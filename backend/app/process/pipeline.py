@@ -50,7 +50,9 @@ def process_item(item: dict, source: dict, topic_map: dict[str, int]) -> dict:
         100 * (w["relevance"] * relevance + w["authority"] * authority
                + w["freshness"] * freshness + w["depth"] * depth), 2
     )
-    status = "approved" if result.get("relevant") and relevance >= config.RELEVANCE_APPROVE_THRESHOLD else "rejected"
+    # LLM/heuristic 的 relevant 判定即最终结论（其内部已含阈值）；
+    # 避免"relevant=true 但分数略低"时被静默拒绝且无原因
+    status = "approved" if result.get("relevant") else "rejected"
 
     db.execute(
         """
