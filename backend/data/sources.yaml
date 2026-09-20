@@ -1,0 +1,281 @@
+sources:
+- slug: mining-com
+  name: MINING.COM
+  layer: 4
+  source_type: news
+  feed_url: https://www.mining.com/feed/
+  site_url: https://www.mining.com
+  lang: en
+  authority_weight: 8
+  notes: 全球矿业新闻第一站
+- slug: im-mining
+  name: International Mining
+  layer: 4
+  source_type: news
+  feed_url: https://im-mining.com/feed/
+  site_url: https://im-mining.com
+  lang: en
+  authority_weight: 8
+  notes: 偏技术与项目报道
+- slug: mining-technology
+  name: Mining Technology
+  layer: 4
+  source_type: news
+  feed_url: https://www.mining-technology.com/feed/
+  site_url: https://www.mining-technology.com
+  lang: en
+  authority_weight: 7
+  active: false
+- slug: australian-mining
+  name: Australian Mining
+  layer: 4
+  source_type: news
+  feed_url: https://www.australianmining.com.au/feed/
+  site_url: https://www.australianmining.com.au
+  lang: en
+  authority_weight: 7
+- slug: northern-miner
+  name: The Northern Miner
+  layer: 4
+  source_type: news
+  feed_url: https://www.northernminer.com/feed/
+  site_url: https://www.northernminer.com
+  lang: en
+  authority_weight: 7
+- slug: ausimm-bulletin
+  name: AusIMM Bulletin
+  layer: 4
+  source_type: journal
+  feed_url: https://www.ausimmbulletin.com/feed/
+  site_url: https://www.ausimmbulletin.com
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: feed 已下线返回 HTML，暂停（2026-09）
+- slug: emj
+  name: Engineering & Mining Journal
+  layer: 4
+  source_type: journal
+  feed_url: https://emj.com/feed/
+  site_url: https://emj.com
+  lang: en
+  authority_weight: 7
+  active: false
+- slug: cim-magazine
+  name: CIM Magazine
+  layer: 4
+  source_type: journal
+  feed_url: https://magazine.cim.org/feed/
+  site_url: https://magazine.cim.org
+  lang: en
+  authority_weight: 7
+  active: false
+  notes: feed 404，暂停（2026-09）
+- slug: mining-weekly
+  name: Mining Weekly
+  layer: 4
+  source_type: news
+  feed_url: https://www.miningweekly.com/rss
+  site_url: https://www.miningweekly.com
+  lang: en
+  authority_weight: 7
+  active: false
+- slug: global-mining-review
+  name: Global Mining Review
+  layer: 4
+  source_type: news
+  feed_url: https://www.globalminingreview.com/rss
+  site_url: https://www.globalminingreview.com
+  lang: en
+  authority_weight: 6
+  active: false
+- slug: mdpi-minerals
+  name: Minerals (MDPI)
+  layer: 4
+  source_type: journal
+  feed_url: https://www.mdpi.com/2075-163X/rss
+  site_url: https://www.mdpi.com/journal/minerals
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 403 反爬（IP 级），暂停（2026-09）
+- slug: mdpi-mining
+  name: Mining (MDPI)
+  layer: 4
+  source_type: journal
+  feed_url: https://www.mdpi.com/2673-6489/rss
+  site_url: https://www.mdpi.com/journal/mining
+  lang: en
+  authority_weight: 9
+  active: false
+- slug: springer-rock-mech
+  name: Rock Mechanics and Rock Engineering (Springer)
+  layer: 4
+  source_type: journal
+  feed_url: https://link.springer.com/search.rss?facet-journal-id=606
+  site_url: https://link.springer.com/journal/606
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: search.rss 已失效返回 HTML，暂停（2026-09）
+- slug: springer-bege
+  name: Bulletin of Engineering Geology and the Environment (Springer)
+  layer: 4
+  source_type: journal
+  feed_url: https://link.springer.com/search.rss?facet-journal-id=10064
+  site_url: https://link.springer.com/journal/10064
+  lang: en
+  authority_weight: 9
+  active: false
+- slug: gn-slope-stability
+  name: Google News · 边坡稳定
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22slope+stability%22+mine&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-tailings
+  name: Google News · 尾矿
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=tailings+dam+OR+%22tailings+storage%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-autonomous
+  name: Google News · 矿山自动化
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22autonomous+haulage%22+OR+%22autonomous+mining%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-mine-water
+  name: Google News · 矿山水文
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22mine+water%22+OR+%22mine+dewatering%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-open-pit
+  name: Google News · 露天开采
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22open+pit+mine%22+OR+%22open-pit+mine%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-blasting
+  name: Google News · 钻爆
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22drill+and+blast%22+OR+%22rock+blasting%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-critical-minerals
+  name: Google News · 关键矿产
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22critical+minerals%22+mine&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-underground
+  name: Google News · 地下采矿
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22underground+mining%22+ground+control&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-rio-tinto
+  name: Google News · Rio Tinto
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=%22Rio+Tinto%22+mine&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://www.riotinto.com
+  lang: en
+  authority_weight: 6
+- slug: gn-bhp
+  name: Google News · BHP
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=BHP+mine&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://www.bhp.com
+  lang: en
+  authority_weight: 6
+- slug: gn-newmont
+  name: Google News · Newmont
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=Newmont+mine&hl=en-US&gl=US&ceid=US:en
+  site_url: https://www.newmont.com
+  lang: en
+  authority_weight: 6
+- slug: gn-anglo-american
+  name: Google News · Anglo American
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=%22Anglo+American%22+mine&hl=en-GB&gl=GB&ceid=GB:en
+  site_url: https://www.angloamerican.com
+  lang: en
+  authority_weight: 6
+- slug: gn-barrick
+  name: Google News · Barrick
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=Barrick+mine&hl=en-CA&gl=CA&ceid=CA:en
+  site_url: https://www.barrick.com
+  lang: en
+  authority_weight: 6
+- slug: gn-vale
+  name: Google News · Vale
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=Vale+mining&hl=en-CA&gl=CA&ceid=CA:en
+  site_url: https://vale.com
+  lang: en
+  authority_weight: 6
+- slug: gn-teck
+  name: Google News · Teck
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=Teck+mine&hl=en-CA&gl=CA&ceid=CA:en
+  site_url: https://www.teck.com
+  lang: en
+  authority_weight: 6
+- slug: gn-zijin
+  name: Google News · 紫金矿业
+  layer: 2
+  source_type: company
+  feed_url: https://news.google.com/rss/search?q=%E7%B4%AB%E9%87%91%E7%9F%BF%E4%B8%9A&hl=zh-CN&gl=CN&ceid=CN:zh-Hans
+  site_url: https://www.zijinmining.com
+  lang: zh
+  authority_weight: 6
+- slug: gn-ai-digital
+  name: Google News · AI与数字矿山
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22smart+mining%22+OR+%22AI+in+mining%22+OR+%22digital+twin%22+mine&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-mine-safety
+  name: Google News · 矿山安全
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22mine+safety%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6
+- slug: gn-mineral-processing
+  name: Google News · 矿物加工
+  layer: 4
+  source_type: aggregator
+  feed_url: https://news.google.com/rss/search?q=%22mineral+processing%22+OR+%22flotation+plant%22&hl=en-AU&gl=AU&ceid=AU:en
+  site_url: https://news.google.com
+  lang: en
+  authority_weight: 6

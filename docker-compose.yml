@@ -1,0 +1,23 @@
+name: mining-hub
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: mining-db
+    environment:
+      POSTGRES_USER: mining
+      POSTGRES_PASSWORD: mining_dev_2026
+      POSTGRES_DB: mining
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mining -d mining"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

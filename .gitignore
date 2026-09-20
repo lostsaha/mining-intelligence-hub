@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# 环境与密钥（绝不入库：含 API Key）
+.env
+*.local
+
+# 数据与运行产物
+*.log
+.qa/
+.zcode/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+寻找活跃矿业专家.pdf

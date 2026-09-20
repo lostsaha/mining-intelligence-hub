@@ -1,0 +1,834 @@
+# 全球矿业专家固定名册 v0.1（100 位高置信度入选者）
+# 定位：算法 Top 100 的「固定对比基准」——双重入选=高置信；仅名册=算法盲区；仅算法=新发现
+# tier: T1 院士/泰斗直通  T2 知名院校教授  T3 企业/咨询技术骨干  T4 标准指南/手册
+# 每条 basis 为公开可查证的入选依据；name 为 OpenAlex 检索用拉丁名。
+# 扩充方式：直接追加条目后运行 python -m app.experts.match_admissions
+
+entries:
+  # ============ T1 中国院士（能源与矿业工程及地学相关） ============
+  - key: feng-xiating
+    name: Xiating Feng
+    name_zh: 冯夏庭
+    tier: T1
+    channel: 院士
+    affiliation: Northeastern University
+    country: CN
+    basis: 中国工程院院士；深部岩体力学与地下工程；曾任国际岩石力学学会（ISRM）主席
+
+  - key: cai-meifeng
+    name: Meifeng Cai
+    name_zh: 蔡美峰
+    tier: T1
+    channel: 院士
+    affiliation: University of Science and Technology Beijing
+    country: CN
+    basis: 中国工程院院士；采矿岩石力学与地应力测量
+
+  - key: gu-desheng
+    name: Desheng Gu
+    name_zh: 古德生
+    tier: T1
+    channel: 院士
+    affiliation: Central South University
+    country: CN
+    basis: 中国工程院院士；金属矿连续开采与振动出矿技术奠基人
+
+  - key: yu-runcang
+    name: Runcang Yu
+    name_zh: 于润沧
+    tier: T1
+    channel: 院士
+    affiliation: China ENFI Engineering Corporation
+    country: CN
+    basis: 中国工程院院士；有色金属矿山设计泰斗
+
+  - key: wang-yunmin
+    name: Yunmin Wang
+    name_zh: 王运敏
+    tier: T1
+    channel: 院士
+    affiliation: Sinosteel Maanshan Institute of Mining Research
+    country: CN
+    basis: 中国工程院院士；金属矿山开采与露天边坡工程
+
+  - key: li-xibing
+    name: Xibing Li
+    name_zh: 李夕兵
+    tier: T1
+    channel: 院士
+    affiliation: Central South University
+    country: CN
+    basis: 中国工程院院士；岩石动力学与矿山爆破
+
+  - key: kang-hongpu
+    name: Hongpu Kang
+    name_zh: 康红普
+    tier: T1
+    channel: 院士
+    affiliation: CCTEG Beijing Coal Mining Research Institute
+    country: CN
+    basis: 中国工程院院士；煤矿巷道围岩控制与支护
+
+  - key: wang-guofa
+    name: Guofa Wang
+    name_zh: 王国法
+    tier: T1
+    channel: 院士
+    affiliation: CCTEG Tiandi Technology
+    country: CN
+    basis: 中国工程院院士；煤矿智能化开采
+
+  - key: gu-dazhao
+    name: Dazhao Gu
+    name_zh: 顾大钊
+    tier: T1
+    channel: 院士
+    affiliation: CHN Energy (China Energy Investment)
+    country: CN
+    basis: 中国工程院院士；煤矿地下水保护与生态修复
+
+  - key: ge-shirong
+    name: Shirong Ge
+    name_zh: 葛世荣
+    tier: T1
+    channel: 院士
+    affiliation: China University of Mining and Technology Beijing
+    country: CN
+    basis: 中国工程院院士；矿山机械与智能采矿
+
+  - key: yuan-liang
+    name: Liang Yuan
+    name_zh: 袁亮
+    tier: T1
+    channel: 院士
+    affiliation: Anhui University of Science and Technology
+    country: CN
+    basis: 中国工程院院士；煤矿瓦斯治理与安全精准开采
+
+  - key: song-zhenqi
+    name: Zhenqi Song
+    name_zh: 宋振骐
+    tier: T1
+    channel: 院士
+    affiliation: Shandong University of Science and Technology
+    country: CN
+    basis: 中国科学院院士；实用矿山压力理论创始人
+
+  - key: qian-minggao
+    name: Minggao Qian
+    name_zh: 钱鸣高
+    tier: T1
+    channel: 院士
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 中国工程院院士；矿山压力与岩层控制（关键层理论）
+
+  - key: he-manchao
+    name: Manchao He
+    name_zh: 何满潮
+    tier: T1
+    channel: 院士
+    affiliation: China University of Mining and Technology Beijing
+    country: CN
+    basis: 中国科学院院士；深部岩体力学与 NPR 恒阻锚固
+
+  - key: tang-chunan
+    name: Chun'an Tang
+    name_zh: 唐春安
+    tier: T1
+    channel: 院士
+    affiliation: Dalian University of Technology
+    country: CN
+    basis: 中国科学院院士；岩石破裂过程分析（RFPA）创始人
+
+  - key: chen-zuyu
+    name: Zuyu Chen
+    name_zh: 陈祖煜
+    tier: T1
+    channel: 院士
+    affiliation: China Institute of Water Resources and Hydropower Research
+    country: CN
+    basis: 中国工程院院士；边坡稳定分析理论与 EMU 法
+
+  - key: xie-heping
+    name: Heping Xie
+    name_zh: 谢和平
+    tier: T1
+    channel: 院士
+    affiliation: Sichuan University
+    country: CN
+    basis: 中国工程院院士；深部岩体力学与开采理论
+
+  - key: liu-baochen
+    name: Baochen Liu
+    name_zh: 刘宝琛
+    tier: T1
+    channel: 院士
+    affiliation: Changsha Institute of Mining Research
+    country: CN
+    basis: 中国工程院院士；随机介质理论（采动沉陷预测）
+
+  - key: zhou-shining
+    name: Shining Zhou
+    name_zh: 周世宁
+    tier: T1
+    channel: 院士
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 中国工程院院士；煤层瓦斯运移理论
+
+  - key: wu-qiang
+    name: Qiang Wu
+    name_zh: 武强
+    tier: T1
+    channel: 院士
+    affiliation: China University of Mining and Technology Beijing
+    country: CN
+    basis: 中国工程院院士；矿井防治水与矿山环境
+
+  - key: peng-suping
+    name: Suping Peng
+    name_zh: 彭苏萍
+    tier: T1
+    channel: 院士
+    affiliation: China University of Mining and Technology Beijing
+    country: CN
+    basis: 中国工程院院士；煤矿地质与矿井物探
+
+  - key: wang-shuangming
+    name: Shuangming Wang
+    name_zh: 王双明
+    tier: T1
+    channel: 院士
+    affiliation: Xi'an University of Science and Technology
+    country: CN
+    basis: 中国工程院院士；煤田地质与生态脆弱区采矿
+
+  - key: zhang-tiegang
+    name: Tiegang Zhang
+    name_zh: 张铁岗
+    tier: T1
+    channel: 院士
+    affiliation: Pingdingshan Tianan Coal Mining
+    country: CN
+    basis: 中国工程院院士；煤矿安全技术
+
+  - key: huang-runqiu
+    name: Runqiu Huang
+    name_zh: 黄润秋
+    tier: T1
+    channel: 院士
+    affiliation: Chengdu University of Technology
+    country: CN
+    basis: 中国工程院院士；边坡地质灾害评价与防治
+
+  - key: sun-chuanyao
+    name: Chuanyao Sun
+    name_zh: 孙传尧
+    tier: T1
+    channel: 院士
+    affiliation: BGRIMM Technology Group
+    country: CN
+    basis: 中国工程院院士；选矿工程
+
+  - key: shen-zhengchang
+    name: Zhengchang Shen
+    name_zh: 沈政昌
+    tier: T1
+    channel: 院士
+    affiliation: BGRIMM Technology Group
+    country: CN
+    basis: 中国工程院院士；浮选装备设计与大型化
+
+  - key: qiu-dingfan
+    name: Dingfan Qiu
+    name_zh: 邱定蕃
+    tier: T1
+    channel: 院士
+    affiliation: BGRIMM Technology Group
+    country: CN
+    basis: 中国工程院院士；有色金属冶金与资源循环
+
+  - key: gui-weihua
+    name: Weihua Gui
+    name_zh: 桂卫华
+    tier: T1
+    channel: 院士
+    affiliation: Central South University
+    country: CN
+    basis: 中国工程院院士；有色金属生产过程自动化
+
+  - key: mao-jingwen
+    name: Jingwen Mao
+    name_zh: 毛景文
+    tier: T1
+    channel: 院士
+    affiliation: Chinese Academy of Geological Sciences
+    country: CN
+    basis: 中国工程院院士；矿床学与成矿规律
+
+  - key: wang-dianzuo
+    name: Dianzuo Wang
+    name_zh: 王淀佐
+    tier: T1
+    channel: 院士
+    affiliation: Central South University
+    country: CN
+    basis: 中国工程院院士；浮选理论与选矿泰斗
+
+  - key: yu-yongfu
+    name: Yongfu Yu
+    name_zh: 余永富
+    tier: T1
+    channel: 院士
+    affiliation: Changsha Research Institute of Mining and Metallurgy
+    country: CN
+    basis: 中国工程院院士；铁矿石选矿
+
+  - key: yang-chunhe
+    name: Chunhe Yang
+    name_zh: 杨春和
+    tier: T1
+    channel: 院士
+    affiliation: Institute of Rock and Soil Mechanics, CAS
+    country: CN
+    basis: 中国工程院院士；盐岩力学与地下储库
+
+  - key: hong-boqian
+    name: Boqian Hong
+    name_zh: 洪伯潜
+    tier: T1
+    channel: 院士
+    affiliation: CCTEG Beijing Coal Mining Research Institute
+    country: CN
+    basis: 中国工程院院士；煤矿立井钻井法凿井
+
+  - key: chen-xiangsheng
+    name: Xiangsheng Chen
+    name_zh: 陈湘生
+    tier: T1
+    channel: 院士
+    affiliation: Shenzhen University
+    country: CN
+    basis: 中国工程院院士；冻结法凿井与地下工程
+
+  - key: zhao-pengda
+    name: Pengda Zhao
+    name_zh: 赵鹏大
+    tier: T1
+    channel: 院士
+    affiliation: China University of Geosciences
+    country: CN
+    basis: 中国科学院院士；数学地质与矿产定量勘查
+
+  - key: chen-yuchuan
+    name: Yuchuan Chen
+    name_zh: 陈毓川
+    tier: T1
+    channel: 院士
+    affiliation: Chinese Academy of Geological Sciences
+    country: CN
+    basis: 中国工程院院士；矿床学与成矿预测
+
+  - key: pei-rongfu
+    name: Rongfu Pei
+    name_zh: 裴荣富
+    tier: T1
+    channel: 院士
+    affiliation: Chinese Academy of Geological Sciences
+    country: CN
+    basis: 中国工程院院士；矿床学与找矿评价
+
+  - key: tang-zhongli
+    name: Zhongli Tang
+    name_zh: 汤中立
+    tier: T1
+    channel: 院士
+    affiliation: Jinchuan Group
+    country: CN
+    basis: 中国工程院院士；镍矿地质（金川铜镍矿）
+
+  - key: chang-yinhuo
+    name: Yinhuo Chang
+    name_zh: 常印佛
+    tier: T1
+    channel: 院士
+    affiliation: Anhui Bureau of Geology and Mineral Resources
+    country: CN
+    basis: 中国科学院院士；矿床学与区域成矿
+
+  - key: zhai-yusheng
+    name: Yusheng Zhai
+    name_zh: 翟裕生
+    tier: T1
+    channel: 院士
+    affiliation: China University of Geosciences
+    country: CN
+    basis: 中国科学院院士；矿田构造与成矿系统
+
+  - key: wang-sijing
+    name: Sijing Wang
+    name_zh: 王思敬
+    tier: T1
+    channel: 院士
+    affiliation: Institute of Geology and Geophysics, CAS
+    country: CN
+    basis: 中国科学院院士；工程地质与岩体工程
+
+  # ============ T1 国际泰斗/会士 ============
+  - key: evert-hoek
+    name: Evert Hoek
+    tier: T1
+    channel: 奠基人/会士
+    affiliation: Independent Consultant
+    country: CA
+    basis: 岩石力学奠基人之一；Hoek-Brown 强度准则与 GSI 创立者；《Rock Slope Engineering》作者
+
+  - key: john-read
+    name: John Read
+    tier: T1
+    channel: 奠基人/会士
+    affiliation: Independent Consultant
+    country: AU
+    basis: Large Open Pit（LOP）项目负责人；《Guidelines for Open Pit Slope Design》主编；AusIMM 会士
+
+  - key: charles-fairhurst
+    name: Charles Fairhurst
+    tier: T1
+    channel: 院士/会士
+    affiliation: University of Minnesota
+    country: US
+    basis: 美国国家工程院院士；ISRM 前主席；岩石力学泰斗
+
+  - key: et-brown
+    name: E.T. Brown
+    tier: T1
+    channel: 院士/会士
+    affiliation: University of Queensland
+    country: AU
+    basis: ISRM 前主席；岩体工程力学；Golder 前高管
+
+  - key: nick-barton
+    name: Nick Barton
+    tier: T1
+    channel: 奠基人/会士
+    affiliation: N Barton & Associates
+    country: "NO"
+    basis: Q 岩体分级系统创立者；挪威岩土研究所（NGI）
+
+  - key: zt-bieniawski
+    name: Z.T. Bieniawski
+    tier: T1
+    channel: 奠基人/会士
+    affiliation: Pennsylvania State University
+    country: US
+    basis: RMR（CSIR）岩体分级系统创始人
+
+  - key: john-a-hudson
+    name: John A. Hudson
+    tier: T1
+    channel: 院士/会士
+    affiliation: Imperial College London
+    country: UK
+    basis: ISRM 前主席；岩石工程系统工程；《Rock Engineering Systems》作者
+
+  - key: giovanni-barla
+    name: Giovanni Barla
+    tier: T1
+    channel: 院士/会士
+    affiliation: Politecnico di Torino
+    country: IT
+    basis: ISRM 前主席；《Rock Mechanics and Rock Engineering》主编
+
+  - key: jian-zhao-isrm
+    name: Jian Zhao
+    tier: T1
+    channel: 院士/会士
+    affiliation: École Polytechnique Fédérale de Lausanne
+    country: CH
+    basis: ISRM 前主席；岩体不连续面力学与爆破
+
+  - key: resat-ulusay
+    name: Resat Ulusay
+    tier: T1
+    channel: 院士/会士
+    affiliation: Hacettepe University
+    country: TR
+    basis: ISRM 前主席；岩体分级与工程应用
+
+  - key: william-hustrulid
+    name: William Hustrulid
+    tier: T1
+    channel: 奠基人/会士
+    affiliation: Hustrulid Mining Services
+    country: US
+    basis: 《Underground Mining Methods》主编；崩落法与地下开采权威
+
+  # ============ T2 知名矿业院校教授 ============
+  - key: erik-eberhardt
+    name: Erik Eberhardt
+    tier: T2
+    channel: 教授
+    affiliation: University of British Columbia
+    country: CA
+    basis: UBC 地质工程教授；岩体强度与露天边坡
+
+  - key: doug-stead
+    name: Doug Stead
+    tier: T2
+    channel: 教授
+    affiliation: Simon Fraser University
+    country: CA
+    basis: 教授；边坡破坏机制与三维地质建模
+
+  - key: derek-martin
+    name: Derek Martin
+    tier: T2
+    channel: 教授
+    affiliation: University of Alberta
+    country: CA
+    basis: 教授；岩石力学与地下研究实验室
+
+  - key: davide-elmo
+    name: Davide Elmo
+    tier: T2
+    channel: 教授
+    affiliation: University of British Columbia
+    country: CA
+    basis: 教授；岩体离散元（DFN）模拟与崩落法
+
+  - key: gideon-chitombo
+    name: Gideon Chitombo
+    tier: T2
+    channel: 教授
+    affiliation: University of Queensland (SMI/JKMRC)
+    country: AU
+    basis: 教授；崩落法开采国际权威
+
+  - key: fidelis-suorineni
+    name: Fidelis Suorineni
+    tier: T2
+    channel: 教授
+    affiliation: Curtin University (WASM)
+    country: AU
+    basis: 教授；矿山岩土工程与风险评估
+
+  - key: john-coggan
+    name: John Coggan
+    tier: T2
+    channel: 教授
+    affiliation: University of Exeter (CSM)
+    country: UK
+    basis: 教授；岩石力学与矿山设计
+
+  - key: renato-macciotta
+    name: Renato Macciotta
+    tier: T2
+    channel: 教授
+    affiliation: University of Alberta
+    country: CA
+    basis: 教授；边坡风险管理与监测
+
+  - key: raul-castro
+    name: Raul Castro
+    tier: T2
+    channel: 教授
+    affiliation: University of Chile
+    country: CL
+    basis: 教授；崩落法与地下金属矿开采
+
+  - key: mostafa-benzaazoua
+    name: Mostafa Benzaazoua
+    tier: T2
+    channel: 教授
+    affiliation: Mohammed VI Polytechnic University
+    country: MA
+    basis: 教授；选矿与矿山环境（酸性排水）
+
+  - key: hani-mitri
+    name: Hani Mitri
+    tier: T2
+    channel: 教授
+    affiliation: McGill University
+    country: CA
+    basis: 教授；矿山岩土与长壁开采
+
+  - key: ferri-hassani
+    name: Ferri Hassani
+    tier: T2
+    channel: 教授
+    affiliation: McGill University
+    country: CA
+    basis: 教授；深井开采与岩爆监测
+
+  - key: peter-kaiser
+    name: Peter Kaiser
+    tier: T2
+    channel: 教授
+    affiliation: Laurentian University (MIRARCO)
+    country: CA
+    basis: 教授；地压控制与支护设计（Kaiser 支护图）
+
+  - key: john-hadjigeorgiou
+    name: John Hadjigeorgiou
+    tier: T2
+    channel: 教授
+    affiliation: University of Toronto
+    country: CA
+    basis: 教授；采矿岩石工程与支护系统
+
+  - key: tr-stacey
+    name: T.R. Stacey
+    tier: T2
+    channel: 教授
+    affiliation: University of the Witwatersrand
+    country: ZA
+    basis: 教授；岩石力学与矿山支护
+
+  - key: paul-villaescusa
+    name: Paul Villaescusa
+    tier: T2
+    channel: 教授
+    affiliation: Curtin University (WASM)
+    country: AU
+    basis: 教授；地下矿山岩石支护
+
+  - key: phil-dight
+    name: Phil Dight
+    tier: T2
+    channel: 教授
+    affiliation: University of Western Australia
+    country: AU
+    basis: 教授；边坡监测与微震响应
+
+  - key: priscilla-nelson
+    name: Priscilla Nelson
+    tier: T2
+    channel: 教授
+    affiliation: Colorado School of Mines
+    country: US
+    basis: 教授；岩石力学与地下工程
+
+  - key: yosoon-choi
+    name: Yosoon Choi
+    tier: T2
+    channel: 教授
+    affiliation: Pukyong National University
+    country: KR
+    basis: 教授；智能矿山与采矿 AI
+
+  - key: simon-dominy
+    name: Simon Dominy
+    tier: T2
+    channel: 教授
+    affiliation: Curtin University (WASM)
+    country: AU
+    basis: 教授；金矿品位控制与资源评估
+
+  - key: bruce-hebblewhite
+    name: Bruce Hebblewhite
+    tier: T2
+    channel: 教授
+    affiliation: UNSW Sydney
+    country: AU
+    basis: 教授；采矿系统与岩层控制
+
+  - key: yang-tianhong
+    name: Tianhong Yang
+    name_zh: 杨天鸿
+    tier: T2
+    channel: 教授
+    affiliation: Northeastern University
+    country: CN
+    basis: 教授；露天矿边坡稳定性与应力-渗流耦合
+
+  - key: zhu-wancheng
+    name: Wancheng Zhu
+    name_zh: 朱万成
+    tier: T2
+    channel: 教授
+    affiliation: Northeastern University
+    country: CN
+    basis: 教授；岩石损伤与破裂
+
+  - key: wu-aixiang
+    name: Aixiang Wu
+    name_zh: 吴爱祥
+    tier: T2
+    channel: 教授
+    affiliation: University of Science and Technology Beijing
+    country: CN
+    basis: 教授；金属矿开采与膏体充填
+
+  - key: zhou-keping
+    name: Keping Zhou
+    name_zh: 周科平
+    tier: T2
+    channel: 教授
+    affiliation: Central South University
+    country: CN
+    basis: 教授；采矿数字化与岩体结构
+
+  - key: wang-liguan
+    name: Liguan Wang
+    name_zh: 王李管
+    tier: T2
+    channel: 教授
+    affiliation: Central South University
+    country: CN
+    basis: 教授；数字矿山与矿业软件
+
+  - key: zhang-nong
+    name: Nong Zhang
+    name_zh: 张农
+    tier: T2
+    channel: 教授
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 教授；巷道围岩控制
+
+  - key: jing-hongwen
+    name: Hongwen Jing
+    name_zh: 靖洪文
+    tier: T2
+    channel: 教授
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 教授；深部岩土工程
+
+  - key: ji-hongguang
+    name: Hongguang Ji
+    name_zh: 纪洪广
+    tier: T2
+    channel: 教授
+    affiliation: University of Science and Technology Beijing
+    country: CN
+    basis: 教授；岩土工程监测
+
+  - key: dou-linming
+    name: Linming Dou
+    name_zh: 窦林名
+    tier: T2
+    channel: 教授
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 教授；冲击地压动静载诱冲理论
+
+  - key: xu-jialin
+    name: Jialin Xu
+    name_zh: 许家林
+    tier: T2
+    channel: 教授
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 教授；岩层控制与覆岩导水裂缝
+
+  - key: ren-fengyu
+    name: Fengyu Ren
+    name_zh: 任凤玉
+    tier: T2
+    channel: 教授
+    affiliation: Northeastern University
+    country: CN
+    basis: 教授；金属矿无底柱分段崩落法
+
+  - key: tu-shihao
+    name: Shihao Tu
+    name_zh: 屠世浩
+    tier: T2
+    channel: 教授
+    affiliation: China University of Mining and Technology
+    country: CN
+    basis: 教授；长壁开采工艺
+
+  - key: chen-shaojie
+    name: Shaojie Chen
+    name_zh: 陈绍杰
+    tier: T2
+    channel: 教授
+    affiliation: Shandong University of Science and Technology
+    country: CN
+    basis: 教授；条带与充填开采
+
+  - key: zhou-zilong
+    name: Zilong Zhou
+    name_zh: 周子龙
+    tier: T2
+    channel: 教授
+    affiliation: Central South University
+    country: CN
+    basis: 教授；岩石动力学
+
+  # ============ T3 企业/咨询技术骨干 ============
+  - key: peter-stacey
+    name: Peter Stacey
+    tier: T3
+    channel: 企业骨干
+    affiliation: Golder Associates
+    country: CA
+    basis: LOP 项目共同负责人；露天边坡咨询 Principal
+
+  - key: laubscher
+    name: D.H. Laubscher
+    tier: T3
+    channel: 企业骨干
+    affiliation: SRK Consulting
+    country: ZA
+    basis: 崩落法岩体分级体系（Laubscher MRMR）创始人
+
+  - key: jarek-jakubec
+    name: Jarek Jakubec
+    tier: T3
+    channel: 企业骨干
+    affiliation: SRK Consulting
+    country: CA
+    basis: Principal Consultant；岩土工程与矿石可崩性
+
+  - key: oskar-steffen
+    name: Oskar Steffen
+    tier: T3
+    channel: 企业骨干
+    affiliation: SRK Consulting
+    country: ZA
+    basis: SRK 联合创始人；边坡与尾矿设施
+
+  - key: antonio-karzulovic
+    name: Antonio Karzulovic
+    tier: T3
+    channel: 企业骨干
+    affiliation: Karzulovic & Asociados
+    country: CL
+    basis: 智利大型铜矿边坡顾问（Chuquicamata 等露天矿）
+
+  - key: david-oliveira
+    name: David Oliveira
+    tier: T3
+    channel: 企业骨干
+    affiliation: Pells Sullivan Meynink
+    country: AU
+    basis: Principal；露天矿边坡岩土
+
+  - key: andy-robertson
+    name: Andy Robertson
+    tier: T3
+    channel: 企业骨干
+    affiliation: Robertson GeoConsultants
+    country: CA
+    basis: 尾矿设施咨询权威
+
+  # ============ T4 标准指南/手册 ============
+  - key: jack-de-la-vergne
+    name: Jack de la Vergne
+    tier: T4
+    channel: 标准指南
+    affiliation: Stantec (McIntosh Engineering)
+    country: CA
+    basis: 《Hard Rock Miner's Handbook》作者
+
+  - key: peter-darling
+    name: Peter Darling
+    tier: T4
+    channel: 标准指南
+    affiliation: SME
+    country: US
+    basis: 《SME Mining Engineering Handbook》第三版主编
