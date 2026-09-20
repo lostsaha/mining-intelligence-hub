@@ -197,7 +197,8 @@ $env:PYTHONUTF8 = "1"
 
 | 症状 | 原因 | 解法 |
 |---|---|---|
-| 后端起不来 `EADDRINUSE` | 端口被占 | 换端口（本机 8000/3000 已被占，固定用 8100/3100） |
+| 后端起不来 `EADDRINUSE` | 端口被占 | 先跑 `scripts\smoke.ps1`：若全部 OK，说明服务已在别的窗口运行，**直接用即可**；要换到自己窗口，先关旧窗口或 `taskkill`。本机 8000/3000 被其他程序占用，固定用 8100/3100 |
+| 停了服务端口仍被占 | `npx next dev` 会残留 node 子进程 | `netstat -ano | findstr :3100` 找 PID → `taskkill /PID <pid> /F` |
 | `docker compose up` 报 project name | 中文目录名 | 已在 compose 固定 `name: mining-hub`，勿删该行 |
 | 采集大量 `403 Forbidden` | 站点反爬 | 属正常；源标记失败并跳过，批量失效再处理 |
 | OpenAlex 全部 `429` | 当日信用点耗尽（匿名按 IP 1000 点/天） | 已配 API Key（10000 点/天）；若仍 429 检查 `.env` 的 `OPENALEX_API_KEY` |
