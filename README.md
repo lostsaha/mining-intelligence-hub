@@ -2,7 +2,8 @@
 
 矿业垂直领域的前沿信息聚合平台。参考 aihot（精选信源 + AI 预筛）与 Hacker News
 （信息流 + 排名）的模式，并针对**矿业信息少、更新慢**的行业特点重新设计节奏：
-每日采集一次、按周聚合精选、慢衰减排序。完整规划见 [PROJECT_PLAN.md](PROJECT_PLAN.md)。
+每日采集一次、按周聚合精选、慢衰减排序。完整规划见 [PROJECT_PLAN.md](PROJECT_PLAN.md)，
+日常运行、测试与故障排查见 [MAINTENANCE.md](MAINTENANCE.md)。
 
 ## 架构
 
