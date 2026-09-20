@@ -66,7 +66,7 @@ topics:
     name_zh: 岩土与边坡稳定
     name_en: Geotechnical & Slope Stability
     sort_order: 3
-    keywords: [slope stability, rock slope, pit slope, rock mechanics, geotechnical, rock mass, ground control, wedge failure, planar failure, toppling, stereonet, factor of safety, LiDAR, InSAR, slope monitoring, radar monitoring, 边坡, 岩土, 岩石力学, 稳定性]
+    keywords: [slope stability, rock slope, pit slope, rock mechanics, geotechnical, rock mass, ground control, wedge failure, planar failure, toppling, stereonet, factor of safety, LiDAR, InSAR, slope monitoring, radar monitoring, waste dump, spoil pile, 排土场, 边坡, 岩土, 岩石力学, 稳定性]
     query_keywords: ["rock mechanics", "geotechnical engineering mining"]
     children:
       - slug: geotech-slope.rock-mechanics
@@ -94,6 +94,11 @@ topics:
         name_en: Structural Control
         query_keywords: ["structural control rock slope", "rock discontinuities slope failure"]
         match_keywords: [discontinuity, joint set, stereonet, kinematic analysis, wedge failure]
+      - slug: geotech-slope.waste-dump
+        name_zh: 排土场
+        name_en: Waste Dumps & Spoil Piles
+        query_keywords: ["waste dump stability open pit", "spoil pile design mine"]
+        match_keywords: [waste dump, spoil pile, spoil heap, dump stability, tip stability, 排土场]
 
   - slug: mine-water
     name_zh: 矿山水文
