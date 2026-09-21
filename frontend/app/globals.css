@@ -251,5 +251,11 @@ button.run[disabled] { opacity: 0.5; cursor: wait; }
 
 .adm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-top: 10px; margin-bottom: 8px; }
 
+/* ---------- 信源金字塔 ---------- */
+.tier-badge {
+  display: inline-block; color: #fff; font-size: 12px; font-weight: 700;
+  border-radius: 4px; padding: 1px 8px; margin-right: 8px; vertical-align: 2px;
+}
+
 footer.site { color: var(--ink-3); font-size: 12.5px; text-align: center; padding: 40px 0 30px; }
 footer.site a { color: var(--ink-2); text-decoration: underline; }

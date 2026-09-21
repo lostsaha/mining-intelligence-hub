@@ -57,12 +57,12 @@ def seed_sources() -> int:
         db.execute(
             """
             INSERT INTO mining.sources
-                (slug, name, layer, source_type, feed_url, site_url, lang,
+                (slug, name, layer, tier, source_type, feed_url, site_url, lang,
                  authority_weight, active, notes)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (slug) DO UPDATE
             SET name = EXCLUDED.name,
-                layer = EXCLUDED.layer,
+                tier = EXCLUDED.tier,
                 source_type = EXCLUDED.source_type,
                 feed_url = EXCLUDED.feed_url,
                 site_url = EXCLUDED.site_url,
@@ -72,7 +72,8 @@ def seed_sources() -> int:
                 notes = EXCLUDED.notes
             """,
             (
-                s["slug"], s["name"], s.get("layer", 4), s.get("source_type", "news"),
+                s["slug"], s["name"], s.get("layer", 4), s.get("tier", "B"),
+                s.get("source_type", "news"),
                 s.get("feed_url"), s.get("site_url"), s.get("lang", "en"),
                 s.get("authority_weight", 5), s.get("active", True), s.get("notes"),
             ),
