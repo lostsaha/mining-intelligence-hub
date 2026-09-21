@@ -1,426 +1,990 @@
-# 矿业主题体系（Mining Ontology V0.1）
-# 来源：《寻找活跃矿业专家.pdf》§13 + 行业市场扩展类
-# 结构：level=1 大类（13 学术类 + industry 资讯类）；children 为 level=2 子主题
-#   query_keywords  — OpenAlex works 检索词族（专家模块采集用）
-#   match_keywords  — 作品/资讯文本匹配关键词（分类用）
-#   keywords        — 大类级匹配关键词（资讯过滤用，向下兼容）
-
 topics:
-  - slug: surface-mining
-    name_zh: 露天采矿
-    name_en: Surface / Open Pit Mining
-    sort_order: 1
-    keywords: [open pit, open-pit, open cast, surface mining, strip mining, bench, pushback, pit optimization, haul road, 露天矿, 露天开采, 台阶]
-    query_keywords: ["open pit mining", "surface mining"]
-    children:
-      - slug: surface-mining.open-pit
-        name_zh: 露天开采工艺
-        name_en: Open Pit Mining
-        query_keywords: ["open pit mining", "open pit mine operation"]
-        match_keywords: [open pit, open-pit, opencast, surface mine]
-      - slug: surface-mining.bench-design
-        name_zh: 台阶设计
-        name_en: Bench Design
-        query_keywords: ["bench design open pit slope", "bench height berm mine"]
-        match_keywords: [bench height, bench face, berm, bench configuration]
-      - slug: surface-mining.pit-optimization
-        name_zh: 境界优化
-        name_en: Pit Optimization
-        query_keywords: ["pit optimization", "ultimate pit limit"]
-        match_keywords: [pit optimization, ultimate pit, lerchs-grossmann, pseudoflow]
-      - slug: surface-mining.pushback
-        name_zh: 剥采推进与排程
-        name_en: Pushback & Production Sequencing
-        query_keywords: ["pushback sequencing open pit", "open pit production scheduling"]
-        match_keywords: [pushback, cutback, sequencing, phase design]
-      - slug: surface-mining.haul-road
-        name_zh: 矿区道路
-        name_en: Haul Road Design
-        query_keywords: ["mine haul road design"]
-        match_keywords: [haul road]
-
-  - slug: underground-mining
-    name_zh: 地下采矿
-    name_en: Underground Mining
-    sort_order: 2
-    keywords: [underground mining, block caving, sublevel stoping, room and pillar, longwall, ground support, shaft, 地下矿, 井下, 充填]
-    query_keywords: ["underground mining methods"]
-    children:
-      - slug: underground-mining.block-caving
-        name_zh: 自然崩落法
-        name_en: Block Caving
-        query_keywords: ["block caving", "cave mining engineering"]
-        match_keywords: [block caving, cave mining, undercutting]
-      - slug: underground-mining.stoping
-        name_zh: 分段/房柱采矿
-        name_en: Stoping Methods
-        query_keywords: ["sublevel stoping", "room and pillar mining"]
-        match_keywords: [sublevel stoping, longhole, stope, room and pillar]
-      - slug: underground-mining.ground-support
-        name_zh: 地压与支护
-        name_en: Ground Support
-        query_keywords: ["ground support underground mining", "rockbolting"]
-        match_keywords: [ground support, rockbolt, cable bolt, shotcrete]
-
-  - slug: geotech-slope
-    name_zh: 岩土与边坡稳定
-    name_en: Geotechnical & Slope Stability
-    sort_order: 3
-    keywords: [slope stability, rock slope, pit slope, rock mechanics, geotechnical, rock mass, ground control, wedge failure, planar failure, toppling, stereonet, factor of safety, LiDAR, InSAR, slope monitoring, radar monitoring, waste dump, spoil pile, 排土场, 边坡, 岩土, 岩石力学, 稳定性]
-    query_keywords: ["rock mechanics", "geotechnical engineering mining"]
-    children:
-      - slug: geotech-slope.rock-mechanics
-        name_zh: 岩石力学
-        name_en: Rock Mechanics
-        query_keywords: ["rock mechanics", "rock mass characterization"]
-        match_keywords: [rock mechanics, rock mass, uniaxial compressive, crack initiation]
-      - slug: geotech-slope.slope-stability
-        name_zh: 边坡稳定
-        name_en: Slope Stability
-        query_keywords: ["open pit slope stability", "rock slope stability analysis"]
-        match_keywords: [slope stability, pit slope, rock slope, limit equilibrium]
-      - slug: geotech-slope.slope-monitoring
-        name_zh: 边坡监测
-        name_en: Slope Monitoring
-        query_keywords: ["slope monitoring open pit", "slope radar mining"]
-        match_keywords: [slope monitoring, slope radar, insar, monitoring prism, deformation monitoring]
-      - slug: geotech-slope.numerical-modeling
-        name_zh: 数值模拟
-        name_en: Numerical Modeling
-        query_keywords: ["numerical modeling geotechnical", "finite element slope stability"]
-        match_keywords: [finite element, discrete element, flac, numerical modeling, dem]
-      - slug: geotech-slope.structural-control
-        name_zh: 结构面控制
-        name_en: Structural Control
-        query_keywords: ["structural control rock slope", "rock discontinuities slope failure"]
-        match_keywords: [discontinuity, joint set, stereonet, kinematic analysis, wedge failure]
-      - slug: geotech-slope.waste-dump
-        name_zh: 排土场
-        name_en: Waste Dumps & Spoil Piles
-        query_keywords: ["waste dump stability open pit", "spoil pile design mine"]
-        match_keywords: [waste dump, spoil pile, spoil heap, dump stability, tip stability, 排土场]
-
-  - slug: mine-water
-    name_zh: 矿山水文
-    name_en: Mine Water & Hydrogeology
-    sort_order: 4
-    keywords: [mine water, hydrogeology, groundwater, dewatering, pore pressure, pit lake, water management, inflow, 矿山水, 水文, 地下水, 降水, 疏干]
-    query_keywords: ["mine water management"]
-    children:
-      - slug: mine-water.hydrogeology
-        name_zh: 矿山水文地质
-        name_en: Mining Hydrogeology
-        query_keywords: ["mining hydrogeology", "groundwater inflow mine"]
-        match_keywords: [hydrogeology, groundwater inflow, aquifer dewatering]
-      - slug: mine-water.dewatering
-        name_zh: 疏干与降压
-        name_en: Dewatering & Depressurization
-        query_keywords: ["mine dewatering", "pit depressurization"]
-        match_keywords: [dewatering, depressurization, wellfield]
-      - slug: mine-water.pore-pressure
-        name_zh: 孔隙水压力
-        name_en: Pore Pressure
-        query_keywords: ["pore pressure slope stability", "piezometric monitoring slope"]
-        match_keywords: [pore pressure, piezometer, phreatic surface]
-      - slug: mine-water.water-slope
-        name_zh: 水岩相互作用
-        name_en: Water-Slope Interaction
-        query_keywords: ["rainfall induced landslide open pit", "water slope interaction mining"]
-        match_keywords: [rainfall induced, saturation, water pressure slope]
-
-  - slug: drilling-blasting
-    name_zh: 钻孔与爆破
-    name_en: Drilling & Blasting
-    sort_order: 5
-    keywords: [blasting, drill and blast, blast design, fragmentation, vibration, explosive, blast damage, 爆破, 钻爆, 凿岩]
-    query_keywords: ["blasting mining"]
-    children:
-      - slug: drilling-blasting.blast-design
-        name_zh: 爆破设计
-        name_en: Blast Design
-        query_keywords: ["blast design open pit", "burden spacing blasthole"]
-        match_keywords: [blast design, burden, powder factor, blasthole]
-      - slug: drilling-blasting.fragmentation
-        name_zh: 破碎块度
-        name_en: Fragmentation
-        query_keywords: ["blasting fragmentation prediction"]
-        match_keywords: [fragmentation, kuz-ram, fragment size]
-      - slug: drilling-blasting.vibration
-        name_zh: 爆破振动
-        name_en: Blast Vibration
-        query_keywords: ["blasting vibration control", "ground vibration quarry"]
-        match_keywords: [vibration, ppv, ground vibration]
-      - slug: drilling-blasting.blast-damage
-        name_zh: 爆破损伤
-        name_en: Blast Damage
-        query_keywords: ["blast damage slope", "presplitting blasting"]
-        match_keywords: [blast damage, presplit, smooth blasting]
-
-  - slug: mine-planning
-    name_zh: 矿山规划
-    name_en: Mine Planning & Economics
-    sort_order: 6
-    keywords: [mine planning, mine design, scheduling, production plan, life of mine, feasibility, resource model, reserve, mine closure plan, 矿山设计, 生产计划, 储量]
-    query_keywords: ["mine planning"]
-    children:
-      - slug: mine-planning.strategic
-        name_zh: 长期规划
-        name_en: Strategic Planning
-        query_keywords: ["strategic mine planning", "life of mine optimization"]
-        match_keywords: [strategic mine planning, life of mine, mine optimization]
-      - slug: mine-planning.scheduling
-        name_zh: 生产排程
-        name_en: Mine Scheduling
-        query_keywords: ["mine production scheduling", "short term mine planning"]
-        match_keywords: [scheduling, short interval, production plan]
-      - slug: mine-planning.economics
-        name_zh: 经济评价
-        name_en: Economic Evaluation
-        query_keywords: ["mining project economic evaluation", "net present value mining"]
-        match_keywords: [net present value, npv, cash flow, valuation, feasibility study]
-      - slug: mine-planning.resource-model
-        name_zh: 资源建模
-        name_en: Resource Modeling
-        query_keywords: ["mineral resource estimation", "geostatistics mining"]
-        match_keywords: [resource estimation, geostatistics, kriging, grade model]
-
-  - slug: automation
-    name_zh: 矿山自动化
-    name_en: Mining Automation & Robotics
-    sort_order: 7
-    keywords: [autonomous haulage, autonomous truck, autonomous drilling, remote operation, robotics, teleoperation, AHS, 无人驾驶, 自动化, 机器人]
-    query_keywords: ["mining automation"]
-    children:
-      - slug: automation.autonomous-haulage
-        name_zh: 无人运输
-        name_en: Autonomous Haulage
-        query_keywords: ["autonomous haulage system", "autonomous trucks mining"]
-        match_keywords: [autonomous haulage, ahs, autonomous truck]
-      - slug: automation.autonomous-drilling
-        name_zh: 自动钻进
-        name_en: Autonomous Drilling
-        query_keywords: ["autonomous drilling mining"]
-        match_keywords: [autonomous drilling, automated drilling]
-      - slug: automation.robotics
-        name_zh: 矿山机器人
-        name_en: Mining Robotics
-        query_keywords: ["robotics in mining", "remote operation mining"]
-        match_keywords: [robotics, teleoperation, remote operation center]
-
-  - slug: ai-digital
-    name_zh: AI 与数字矿山
-    name_en: AI & Digital Mining
-    sort_order: 8
-    keywords: [machine learning, deep learning, artificial intelligence, digital twin, computer vision, predictive maintenance, data analytics, smart mining, AI in mining, 人工智能, 机器学习, 数字孪生, 智慧矿山, 数字化]
-    query_keywords: ["artificial intelligence mining"]
-    children:
-      - slug: ai-digital.machine-learning
-        name_zh: 机器学习
-        name_en: Machine Learning in Mining
-        query_keywords: ["machine learning mining engineering", "machine learning slope"]
-        match_keywords: [machine learning, random forest, xgboost, svm]
-      - slug: ai-digital.deep-learning
-        name_zh: 深度学习
-        name_en: Deep Learning in Mining
-        query_keywords: ["deep learning mining", "neural network geotechnical"]
-        match_keywords: [deep learning, neural network, cnn, lstm, transformer]
-      - slug: ai-digital.digital-twin
-        name_zh: 数字孪生
-        name_en: Digital Twin
-        query_keywords: ["digital twin mining"]
-        match_keywords: [digital twin]
-      - slug: ai-digital.computer-vision
-        name_zh: 机器视觉
-        name_en: Computer Vision
-        query_keywords: ["computer vision mining", "rock mass image segmentation"]
-        match_keywords: [computer vision, image segmentation, crack detection, object detection]
-      - slug: ai-digital.data-analytics
-        name_zh: 数据分析与预测维护
-        name_en: Data Analytics & Predictive Maintenance
-        query_keywords: ["predictive maintenance mining equipment", "big data mining industry"]
-        match_keywords: [predictive maintenance, big data, data analytics]
-
-  - slug: mineral-processing
-    name_zh: 矿物加工
-    name_en: Mineral Processing & Metallurgy
-    sort_order: 9
-    keywords: [mineral processing, comminution, flotation, grinding, leaching, metallurgy, concentration, recovery, 选矿, 磨矿, 浮选, 冶炼]
-    query_keywords: ["mineral processing"]
-    children:
-      - slug: mineral-processing.comminution
-        name_zh: 破碎磨矿
-        name_en: Comminution
-        query_keywords: ["comminution grinding mill"]
-        match_keywords: [comminution, grinding, sag mill, ball mill]
-      - slug: mineral-processing.flotation
-        name_zh: 浮选
-        name_en: Flotation
-        query_keywords: ["froth flotation"]
-        match_keywords: [flotation, froth, reagent]
-      - slug: mineral-processing.leaching
-        name_zh: 浸出
-        name_en: Leaching
-        query_keywords: ["heap leaching", "bioleaching"]
-        match_keywords: [leaching, heap leach, bioleaching]
-      - slug: mineral-processing.separation
-        name_zh: 物理选别
-        name_en: Physical Separation
-        query_keywords: ["magnetic separation minerals", "gravity separation mineral"]
-        match_keywords: [magnetic separation, gravity separation, dense medium]
-
-  - slug: tailings
-    name_zh: 尾矿
-    name_en: Tailings Management
-    sort_order: 10
-    keywords: [tailings, tailings dam, tailings storage, TSF, dry stacking, paste backfill, GISTM, 尾矿, 尾矿库]
-    query_keywords: ["tailings management"]
-    children:
-      - slug: tailings.storage
-        name_zh: 尾矿库设计
-        name_en: Tailings Storage Facilities
-        query_keywords: ["tailings storage facility", "tailings dam design"]
-        match_keywords: [tailings storage, tailings dam, tsf]
-      - slug: tailings.safety
-        name_zh: 尾矿安全
-        name_en: Tailings Dam Safety
-        query_keywords: ["tailings dam failure", "tailings governance GISTM"]
-        match_keywords: [dam safety, gistm, tailings failure, liquefaction]
-      - slug: tailings.paste-dry
-        name_zh: 膏体与干堆
-        name_en: Paste & Filtered Tailings
-        query_keywords: ["paste backfill", "filtered tailings dry stacking"]
-        match_keywords: [paste backfill, filtered tailings, dry stack]
-      - slug: tailings.reprocessing
-        name_zh: 尾矿再利用
-        name_en: Tailings Reprocessing
-        query_keywords: ["tailings reprocessing", "tailings valorization"]
-        match_keywords: [reprocessing, tailings recycling, valorization]
-
-  - slug: mine-safety
-    name_zh: 矿山安全
-    name_en: Mine Safety
-    sort_order: 11
-    keywords: [mine safety, fatality, occupational, gas monitoring, rockburst, emergency, safety management, 矿山安全, 安全生产, 冲击地压]
-    query_keywords: ["mine safety"]
-    children:
-      - slug: mine-safety.gas-dust
-        name_zh: 气体与粉尘
-        name_en: Gas & Dust Monitoring
-        query_keywords: ["gas monitoring underground mine", "mine dust control"]
-        match_keywords: [gas monitoring, methane, dust control, respirable dust]
-      - slug: mine-safety.rockburst
-        name_zh: 冲击地压
-        name_en: Rockburst & Seismicity
-        query_keywords: ["rockburst prediction", "mining seismicity"]
-        match_keywords: [rockburst, seismicity, microseismic]
-      - slug: mine-safety.emergency
-        name_zh: 应急管理
-        name_en: Emergency Management
-        query_keywords: ["mine emergency response", "mine rescue"]
-        match_keywords: [emergency response, mine rescue, evacuation]
-      - slug: mine-safety.occupational
-        name_zh: 职业健康
-        name_en: Occupational Health
-        query_keywords: ["occupational health mining", "miners silicosis"]
-        match_keywords: [occupational health, silicosis, heat stress, fatigue]
-
-  - slug: mine-closure
-    name_zh: 矿山闭坑与生态修复
-    name_en: Mine Closure & Rehabilitation
-    sort_order: 12
-    keywords: [mine closure, rehabilitation, revegetation, remediation, landform, post-mining, 闭坑, 复垦, 生态修复]
-    query_keywords: ["mine closure"]
-    children:
-      - slug: mine-closure.closure-planning
-        name_zh: 闭坑规划
-        name_en: Closure Planning
-        query_keywords: ["mine closure planning", "closure cost estimation"]
-        match_keywords: [mine closure, closure plan, relinquishment]
-      - slug: mine-closure.rehabilitation
-        name_zh: 复垦与植被恢复
-        name_en: Rehabilitation
-        query_keywords: ["mine site rehabilitation", "revegetation mine"]
-        match_keywords: [rehabilitation, revegetation, landform design, topsoil]
-      - slug: mine-closure.geochemistry
-        name_zh: 地化稳定性
-        name_en: Geochemical Stability
-        query_keywords: ["acid mine drainage", "acid rock drainage prediction"]
-        match_keywords: [acid mine drainage, amd, metal leaching]
-      - slug: mine-closure.post-mining
-        name_zh: 矿后土地利用
-        name_en: Post-Mining Land Use
-        query_keywords: ["post-mining land use", "repurposing mine sites"]
-        match_keywords: [post-mining, repurposing, pumped storage mine]
-
-  - slug: critical-minerals
-    name_zh: 关键矿产
-    name_en: Critical Minerals & Energy Transition
-    sort_order: 13
-    keywords: [critical minerals, lithium, cobalt, nickel, rare earth, copper, energy transition, battery minerals, 关键矿产, 锂, 钴, 镍, 稀土, 铜矿]
-    query_keywords: ["critical minerals mining"]
-    children:
-      - slug: critical-minerals.lithium
-        name_zh: 锂与电池矿产
-        name_en: Lithium & Battery Minerals
-        query_keywords: ["lithium mining", "lithium brine extraction"]
-        match_keywords: [lithium, spodumene, brine extraction]
-      - slug: critical-minerals.rare-earth
-        name_zh: 稀土
-        name_en: Rare Earth Elements
-        query_keywords: ["rare earth elements mining"]
-        match_keywords: [rare earth, ree, monazite, bastnaesite]
-      - slug: critical-minerals.copper
-        name_zh: 铜与能源转型
-        name_en: Copper & Energy Transition
-        query_keywords: ["copper mining energy transition"]
-        match_keywords: [copper, energy transition metals]
-      - slug: critical-minerals.cobalt-nickel
-        name_zh: 钴镍供应
-        name_en: Cobalt & Nickel Supply
-        query_keywords: ["cobalt nickel mining", "battery metals supply chain"]
-        match_keywords: [cobalt, nickel, battery metals]
-
-  # ---------- 资讯类（仅用于平台信息流分类，不参与学术本体） ----------
-  - slug: geo-exploration
-    name_zh: 地质勘查与资源估算
-    name_en: Exploration & Resource Estimation
-    sort_order: 14
-    keywords: [exploration, geological survey, exploration drilling, assay, resource estimation, geostatistics, ore body model, geological modeling, 勘探, 地质勘查, 资源量, 储量估算, 地质建模, 勘查]
-    query_keywords: ["mineral exploration"]
-    children:
-      - slug: geo-exploration.drilling
-        name_zh: 勘探与钻探
-        name_en: Exploration Drilling
-        query_keywords: ["mineral exploration drilling", "exploration geochemistry deposit"]
-        match_keywords: [exploration drilling, drill core, assay, geochemistry, prospecting]
-      - slug: geo-exploration.geological-modeling
-        name_zh: 三维地质建模
-        name_en: 3D Geological Modeling
-        query_keywords: ["3D geological modeling", "implicit modeling geology"]
-        match_keywords: [geological modeling, implicit modeling, wireframe, leapfrog, gocad]
-      - slug: geo-exploration.resource-estimation
-        name_zh: 资源量估算
-        name_en: Mineral Resource Estimation
-        query_keywords: ["mineral resource estimation", "kriging grade estimation"]
-        match_keywords: [resource estimation, kriging, conditional simulation, grade interpolation, cokriging, variography]
-      - slug: geo-exploration.grade-control
-        name_zh: 生产品位控制
-        name_en: Grade Control
-        query_keywords: ["grade control open pit", "ore reconciliation"]
-        match_keywords: [grade control, ore spotting, reconciliation, dilution]
-      - slug: geo-exploration.resource-codes
-        name_zh: 资源储量规范
-        name_en: Resource & Reserve Codes
-        query_keywords: ["JORC code resource", "NI 43-101 mineral resource"]
-        match_keywords: [jorc, ni 43-101, samrec, perc, resource classification, reserve reporting]
-      - slug: geo-exploration.prospectivity
-        name_zh: 成矿预测与勘查技术
-        name_en: Prospectivity Mapping & Exploration Tech
-        query_keywords: ["mineral prospectivity mapping", "geophysical survey exploration"]
-        match_keywords: [prospectivity, geophysical survey, hyperspectral, deposit model]
-
-  - slug: industry
-    name_zh: 行业与市场
-    name_en: Industry & Market
-    sort_order: 15
-    keywords: [merger, acquisition, investment, production report, quarterly, commodity price, expansion project, new mine, 收购, 并购, 投产, 扩产, 产量, 市场]
+- slug: surface-mining
+  name_zh: 露天采矿
+  name_en: Surface / Open Pit Mining
+  sort_order: 1
+  keywords:
+  - open pit
+  - open-pit
+  - open cast
+  - surface mining
+  - strip mining
+  - bench
+  - pushback
+  - pit optimization
+  - haul road
+  - 露天矿
+  - 露天开采
+  - 台阶
+  query_keywords:
+  - open pit mining
+  - surface mining
+  children:
+  - slug: surface-mining.open-pit
+    name_zh: 露天开采工艺
+    name_en: Open Pit Mining
+    query_keywords:
+    - open pit mining
+    - open pit mine operation
+    match_keywords:
+    - open pit
+    - open-pit
+    - opencast
+    - surface mine
+  - slug: surface-mining.bench-design
+    name_zh: 台阶设计
+    name_en: Bench Design
+    query_keywords:
+    - bench design open pit slope
+    - bench height berm mine
+    match_keywords:
+    - bench height
+    - bench face
+    - berm
+    - bench configuration
+  - slug: surface-mining.pit-optimization
+    name_zh: 境界优化
+    name_en: Pit Optimization
+    query_keywords:
+    - pit optimization
+    - ultimate pit limit
+    match_keywords:
+    - pit optimization
+    - ultimate pit
+    - lerchs-grossmann
+    - pseudoflow
+  - slug: surface-mining.pushback
+    name_zh: 剥采推进与排程
+    name_en: Pushback & Production Sequencing
+    query_keywords:
+    - pushback sequencing open pit
+    - open pit production scheduling
+    match_keywords:
+    - pushback
+    - cutback
+    - sequencing
+    - phase design
+  - slug: surface-mining.haul-road
+    name_zh: 矿区道路
+    name_en: Haul Road Design
+    query_keywords:
+    - mine haul road design
+    match_keywords:
+    - haul road
+  query_keywords_zh:
+  - 露天矿山开采
+  - 露天煤矿
+  - 台阶爆破参数
+- slug: underground-mining
+  name_zh: 地下采矿
+  name_en: Underground Mining
+  sort_order: 2
+  keywords:
+  - underground mining
+  - block caving
+  - sublevel stoping
+  - room and pillar
+  - longwall
+  - ground support
+  - shaft
+  - 地下矿
+  - 井下
+  - 充填
+  query_keywords:
+  - underground mining methods
+  children:
+  - slug: underground-mining.block-caving
+    name_zh: 自然崩落法
+    name_en: Block Caving
+    query_keywords:
+    - block caving
+    - cave mining engineering
+    match_keywords:
+    - block caving
+    - cave mining
+    - undercutting
+  - slug: underground-mining.stoping
+    name_zh: 分段/房柱采矿
+    name_en: Stoping Methods
+    query_keywords:
+    - sublevel stoping
+    - room and pillar mining
+    match_keywords:
+    - sublevel stoping
+    - longhole
+    - stope
+    - room and pillar
+  - slug: underground-mining.ground-support
+    name_zh: 地压与支护
+    name_en: Ground Support
+    query_keywords:
+    - ground support underground mining
+    - rockbolting
+    match_keywords:
+    - ground support
+    - rockbolt
+    - cable bolt
+    - shotcrete
+  query_keywords_zh:
+  - 地下金属矿山
+  - 煤矿井下开采
+  - 采场结构参数
+- slug: geotech-slope
+  name_zh: 岩土与边坡稳定
+  name_en: Geotechnical & Slope Stability
+  sort_order: 3
+  keywords:
+  - slope stability
+  - rock slope
+  - pit slope
+  - rock mechanics
+  - geotechnical
+  - rock mass
+  - ground control
+  - wedge failure
+  - planar failure
+  - toppling
+  - stereonet
+  - factor of safety
+  - LiDAR
+  - InSAR
+  - slope monitoring
+  - radar monitoring
+  - waste dump
+  - spoil pile
+  - 排土场
+  - 边坡
+  - 岩土
+  - 岩石力学
+  - 稳定性
+  query_keywords:
+  - rock mechanics
+  - geotechnical engineering mining
+  children:
+  - slug: geotech-slope.rock-mechanics
+    name_zh: 岩石力学
+    name_en: Rock Mechanics
+    query_keywords:
+    - rock mechanics
+    - rock mass characterization
+    match_keywords:
+    - rock mechanics
+    - rock mass
+    - uniaxial compressive
+    - crack initiation
+  - slug: geotech-slope.slope-stability
+    name_zh: 边坡稳定
+    name_en: Slope Stability
+    query_keywords:
+    - open pit slope stability
+    - rock slope stability analysis
+    match_keywords:
+    - slope stability
+    - pit slope
+    - rock slope
+    - limit equilibrium
+  - slug: geotech-slope.slope-monitoring
+    name_zh: 边坡监测
+    name_en: Slope Monitoring
+    query_keywords:
+    - slope monitoring open pit
+    - slope radar mining
+    match_keywords:
+    - slope monitoring
+    - slope radar
+    - insar
+    - monitoring prism
+    - deformation monitoring
+  - slug: geotech-slope.numerical-modeling
+    name_zh: 数值模拟
+    name_en: Numerical Modeling
+    query_keywords:
+    - numerical modeling geotechnical
+    - finite element slope stability
+    match_keywords:
+    - finite element
+    - discrete element
+    - flac
+    - numerical modeling
+    - dem
+  - slug: geotech-slope.structural-control
+    name_zh: 结构面控制
+    name_en: Structural Control
+    query_keywords:
+    - structural control rock slope
+    - rock discontinuities slope failure
+    match_keywords:
+    - discontinuity
+    - joint set
+    - stereonet
+    - kinematic analysis
+    - wedge failure
+  - slug: geotech-slope.waste-dump
+    name_zh: 排土场
+    name_en: Waste Dumps & Spoil Piles
+    query_keywords:
+    - waste dump stability open pit
+    - spoil pile design mine
+    match_keywords:
+    - waste dump
+    - spoil pile
+    - spoil heap
+    - dump stability
+    - tip stability
+    - 排土场
+  query_keywords_zh:
+  - 边坡稳定性
+  - 露天矿边坡
+  - 排土场稳定性
+- slug: mine-water
+  name_zh: 矿山水文
+  name_en: Mine Water & Hydrogeology
+  sort_order: 4
+  keywords:
+  - mine water
+  - hydrogeology
+  - groundwater
+  - dewatering
+  - pore pressure
+  - pit lake
+  - water management
+  - inflow
+  - 矿山水
+  - 水文
+  - 地下水
+  - 降水
+  - 疏干
+  query_keywords:
+  - mine water management
+  children:
+  - slug: mine-water.hydrogeology
+    name_zh: 矿山水文地质
+    name_en: Mining Hydrogeology
+    query_keywords:
+    - mining hydrogeology
+    - groundwater inflow mine
+    match_keywords:
+    - hydrogeology
+    - groundwater inflow
+    - aquifer dewatering
+  - slug: mine-water.dewatering
+    name_zh: 疏干与降压
+    name_en: Dewatering & Depressurization
+    query_keywords:
+    - mine dewatering
+    - pit depressurization
+    match_keywords:
+    - dewatering
+    - depressurization
+    - wellfield
+  - slug: mine-water.pore-pressure
+    name_zh: 孔隙水压力
+    name_en: Pore Pressure
+    query_keywords:
+    - pore pressure slope stability
+    - piezometric monitoring slope
+    match_keywords:
+    - pore pressure
+    - piezometer
+    - phreatic surface
+  - slug: mine-water.water-slope
+    name_zh: 水岩相互作用
+    name_en: Water-Slope Interaction
+    query_keywords:
+    - rainfall induced landslide open pit
+    - water slope interaction mining
+    match_keywords:
+    - rainfall induced
+    - saturation
+    - water pressure slope
+  query_keywords_zh:
+  - 矿井防治水
+  - 矿山水文地质
+  - 矿井涌水量
+- slug: drilling-blasting
+  name_zh: 钻孔与爆破
+  name_en: Drilling & Blasting
+  sort_order: 5
+  keywords:
+  - blasting
+  - drill and blast
+  - blast design
+  - fragmentation
+  - vibration
+  - explosive
+  - blast damage
+  - 爆破
+  - 钻爆
+  - 凿岩
+  query_keywords:
+  - blasting mining
+  children:
+  - slug: drilling-blasting.blast-design
+    name_zh: 爆破设计
+    name_en: Blast Design
+    query_keywords:
+    - blast design open pit
+    - burden spacing blasthole
+    match_keywords:
+    - blast design
+    - burden
+    - powder factor
+    - blasthole
+  - slug: drilling-blasting.fragmentation
+    name_zh: 破碎块度
+    name_en: Fragmentation
+    query_keywords:
+    - blasting fragmentation prediction
+    match_keywords:
+    - fragmentation
+    - kuz-ram
+    - fragment size
+  - slug: drilling-blasting.vibration
+    name_zh: 爆破振动
+    name_en: Blast Vibration
+    query_keywords:
+    - blasting vibration control
+    - ground vibration quarry
+    match_keywords:
+    - vibration
+    - ppv
+    - ground vibration
+  - slug: drilling-blasting.blast-damage
+    name_zh: 爆破损伤
+    name_en: Blast Damage
+    query_keywords:
+    - blast damage slope
+    - presplitting blasting
+    match_keywords:
+    - blast damage
+    - presplit
+    - smooth blasting
+  query_keywords_zh:
+  - 矿山爆破
+  - 爆破振动
+  - 光面爆破
+- slug: mine-planning
+  name_zh: 矿山规划
+  name_en: Mine Planning & Economics
+  sort_order: 6
+  keywords:
+  - mine planning
+  - mine design
+  - scheduling
+  - production plan
+  - life of mine
+  - feasibility
+  - resource model
+  - reserve
+  - mine closure plan
+  - 矿山设计
+  - 生产计划
+  - 储量
+  query_keywords:
+  - mine planning
+  children:
+  - slug: mine-planning.strategic
+    name_zh: 长期规划
+    name_en: Strategic Planning
+    query_keywords:
+    - strategic mine planning
+    - life of mine optimization
+    match_keywords:
+    - strategic mine planning
+    - life of mine
+    - mine optimization
+  - slug: mine-planning.scheduling
+    name_zh: 生产排程
+    name_en: Mine Scheduling
+    query_keywords:
+    - mine production scheduling
+    - short term mine planning
+    match_keywords:
+    - scheduling
+    - short interval
+    - production plan
+  - slug: mine-planning.economics
+    name_zh: 经济评价
+    name_en: Economic Evaluation
+    query_keywords:
+    - mining project economic evaluation
+    - net present value mining
+    match_keywords:
+    - net present value
+    - npv
+    - cash flow
+    - valuation
+    - feasibility study
+  - slug: mine-planning.resource-model
+    name_zh: 资源建模
+    name_en: Resource Modeling
+    query_keywords:
+    - mineral resource estimation
+    - geostatistics mining
+    match_keywords:
+    - resource estimation
+    - geostatistics
+    - kriging
+    - grade model
+  query_keywords_zh:
+  - 矿山生产计划
+  - 矿业经济评价
+  - 矿产资源开发
+- slug: automation
+  name_zh: 矿山自动化
+  name_en: Mining Automation & Robotics
+  sort_order: 7
+  keywords:
+  - autonomous haulage
+  - autonomous truck
+  - autonomous drilling
+  - remote operation
+  - robotics
+  - teleoperation
+  - AHS
+  - 无人驾驶
+  - 自动化
+  - 机器人
+  query_keywords:
+  - mining automation
+  children:
+  - slug: automation.autonomous-haulage
+    name_zh: 无人运输
+    name_en: Autonomous Haulage
+    query_keywords:
+    - autonomous haulage system
+    - autonomous trucks mining
+    match_keywords:
+    - autonomous haulage
+    - ahs
+    - autonomous truck
+  - slug: automation.autonomous-drilling
+    name_zh: 自动钻进
+    name_en: Autonomous Drilling
+    query_keywords:
+    - autonomous drilling mining
+    match_keywords:
+    - autonomous drilling
+    - automated drilling
+  - slug: automation.robotics
+    name_zh: 矿山机器人
+    name_en: Mining Robotics
+    query_keywords:
+    - robotics in mining
+    - remote operation mining
+    match_keywords:
+    - robotics
+    - teleoperation
+    - remote operation center
+  query_keywords_zh:
+  - 智能矿山
+  - 矿山无人驾驶
+  - 矿井机器人
+- slug: ai-digital
+  name_zh: AI 与数字矿山
+  name_en: AI & Digital Mining
+  sort_order: 8
+  keywords:
+  - machine learning
+  - deep learning
+  - artificial intelligence
+  - digital twin
+  - computer vision
+  - predictive maintenance
+  - data analytics
+  - smart mining
+  - AI in mining
+  - 人工智能
+  - 机器学习
+  - 数字孪生
+  - 智慧矿山
+  - 数字化
+  query_keywords:
+  - artificial intelligence mining
+  children:
+  - slug: ai-digital.machine-learning
+    name_zh: 机器学习
+    name_en: Machine Learning in Mining
+    query_keywords:
+    - machine learning mining engineering
+    - machine learning slope
+    match_keywords:
+    - machine learning
+    - random forest
+    - xgboost
+    - svm
+  - slug: ai-digital.deep-learning
+    name_zh: 深度学习
+    name_en: Deep Learning in Mining
+    query_keywords:
+    - deep learning mining
+    - neural network geotechnical
+    match_keywords:
+    - deep learning
+    - neural network
+    - cnn
+    - lstm
+    - transformer
+  - slug: ai-digital.digital-twin
+    name_zh: 数字孪生
+    name_en: Digital Twin
+    query_keywords:
+    - digital twin mining
+    match_keywords:
+    - digital twin
+  - slug: ai-digital.computer-vision
+    name_zh: 机器视觉
+    name_en: Computer Vision
+    query_keywords:
+    - computer vision mining
+    - rock mass image segmentation
+    match_keywords:
+    - computer vision
+    - image segmentation
+    - crack detection
+    - object detection
+  - slug: ai-digital.data-analytics
+    name_zh: 数据分析与预测维护
+    name_en: Data Analytics & Predictive Maintenance
+    query_keywords:
+    - predictive maintenance mining equipment
+    - big data mining industry
+    match_keywords:
+    - predictive maintenance
+    - big data
+    - data analytics
+  query_keywords_zh:
+  - 矿山人工智能
+  - 机器学习 岩石力学
+  - 数字矿山
+- slug: mineral-processing
+  name_zh: 矿物加工
+  name_en: Mineral Processing & Metallurgy
+  sort_order: 9
+  keywords:
+  - mineral processing
+  - comminution
+  - flotation
+  - grinding
+  - leaching
+  - metallurgy
+  - concentration
+  - recovery
+  - 选矿
+  - 磨矿
+  - 浮选
+  - 冶炼
+  query_keywords:
+  - mineral processing
+  children:
+  - slug: mineral-processing.comminution
+    name_zh: 破碎磨矿
+    name_en: Comminution
+    query_keywords:
+    - comminution grinding mill
+    match_keywords:
+    - comminution
+    - grinding
+    - sag mill
+    - ball mill
+  - slug: mineral-processing.flotation
+    name_zh: 浮选
+    name_en: Flotation
+    query_keywords:
+    - froth flotation
+    match_keywords:
+    - flotation
+    - froth
+    - reagent
+  - slug: mineral-processing.leaching
+    name_zh: 浸出
+    name_en: Leaching
+    query_keywords:
+    - heap leaching
+    - bioleaching
+    match_keywords:
+    - leaching
+    - heap leach
+    - bioleaching
+  - slug: mineral-processing.separation
+    name_zh: 物理选别
+    name_en: Physical Separation
+    query_keywords:
+    - magnetic separation minerals
+    - gravity separation mineral
+    match_keywords:
+    - magnetic separation
+    - gravity separation
+    - dense medium
+  query_keywords_zh:
+  - 矿物加工
+  - 浮选工艺
+  - 选矿厂
+- slug: tailings
+  name_zh: 尾矿
+  name_en: Tailings Management
+  sort_order: 10
+  keywords:
+  - tailings
+  - tailings dam
+  - tailings storage
+  - TSF
+  - dry stacking
+  - paste backfill
+  - GISTM
+  - 尾矿
+  - 尾矿库
+  query_keywords:
+  - tailings management
+  children:
+  - slug: tailings.storage
+    name_zh: 尾矿库设计
+    name_en: Tailings Storage Facilities
+    query_keywords:
+    - tailings storage facility
+    - tailings dam design
+    match_keywords:
+    - tailings storage
+    - tailings dam
+    - tsf
+  - slug: tailings.safety
+    name_zh: 尾矿安全
+    name_en: Tailings Dam Safety
+    query_keywords:
+    - tailings dam failure
+    - tailings governance GISTM
+    match_keywords:
+    - dam safety
+    - gistm
+    - tailings failure
+    - liquefaction
+  - slug: tailings.paste-dry
+    name_zh: 膏体与干堆
+    name_en: Paste & Filtered Tailings
+    query_keywords:
+    - paste backfill
+    - filtered tailings dry stacking
+    match_keywords:
+    - paste backfill
+    - filtered tailings
+    - dry stack
+  - slug: tailings.reprocessing
+    name_zh: 尾矿再利用
+    name_en: Tailings Reprocessing
+    query_keywords:
+    - tailings reprocessing
+    - tailings valorization
+    match_keywords:
+    - reprocessing
+    - tailings recycling
+    - valorization
+  query_keywords_zh:
+  - 尾矿库
+  - 尾矿坝
+- slug: mine-safety
+  name_zh: 矿山安全
+  name_en: Mine Safety
+  sort_order: 11
+  keywords:
+  - mine safety
+  - fatality
+  - occupational
+  - gas monitoring
+  - rockburst
+  - emergency
+  - safety management
+  - 矿山安全
+  - 安全生产
+  - 冲击地压
+  query_keywords:
+  - mine safety
+  children:
+  - slug: mine-safety.gas-dust
+    name_zh: 气体与粉尘
+    name_en: Gas & Dust Monitoring
+    query_keywords:
+    - gas monitoring underground mine
+    - mine dust control
+    match_keywords:
+    - gas monitoring
+    - methane
+    - dust control
+    - respirable dust
+  - slug: mine-safety.rockburst
+    name_zh: 冲击地压
+    name_en: Rockburst & Seismicity
+    query_keywords:
+    - rockburst prediction
+    - mining seismicity
+    match_keywords:
+    - rockburst
+    - seismicity
+    - microseismic
+  - slug: mine-safety.emergency
+    name_zh: 应急管理
+    name_en: Emergency Management
+    query_keywords:
+    - mine emergency response
+    - mine rescue
+    match_keywords:
+    - emergency response
+    - mine rescue
+    - evacuation
+  - slug: mine-safety.occupational
+    name_zh: 职业健康
+    name_en: Occupational Health
+    query_keywords:
+    - occupational health mining
+    - miners silicosis
+    match_keywords:
+    - occupational health
+    - silicosis
+    - heat stress
+    - fatigue
+  query_keywords_zh:
+  - 冲击地压
+  - 煤矿安全
+  - 矿井瓦斯
+- slug: mine-closure
+  name_zh: 矿山闭坑与生态修复
+  name_en: Mine Closure & Rehabilitation
+  sort_order: 12
+  keywords:
+  - mine closure
+  - rehabilitation
+  - revegetation
+  - remediation
+  - landform
+  - post-mining
+  - 闭坑
+  - 复垦
+  - 生态修复
+  query_keywords:
+  - mine closure
+  children:
+  - slug: mine-closure.closure-planning
+    name_zh: 闭坑规划
+    name_en: Closure Planning
+    query_keywords:
+    - mine closure planning
+    - closure cost estimation
+    match_keywords:
+    - mine closure
+    - closure plan
+    - relinquishment
+  - slug: mine-closure.rehabilitation
+    name_zh: 复垦与植被恢复
+    name_en: Rehabilitation
+    query_keywords:
+    - mine site rehabilitation
+    - revegetation mine
+    match_keywords:
+    - rehabilitation
+    - revegetation
+    - landform design
+    - topsoil
+  - slug: mine-closure.geochemistry
+    name_zh: 地化稳定性
+    name_en: Geochemical Stability
+    query_keywords:
+    - acid mine drainage
+    - acid rock drainage prediction
+    match_keywords:
+    - acid mine drainage
+    - amd
+    - metal leaching
+  - slug: mine-closure.post-mining
+    name_zh: 矿后土地利用
+    name_en: Post-Mining Land Use
+    query_keywords:
+    - post-mining land use
+    - repurposing mine sites
+    match_keywords:
+    - post-mining
+    - repurposing
+    - pumped storage mine
+  query_keywords_zh:
+  - 矿山生态修复
+  - 煤矿关闭
+  - 酸性矿井水
+- slug: critical-minerals
+  name_zh: 关键矿产
+  name_en: Critical Minerals & Energy Transition
+  sort_order: 13
+  keywords:
+  - critical minerals
+  - lithium
+  - cobalt
+  - nickel
+  - rare earth
+  - copper
+  - energy transition
+  - battery minerals
+  - 关键矿产
+  - 锂
+  - 钴
+  - 镍
+  - 稀土
+  - 铜矿
+  query_keywords:
+  - critical minerals mining
+  children:
+  - slug: critical-minerals.lithium
+    name_zh: 锂与电池矿产
+    name_en: Lithium & Battery Minerals
+    query_keywords:
+    - lithium mining
+    - lithium brine extraction
+    match_keywords:
+    - lithium
+    - spodumene
+    - brine extraction
+  - slug: critical-minerals.rare-earth
+    name_zh: 稀土
+    name_en: Rare Earth Elements
+    query_keywords:
+    - rare earth elements mining
+    match_keywords:
+    - rare earth
+    - ree
+    - monazite
+    - bastnaesite
+  - slug: critical-minerals.copper
+    name_zh: 铜与能源转型
+    name_en: Copper & Energy Transition
+    query_keywords:
+    - copper mining energy transition
+    match_keywords:
+    - copper
+    - energy transition metals
+  - slug: critical-minerals.cobalt-nickel
+    name_zh: 钴镍供应
+    name_en: Cobalt & Nickel Supply
+    query_keywords:
+    - cobalt nickel mining
+    - battery metals supply chain
+    match_keywords:
+    - cobalt
+    - nickel
+    - battery metals
+  query_keywords_zh:
+  - 关键金属矿产
+  - 锂矿
+  - 稀土资源
+- slug: geo-exploration
+  name_zh: 地质勘查与资源估算
+  name_en: Exploration & Resource Estimation
+  sort_order: 14
+  keywords:
+  - exploration
+  - geological survey
+  - exploration drilling
+  - assay
+  - resource estimation
+  - geostatistics
+  - ore body model
+  - geological modeling
+  - 勘探
+  - 地质勘查
+  - 资源量
+  - 储量估算
+  - 地质建模
+  - 勘查
+  query_keywords:
+  - mineral exploration
+  children:
+  - slug: geo-exploration.drilling
+    name_zh: 勘探与钻探
+    name_en: Exploration Drilling
+    query_keywords:
+    - mineral exploration drilling
+    - exploration geochemistry deposit
+    match_keywords:
+    - exploration drilling
+    - drill core
+    - assay
+    - geochemistry
+    - prospecting
+  - slug: geo-exploration.geological-modeling
+    name_zh: 三维地质建模
+    name_en: 3D Geological Modeling
+    query_keywords:
+    - 3D geological modeling
+    - implicit modeling geology
+    match_keywords:
+    - geological modeling
+    - implicit modeling
+    - wireframe
+    - leapfrog
+    - gocad
+  - slug: geo-exploration.resource-estimation
+    name_zh: 资源量估算
+    name_en: Mineral Resource Estimation
+    query_keywords:
+    - mineral resource estimation
+    - kriging grade estimation
+    match_keywords:
+    - resource estimation
+    - kriging
+    - conditional simulation
+    - grade interpolation
+    - cokriging
+    - variography
+  - slug: geo-exploration.grade-control
+    name_zh: 生产品位控制
+    name_en: Grade Control
+    query_keywords:
+    - grade control open pit
+    - ore reconciliation
+    match_keywords:
+    - grade control
+    - ore spotting
+    - reconciliation
+    - dilution
+  - slug: geo-exploration.resource-codes
+    name_zh: 资源储量规范
+    name_en: Resource & Reserve Codes
+    query_keywords:
+    - JORC code resource
+    - NI 43-101 mineral resource
+    match_keywords:
+    - jorc
+    - ni 43-101
+    - samrec
+    - perc
+    - resource classification
+    - reserve reporting
+  - slug: geo-exploration.prospectivity
+    name_zh: 成矿预测与勘查技术
+    name_en: Prospectivity Mapping & Exploration Tech
+    query_keywords:
+    - mineral prospectivity mapping
+    - geophysical survey exploration
+    match_keywords:
+    - prospectivity
+    - geophysical survey
+    - hyperspectral
+    - deposit model
+  query_keywords_zh:
+  - 成矿预测
+  - 资源储量估算
+  - 三维地质建模
+- slug: industry
+  name_zh: 行业与市场
+  name_en: Industry & Market
+  sort_order: 15
+  keywords:
+  - merger
+  - acquisition
+  - investment
+  - production report
+  - quarterly
+  - commodity price
+  - expansion project
+  - new mine
+  - 收购
+  - 并购
+  - 投产
+  - 扩产
+  - 产量
+  - 市场
