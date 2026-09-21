@@ -38,6 +38,7 @@ def load_ontology() -> list[dict]:
                     "slug": ch["slug"],
                     "name_zh": ch["name_zh"],
                     "query_keywords": ch.get("query_keywords", []),
+                    "query_keywords_zh": ch.get("query_keywords_zh", []),
                     "match_keywords": [k.lower() for k in ch.get("match_keywords", [])],
                 })
         result.append({
@@ -45,6 +46,7 @@ def load_ontology() -> list[dict]:
             "slug": cat["slug"],
             "name_zh": cat["name_zh"],
             "query_keywords": cat.get("query_keywords", []),
+            "query_keywords_zh": cat.get("query_keywords_zh", []),
             "match_keywords": [k.lower() for k in cat.get("keywords", [])],
             "children": children,
         })
@@ -103,8 +105,8 @@ def upsert_work(cur_work: dict) -> int | None:
         """
         INSERT INTO mining.works
             (openalex_id, doi, title, abstract, work_type, publication_year,
-             publication_date, cited_by_count, source_name, raw_data)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+             publication_date, cited_by_count, source_name, lang, raw_data)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (openalex_id) DO UPDATE
         SET cited_by_count = EXCLUDED.cited_by_count,
             abstract = COALESCE(works.abstract, EXCLUDED.abstract),
@@ -115,7 +117,8 @@ def upsert_work(cur_work: dict) -> int | None:
             cur_work["id"], doi, title[:600], abstract or None,
             cur_work.get("type"), cur_work.get("publication_year"),
             cur_work.get("publication_date"), cur_work.get("cited_by_count", 0),
-            source_name, json.dumps({"referenced_works": cur_work.get("referenced_works", [])}),
+            source_name, cur_work.get("language"),
+            json.dumps({"referenced_works": cur_work.get("referenced_works", [])}),
         ),
     )
     return row["work_id"]
@@ -243,19 +246,30 @@ def build_citation_edges() -> int:
     return len(edges)
 
 
-def build_query_list(ontology: list[dict], queries_per_topic: int) -> list[tuple[dict, str]]:
-    """每子主题取前 N 条查询词、每大类取 1 条，控制 API 预算（匿名每日约 100 次调用）。"""
+def build_query_list(ontology: list[dict], queries_per_topic: int, zh: bool = False) -> list[tuple[dict, str]]:
+    """每子主题取前 N 条查询词、每大类取 1 条；zh=True 时改用中文词族（中文文献语料）。"""
     queries: list[tuple[dict, str]] = []
     for cat in ontology:
         seen_q: set[str] = set()
-        if cat.get("query_keywords"):
-            seen_q.add(cat["query_keywords"][0].lower())
-            queries.append((cat, cat["query_keywords"][0]))
-        for ch in cat["children"]:
-            for q in ch["query_keywords"][:queries_per_topic]:
-                if q.lower() not in seen_q:
-                    seen_q.add(q.lower())
+        if zh:
+            for q in cat.get("query_keywords_zh", []):
+                if q not in seen_q:
+                    seen_q.add(q)
                     queries.append((cat, q))
+            for ch in cat["children"]:
+                for q in ch.get("query_keywords_zh", [])[:queries_per_topic]:
+                    if q not in seen_q:
+                        seen_q.add(q)
+                        queries.append((cat, q))
+        else:
+            if cat.get("query_keywords"):
+                seen_q.add(cat["query_keywords"][0].lower())
+                queries.append((cat, cat["query_keywords"][0]))
+            for ch in cat["children"]:
+                for q in ch["query_keywords"][:queries_per_topic]:
+                    if q.lower() not in seen_q:
+                        seen_q.add(q.lower())
+                        queries.append((cat, q))
     return queries
 
 
@@ -267,6 +281,7 @@ def collect(
     sort: str | None = None,
     from_date: str | None = None,
     to_date: str | None = None,
+    zh: bool = False,
 ) -> dict:
     """category_slug 用于补采单个大类；sort/from_date 用于"最新论文优先"补采轮。"""
     max_records_per_query = max_records_per_query or config.EXPERT_WORKS_PER_QUERY
@@ -287,8 +302,8 @@ def collect(
         "persons": {}, "persons_display": {}, "institutions": set(),
         "inst_rows": [], "pw": [], "pi": [],
     }
-    queries = build_query_list(ontology, queries_per_topic)
-    print(f"collect: {len(queries)} queries over {len(ontology)} categories")
+    queries = build_query_list(ontology, queries_per_topic, zh=zh)
+    print(f"collect: {len(queries)} queries over {len(ontology)} categories (zh={zh})")
 
     new_works, failed = 0, 0
     budget_stop = False

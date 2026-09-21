@@ -19,7 +19,7 @@ TIMEOUT = 30.0
 EMAIL = os.getenv("OPENALEX_EMAIL", "").strip()
 
 WORKS_SELECT = (
-    "id,doi,title,publication_year,publication_date,cited_by_count,type,"
+    "id,doi,title,publication_year,publication_date,cited_by_count,type,language,"
     "authorships,primary_location,referenced_works,abstract_inverted_index"
 )
 AUTHORS_SELECT = (
