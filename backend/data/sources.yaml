@@ -8,6 +8,7 @@ sources:
   lang: en
   authority_weight: 8
   notes: 全球矿业新闻第一站
+  tier: B
 - slug: im-mining
   name: International Mining
   layer: 4
@@ -17,6 +18,7 @@ sources:
   lang: en
   authority_weight: 8
   notes: 偏技术与项目报道
+  tier: B
 - slug: mining-technology
   name: Mining Technology
   layer: 4
@@ -26,6 +28,7 @@ sources:
   lang: en
   authority_weight: 7
   active: false
+  tier: B
 - slug: australian-mining
   name: Australian Mining
   layer: 4
@@ -34,6 +37,7 @@ sources:
   site_url: https://www.australianmining.com.au
   lang: en
   authority_weight: 7
+  tier: B
 - slug: northern-miner
   name: The Northern Miner
   layer: 4
@@ -42,6 +46,7 @@ sources:
   site_url: https://www.northernminer.com
   lang: en
   authority_weight: 7
+  tier: B
 - slug: ausimm-bulletin
   name: AusIMM Bulletin
   layer: 4
@@ -52,6 +57,7 @@ sources:
   authority_weight: 8
   active: false
   notes: feed 已下线返回 HTML，暂停（2026-09）
+  tier: B
 - slug: emj
   name: Engineering & Mining Journal
   layer: 4
@@ -61,6 +67,7 @@ sources:
   lang: en
   authority_weight: 7
   active: false
+  tier: B
 - slug: cim-magazine
   name: CIM Magazine
   layer: 4
@@ -71,6 +78,7 @@ sources:
   authority_weight: 7
   active: false
   notes: feed 404，暂停（2026-09）
+  tier: B
 - slug: mining-weekly
   name: Mining Weekly
   layer: 4
@@ -80,6 +88,7 @@ sources:
   lang: en
   authority_weight: 7
   active: false
+  tier: B
 - slug: global-mining-review
   name: Global Mining Review
   layer: 4
@@ -89,6 +98,7 @@ sources:
   lang: en
   authority_weight: 6
   active: false
+  tier: B
 - slug: mdpi-minerals
   name: Minerals (MDPI)
   layer: 4
@@ -99,6 +109,7 @@ sources:
   authority_weight: 9
   active: false
   notes: 403 反爬（IP 级），暂停（2026-09）
+  tier: B-
 - slug: mdpi-mining
   name: Mining (MDPI)
   layer: 4
@@ -108,6 +119,7 @@ sources:
   lang: en
   authority_weight: 9
   active: false
+  tier: B-
 - slug: springer-rock-mech
   name: Rock Mechanics and Rock Engineering (Springer)
   layer: 4
@@ -118,6 +130,7 @@ sources:
   authority_weight: 9
   active: false
   notes: search.rss 已失效返回 HTML，暂停（2026-09）
+  tier: B-
 - slug: springer-bege
   name: Bulletin of Engineering Geology and the Environment (Springer)
   layer: 4
@@ -127,6 +140,7 @@ sources:
   lang: en
   authority_weight: 9
   active: false
+  tier: B-
 - slug: gn-slope-stability
   name: Google News · 边坡稳定
   layer: 4
@@ -135,6 +149,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-tailings
   name: Google News · 尾矿
   layer: 4
@@ -143,6 +158,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-autonomous
   name: Google News · 矿山自动化
   layer: 4
@@ -151,6 +167,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-mine-water
   name: Google News · 矿山水文
   layer: 4
@@ -159,6 +176,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-open-pit
   name: Google News · 露天开采
   layer: 4
@@ -167,6 +185,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-blasting
   name: Google News · 钻爆
   layer: 4
@@ -175,6 +194,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-critical-minerals
   name: Google News · 关键矿产
   layer: 4
@@ -183,6 +203,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-underground
   name: Google News · 地下采矿
   layer: 4
@@ -191,6 +212,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-rio-tinto
   name: Google News · Rio Tinto
   layer: 2
@@ -199,6 +221,7 @@ sources:
   site_url: https://www.riotinto.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-bhp
   name: Google News · BHP
   layer: 2
@@ -207,6 +230,7 @@ sources:
   site_url: https://www.bhp.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-newmont
   name: Google News · Newmont
   layer: 2
@@ -215,6 +239,7 @@ sources:
   site_url: https://www.newmont.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-anglo-american
   name: Google News · Anglo American
   layer: 2
@@ -223,6 +248,7 @@ sources:
   site_url: https://www.angloamerican.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-barrick
   name: Google News · Barrick
   layer: 2
@@ -231,6 +257,7 @@ sources:
   site_url: https://www.barrick.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-vale
   name: Google News · Vale
   layer: 2
@@ -239,6 +266,7 @@ sources:
   site_url: https://vale.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-teck
   name: Google News · Teck
   layer: 2
@@ -247,6 +275,7 @@ sources:
   site_url: https://www.teck.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-zijin
   name: Google News · 紫金矿业
   layer: 2
@@ -255,6 +284,7 @@ sources:
   site_url: https://www.zijinmining.com
   lang: zh
   authority_weight: 6
+  tier: B
 - slug: gn-ai-digital
   name: Google News · AI与数字矿山
   layer: 4
@@ -263,6 +293,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-mine-safety
   name: Google News · 矿山安全
   layer: 4
@@ -271,6 +302,7 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
 - slug: gn-mineral-processing
   name: Google News · 矿物加工
   layer: 4
@@ -279,3 +311,152 @@ sources:
   site_url: https://news.google.com
   lang: en
   authority_weight: 6
+  tier: B
+- slug: mining-journal
+  name: The Mining Journal (Marquette 地方报)
+  tier: D
+  source_type: news
+  feed_url: https://www.miningjournal.net/rss
+  site_url: https://www.miningjournal.net
+  lang: en
+  authority_weight: 8
+  notes: 同名美国地方报纸，非 Aspermont 矿业周刊；已停用
+  active: false
+- slug: crirsco
+  name: CRIRSCO
+  tier: A
+  source_type: org
+  feed_url: https://www.crirsco.com/rss
+  site_url: https://www.crirsco.com
+  lang: en
+  authority_weight: 10
+  notes: 全球资源储量报告标准体系协调组织（JORC/NI 43-101/SAMREC 等）
+- slug: usgs
+  name: USGS 美国地质调查局
+  tier: S0
+  source_type: government
+  site_url: https://www.usgs.gov
+  lang: en
+  authority_weight: 10
+  active: false
+  notes: 全球矿产品产量/储量权威（Mineral Commodity Summaries 年度覆盖 90+ 矿种）；无 RSS，人工查阅
+  country: US
+- slug: bgs-wms
+  name: BGS 世界矿产统计
+  tier: S0
+  source_type: government
+  site_url: https://www2.bgs.ac.uk/mineralsuk/statistics/worldArchive.html
+  lang: en
+  authority_weight: 10
+  active: false
+  notes: 全球矿产生产/贸易长周期数据库；人工查阅
+  country: GB
+- slug: gsc
+  name: 加拿大地质调查局
+  tier: S0
+  source_type: government
+  site_url: https://natural-resources.canada.ca/earth-sciences/geography/geological-survey-canada
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 矿床/地质/关键矿产出版物与数据；人工查阅
+  country: CA
+- slug: sec-edgar
+  name: SEC EDGAR 披露
+  tier: A-
+  source_type: regulator
+  site_url: https://www.sec.gov/edgar/search/
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 在美上市矿企年报/技术报告（S-K 1300）/重大事项一手披露；人工检索
+- slug: asx-announcements
+  name: ASX 公告平台
+  tier: A-
+  source_type: regulator
+  site_url: https://www2.asx.com.au/markets/trade-our-cash-market/announcements
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 澳上市矿企公告（JORC 报告主渠道）；人工检索
+- slug: iea
+  name: IEA 国际能源署
+  tier: A
+  source_type: org
+  site_url: https://www.iea.org
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 关键矿产/能源转型/供应链展望报告；无 RSS，人工查阅
+- slug: icmm
+  name: ICMM 国际矿业与金属理事会
+  tier: A
+  source_type: org
+  site_url: https://www.icmm.com
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: 行业共识/ESG 标准；人工查阅
+- slug: sp-global-mi
+  name: S&P Global Mining Intelligence
+  tier: B+
+  source_type: database
+  site_url: https://www.spglobal.com/marketintelligence/en/solutions/global-mining-intelligence
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 5000+ 上市公司/37400+ 项目/矿山数据库；付费，人工查阅
+- slug: fastmarkets
+  name: Fastmarkets Metals & Mining
+  tier: B+
+  source_type: database
+  site_url: https://www.fastmarkets.com
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: 金属价格/市场分析；付费，人工查阅
+- slug: wood-mackenzie
+  name: Wood Mackenzie
+  tier: B+
+  source_type: database
+  site_url: https://www.woodmac.com
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: 矿山经济/供需/能源转型分析；付费，人工查阅
+- slug: cru
+  name: CRU Group
+  tier: B+
+  source_type: database
+  site_url: https://crugroup.com
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: 铜铝钢铁锂成本与市场供需；付费，人工查阅
+- slug: onemine
+  name: OneMine (SME/AusIMM 文献库)
+  tier: B-
+  source_type: database
+  site_url: https://onemine.org
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: 矿业会议论文与专著全文库；部分付费
+- slug: linkedin-experts
+  name: 专家 LinkedIn/博客
+  tier: C
+  source_type: expert
+  site_url: https://www.linkedin.com
+  lang: en
+  authority_weight: 5
+  active: false
+  notes: 专家观点与前沿信号；合规限制不自动抓取，人工浏览
+- slug: mining-journal-aspermont
+  name: Mining Journal (Aspermont)
+  tier: B
+  source_type: news
+  site_url: https://www.mining-journal.com
+  lang: en
+  authority_weight: 8
+  active: false
+  notes: 矿业金融/项目/勘探周刊；无公开 RSS，人工查阅

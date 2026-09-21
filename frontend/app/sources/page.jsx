@@ -2,39 +2,53 @@ import { api } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
+const TIER_COLOR = {
+  S0: "#991b1b", "A-": "#c2410c", "A": "#b45309",
+  "B+": "#1d4ed8", "B": "#15803d", "B-": "#7c3aed", C: "#6b7280", D: "#a8a29e",
+};
+
 export default async function SourcesPage() {
   const data = await api("/api/sources");
   return (
     <>
       <div className="page-head">
-        <h1>信源目录</h1>
+        <h1>全球矿业信源金字塔</h1>
         <div className="sub">
-          白名单制 · 按四层体系组织（专家 → 公司 → 组织 → 期刊/媒体）·
-          权威度参与条目综合评分
+          八级信源体系：S0–S2 确认事实 · B+/B-/B 扩展知识 · C/D 发现线索 ·
+          原则：<b>社媒适合「发现」，数据库适合「定位」，一手文件适合「验证」</b>
         </div>
       </div>
-      {data.layers.map((layer) => (
-        <section key={layer.layer}>
+      {data.tiers.map((layer) => (
+        <section key={layer.tier}>
           <h2 className="layer-title">
-            第 {["一", "二", "三", "四"][layer.layer - 1]}层 · {layer.name}
+            <span className="tier-badge" style={{ background: TIER_COLOR[layer.tier] || "#57534e" }}>
+              {layer.tier}
+            </span>
+            {layer.name}
             <span className="badge" style={{ marginLeft: 8 }}>
               {layer.sources.length} 个
             </span>
           </h2>
+          <div className="sub" style={{ marginBottom: 6 }}>{layer.description}</div>
           <div className="source-grid">
-            {layer.sources.map((s) => (
-              <div className="source-card" key={s.source_id}>
-                <div className="name">
-                  <span>{s.name}</span>
-                  {!s.active && <span className="badge inactive">停用</span>}
+            {layer.sources.map((s) => {
+              const collectible = Boolean(s.feed_url) && s.active;
+              return (
+                <div className="source-card" key={s.source_id}>
+                  <div className="name">
+                    <span>{s.name}</span>
+                    <span className={`badge ${collectible ? "" : "inactive"}`}>
+                      {collectible ? "采集中" : s.feed_url ? "停用" : "人工查阅"}
+                    </span>
+                  </div>
+                  <div className="stat">
+                    权威度 {s.authority_weight}/10 · 已收录 {s.approved_count} 条
+                    {s.lang === "zh" && " · 中文"}
+                  </div>
+                  {s.notes && <div className="stat">{s.notes}</div>}
                 </div>
-                <div className="stat">
-                  权威度 {s.authority_weight}/10 · 已收录 {s.approved_count} 条
-                  {s.lang === "zh" && " · 中文"}
-                </div>
-                {s.notes && <div className="stat">{s.notes}</div>}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       ))}

@@ -95,18 +95,36 @@
 
 ---
 
-## 4. 信源体系（首批 ~30 个）
+## 4. 信源体系
 
-按 PDF 记录的四层体系配置（`backend/data/sources.yaml`），每源含：名称、RSS/抓取地址、层级、权威权重（1~10）、语言、主题映射。
+### 4.1 八级信源金字塔（S0–S7，源自《全球矿业信源分析》）
 
-| 层级 | 信源示例 | 权重倾向 |
-|---|---|---|
-| L4 期刊/会议 | Mining.com、International Mining、Mining Technology、Mining Weekly、AusIMM Bulletin、SME Mining Engineering、ACG/Slope Stability 会议动态 | 8~10 |
-| L3 专业组织 | AusIMM、SME、ARMA、Australian Centre for Geomechanics、ICMM 新闻 | 7~9 |
-| L2 矿业公司 | Rio Tinto、BHP、Newmont、Anglo American、Barrick、Teck 官方新闻室 | 6~7 |
-| L1 专家个人 | MVP 暂不直接抓取社交平台；以专家署名的期刊/博客专栏代替（Phase 2 接 OpenAlex） | 5~8 |
+| 层级 | 类型 | 作用 | 平台收录 |
+|---|---|---|---|
+| S0 | 政府/地调/监管/交易所（USGS、BGS、GSC） | 确认事实：资源/储量/产量/法规 | 目录·人工查阅 |
+| A | 国际与标准组织（IEA/ICMM/CRIRSCO） | 全球统计、标准规范 | CRIRSCO 采集中 |
+| A- | 公司公告与技术报告（SEC/ASX，NI 43-101/JORC） | 一手项目信息（证据链顶端） | 目录·人工检索 |
+| B+ | 商业数据库（S&P Global/Fastmarkets/WoodMac/CRU） | 定位：矿山数据/成本/价格 | 目录·付费 |
+| B | 专业矿业媒体（Mining.com/IM 等） | 新闻、项目动态、技术趋势 | **自动采集主力**（30 源） |
+| B- | 学术文献（OpenAlex/期刊） | 技术原理与研究进展 | OpenAlex 管线 + 期刊源 |
+| C | 专家个人渠道（LinkedIn/博客） | 专家观点与前沿信号 | 人工浏览（合规限制） |
+| D | 普通媒体/论坛 | 仅发现线索 | 原则上不收录 |
 
-> 说明：RSS 可用性随时间变化，采集器对失效源静默跳过并记录到 collect_runs，信源清单可持续维护。
+**关键原则**：社交媒体适合"发现"，专业数据库适合"定位"，一手文件适合"验证"；
+对同一矿山：公司新闻 < 交易所公告 < 监管文件 < 技术报告。
+
+**Source × Question Matrix（节选）**：全球产量→USGS/BGS；某矿山储量→JORC/NI 43-101；
+矿山技术→学术论文/SME；专家是谁→OpenAlex/ORCID；矿业新闻→Mining.com/IM；金属价格→Fastmarkets/S&P。
+
+**Evidence Chain（证据链）**：条目 → 一手公告 → 技术报告 → 合格人签字的资源表——
+平台的 evidence 表已为此预留（专家推荐证据已实现），Phase 3+ 将把"新闻声称"溯源到
+"一手文件"（Question→Retrieve→Claim→Evidence→Source→Confidence→Answer）。
+
+### 4.2 首批信源清单（48 源）
+
+完整目录见 `/sources` 页面与 `backend/data/sources.yaml`。可自动采集 24 个（B 级媒体与
+Google News 定向查询为主），人工查阅目录 25 个（S0/A-/B+ 付费数据库等）。
+RSS 可用性随时间变化：失效源自动跳过并记录，需定期巡检（`quality-check.ps1` 第 4 项）。
 
 ---
 

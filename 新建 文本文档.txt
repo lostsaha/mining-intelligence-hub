@@ -1,0 +1,7 @@
+# 窗口 A
+cd E:\syn\矿业聚合平台\backend
+.\.venv\Scripts\python -m uvicorn app.main:app --port 8100
+
+# 窗口 B
+cd E:\syn\矿业聚合平台\frontend
+npx next dev -p 3100

@@ -168,27 +168,46 @@ def weekly_detail(digest_id: int):
 
 
 # ---------------------------------------------------------------- 信源
+SOURCE_TIER_ORDER = ["S0", "A", "A-", "B+", "B", "B-", "C", "D"]
+SOURCE_TIER_META = {
+    "S0": ("S0 · 政府与监管", "地质调查局/监管机构/交易所——资源储量、产量、法规等项目事实（验证层）"),
+    "A": ("A · 国际与标准组织", "IEA/ICMM/CRIRSCO——全球统计、标准规范、行业共识"),
+    "A-": ("A- · 公司公告与披露", "上市矿企正式公告、技术报告（NI 43-101/JORC/S-K 1300）——一手项目信息"),
+    "B+": ("B+ · 专业商业数据库", "S&P Global/Fastmarkets/Wood Mackenzie/CRU——矿山数据、成本、价格"),
+    "B": ("B · 专业矿业媒体", "Mining.com/International Mining 等——新闻、项目动态、技术趋势"),
+    "B-": ("B- · 学术文献", "期刊/会议论文——技术原理与研究进展"),
+    "C": ("C · 专家个人渠道", "LinkedIn/博客/播客——专家观点与前沿信号"),
+    "D": ("D · 普通媒体/论坛", "发现线索，不作为最终证据"),
+}
+
+
 @app.get("/api/sources")
 def list_sources():
     rows = db.query(
         """
-        SELECT s.source_id, s.slug, s.name, s.layer, s.source_type, s.site_url,
+        SELECT s.source_id, s.slug, s.name, s.tier, s.source_type, s.site_url,
                s.lang, s.authority_weight, s.active, s.notes, s.last_fetched_at,
                COUNT(i.item_id) FILTER (WHERE i.status = 'approved') AS approved_count
         FROM mining.sources s
         LEFT JOIN mining.items i ON i.source_id = s.source_id
         GROUP BY s.source_id
-        ORDER BY s.layer, s.authority_weight DESC, s.name
+        ORDER BY s.authority_weight DESC, s.name
         """
     )
-    layers = {
-        1: "专家个人", 2: "矿业公司", 3: "专业组织", 4: "期刊 / 会议 / 行业媒体",
-    }
-    grouped: dict[int, list] = {}
+    grouped: dict[str, list] = {}
     for r in rows:
-        grouped.setdefault(r["layer"], []).append(r)
-    return {"layers": [{"layer": k, "name": layers[k], "sources": grouped.get(k, [])}
-                       for k in sorted(grouped)]}
+        grouped.setdefault(r["tier"] or "B", []).append(r)
+    return {
+        "tiers": [
+            {
+                "tier": t,
+                "name": SOURCE_TIER_META[t][0],
+                "description": SOURCE_TIER_META[t][1],
+                "sources": grouped.get(t, []),
+            }
+            for t in SOURCE_TIER_ORDER if t in grouped
+        ]
+    }
 
 
 # ---------------------------------------------------------------- 专家（Phase 2）
