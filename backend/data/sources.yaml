@@ -460,3 +460,39 @@ sources:
   authority_weight: 8
   active: false
   notes: 矿业金融/项目/勘探周刊；无公开 RSS，人工查阅
+- slug: nea-uranium
+  name: OECD NEA 核能署
+  tier: A
+  source_type: org
+  site_url: https://www.oecd-nea.org
+  lang: en
+  authority_weight: 10
+  active: false
+  notes: '铀资源/产量/需求权威（《Uranium: Resources, Production and Demand》红皮书，与 IAEA 联合发布）；人工查阅'
+- slug: iaea
+  name: IAEA 国际原子能机构
+  tier: A
+  source_type: org
+  site_url: https://www.iaea.org
+  lang: en
+  authority_weight: 10
+  active: false
+  notes: 铀矿床数据库（UDEPO）/核燃料循环/铀生产周期报告；人工查阅
+- slug: wna
+  name: WNA 世界核协会
+  tier: A
+  source_type: org
+  site_url: https://www.world-nuclear.org
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 世界核燃料循环报告：铀矿供应、矿山清单与市场；人工查阅
+- slug: icsg
+  name: ICSG 国际铜业研究组
+  tier: A
+  source_type: org
+  site_url: https://icsg.org
+  lang: en
+  authority_weight: 9
+  active: false
+  notes: 铜矿产量/消费/贸易权威统计与市场预测（政府间组织）；人工查阅
