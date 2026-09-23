@@ -32,12 +32,12 @@ def _flat_classifier(ontology: list[dict]) -> list[dict]:
             flat.append({
                 "topic_id": ch["topic_id"],
                 "en": [k.lower() for k in ch["match_keywords"]],
-                "zh_names": [ch["name_zh"]],
+                "zh": [k for k in ch.get("match_keywords_zh", [])] + [ch["name_zh"]],
             })
         flat.append({
             "topic_id": cat["topic_id"],
             "en": [k.lower() for k in cat["match_keywords"]],
-            "zh_names": [cat["name_zh"]],
+            "zh": [k for k in cat.get("match_keywords_zh", [])] + [cat["name_zh"]],
         })
     return flat
 
@@ -46,7 +46,7 @@ def global_classify(text: str, flat: list[dict]) -> list[tuple[int, float]]:
     scored = []
     for t in flat:
         hits = sum(1 for k in t["en"] if k in text)
-        hits += sum(1 for n in t["zh_names"] if n and n in text)
+        hits += sum(1 for k in t.get("zh", []) if k and k in text)
         if hits:
             scored.append((t["topic_id"], min(0.9, 0.5 + 0.1 * hits)))
     scored.sort(key=lambda x: -x[1])
