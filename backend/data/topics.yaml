@@ -275,7 +275,7 @@ topics:
   - 排土场稳定性
 - slug: mine-water
   name_zh: 矿山防排水
-  name_en: Mine Water Prevention & Drainage
+  name_en: Mine Water Control & Drainage
   sort_order: 4
   keywords:
   - mine water
@@ -295,6 +295,10 @@ topics:
   - 水害
   - 突水
   - 透水
+  - water control
+  - drainage
+  - water hazard
+  - water inrush
   query_keywords:
   - mine water management
   children:

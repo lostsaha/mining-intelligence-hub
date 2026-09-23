@@ -6,8 +6,22 @@ import re
 
 import httpx
 
+import yaml
+
 from .. import config
 from .heuristic import _topics
+
+
+def _topic_label_map() -> dict:
+    """slug -> 中文名（提示词用中文主题名，避免英文 slug 字面误导）。"""
+    with (config.DATA_DIR / "topics.yaml").open("r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    m = {}
+    for cat in data["topics"]:
+        m[cat["slug"]] = cat["name_zh"]
+        for ch in cat.get("children", []) or []:
+            m[ch["slug"]] = f"{cat['name_zh']}·{ch['name_zh']}"
+    return m
 
 SYSTEM_PROMPT = """你是矿业工程情报编辑。对给定的行业条目做判定，只输出一个 JSON 对象，不要输出任何其他文字：
 {
@@ -16,7 +30,12 @@ SYSTEM_PROMPT = """你是矿业工程情报编辑。对给定的行业条目做�
   "topics": ["slug", ...],         // 从候选主题中选 1~3 个最贴切的 slug
   "summary_zh": "一句话中文摘要（30~60字，概括核心内容与行业意义）",
   "item_type": "news|paper|report|conference|company|expert"
-}"""
+}
+
+主题判定规则（严格遵守）：
+- 每个主题必须由标题或摘要中明确出现的内容直接支撑，禁止望文生义（如出现 water/cloud/market 等词不代表属于相关主题）；
+- 矿山防排水(mine-water) 仅限：矿井防治水、排水疏干、水害突水、矿山水文地质本身；企业数字化合作、碳市场等一律不选它；
+- 公司并购/数字合作/碳市场/大宗商品行情默认归 industry（行业与市场）。"""
 
 USER_PROMPT_TEMPLATE = """候选主题 slug 列表：
 {topic_slugs}
@@ -39,9 +58,10 @@ def _extract_json(text: str) -> dict:
 
 
 def classify(title: str, summary: str, site_url: str = "", source_type: str = "news") -> dict:
-    valid_slugs = [t["slug"] for t in _topics()]
+    label_map = _topic_label_map()
+    valid_slugs = list(label_map.keys())
     prompt = USER_PROMPT_TEMPLATE.format(
-        topic_slugs=", ".join(valid_slugs),
+        topic_slugs=", ".join(f"{s}({label_map[s]})" for s in valid_slugs),
         title=title[:400],
         summary=(summary or "（无摘要）")[:1200],
     )
