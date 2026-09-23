@@ -274,8 +274,8 @@ topics:
   - 露天矿边坡
   - 排土场稳定性
 - slug: mine-water
-  name_zh: 矿山水文
-  name_en: Mine Water & Hydrogeology
+  name_zh: 矿山防排水
+  name_en: Mine Water Prevention & Drainage
   sort_order: 4
   keywords:
   - mine water
@@ -291,6 +291,10 @@ topics:
   - 地下水
   - 降水
   - 疏干
+  - 防排水
+  - 水害
+  - 突水
+  - 透水
   query_keywords:
   - mine water management
   children:
