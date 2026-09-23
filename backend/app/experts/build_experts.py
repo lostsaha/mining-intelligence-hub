@@ -471,6 +471,33 @@ def save(selected: list[dict], corpus: dict) -> None:
         )
 
 
+def persist_candidates(candidates: list[dict]) -> None:
+    """未入选 Top N 的候选也持久化语料统计（认证专家页需要显示真实数据）。"""
+    for cand in candidates:
+        s = cand["scores"]
+        db.execute(
+            """
+            UPDATE mining.persons SET
+                corpus_works = %s, corpus_citations = %s,
+                first_year = %s, last_year = %s, coauthor_count = %s,
+                mining_relevance_score = %s, research_impact_score = %s,
+                recent_activity_score = %s, topic_depth_score = %s,
+                industry_score = %s, collaboration_score = %s,
+                expert_score = %s, coverage_score = %s, final_score = %s,
+                is_selected = FALSE, expert_rank = NULL, updated_at = now()
+            WHERE person_id = %s
+            """,
+            (
+                cand["corpus_works"], cand["corpus_citations"],
+                cand["first_year"], cand["last_year"], cand["coauthor_count"],
+                s["relevance"], s["impact"], s["activity"], s["depth"],
+                s["industry"], s["collab"],
+                cand["expert_score"], cand.get("coverage_score"),
+                cand["expert_score"], cand["person_id"],
+            ),
+        )
+
+
 def build() -> dict:
     run = db.query_one(
         "INSERT INTO mining.expert_pipeline_runs (run_type) VALUES ('build') RETURNING run_id"
@@ -486,6 +513,8 @@ def build() -> dict:
     selected = select_top(candidates, config.EXPERT_TOP_N)
     print(f"selected top {len(selected)} experts")
     save(selected, corpus)
+    persist_candidates([c for c in candidates
+                        if c["person_id"] not in {s["person_id"] for s in selected}])
 
     db.execute(
         """

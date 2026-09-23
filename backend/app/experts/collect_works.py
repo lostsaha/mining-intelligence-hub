@@ -39,6 +39,7 @@ def load_ontology() -> list[dict]:
                     "name_zh": ch["name_zh"],
                     "query_keywords": ch.get("query_keywords", []),
                     "query_keywords_zh": ch.get("query_keywords_zh", []),
+                    "match_keywords_zh": [k for k in ch.get("match_keywords_zh", [])],
                     "match_keywords": [k.lower() for k in ch.get("match_keywords", [])],
                 })
         result.append({
@@ -47,6 +48,7 @@ def load_ontology() -> list[dict]:
             "name_zh": cat["name_zh"],
             "query_keywords": cat.get("query_keywords", []),
             "query_keywords_zh": cat.get("query_keywords_zh", []),
+            "match_keywords_zh": [k for k in cat.get("match_keywords_zh", [])],
             "match_keywords": [k.lower() for k in cat.get("keywords", [])],
             "children": children,
         })

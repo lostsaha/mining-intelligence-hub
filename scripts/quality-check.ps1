@@ -16,3 +16,7 @@ Write-Host "== 3. 中文摘要覆盖率 ==" -ForegroundColor Cyan
 
 Write-Host "== 4. 信源健康（最近最久未更新的 10 个活跃源） ==" -ForegroundColor Cyan
 & $psql "SELECT slug AS 信源, last_fetched_at::date AS 最近采集 FROM mining.sources WHERE active ORDER BY last_fetched_at NULLS FIRST LIMIT 10;"
+
+Write-Host "== 5. 名册匹配审计（国别不一致=需人工核实；零语料=待补采） ==" -ForegroundColor Cyan
+& $psql "SELECT COALESCE(ea.name_zh, ea.full_name) AS 名册人员, ea.tier, ea.country_code AS 名册国, p.country_code AS 档案国, COALESCE(p.corpus_works,0) AS 语料 FROM mining.expert_admissions ea LEFT JOIN mining.persons p ON p.person_id = ea.person_id WHERE ea.match_status='matched' AND ea.country_code IS NOT NULL AND p.country_code IS NOT NULL AND ea.country_code <> p.country_code ORDER BY ea.tier;"
+& $psql "SELECT COALESCE(ea.name_zh, ea.full_name) AS 名册人员, ea.tier, ea.match_status AS 状态, left(ea.review_note,30) AS 备注 FROM mining.expert_admissions ea WHERE ea.match_status='created' ORDER BY ea.tier;"
