@@ -734,3 +734,19 @@ entries:
   affiliation: SME
   country: US
   basis: 《SME Mining Engineering Handbook》第三版主编
+- key: gu-xiaowei
+  name: Xiaowei Gu
+  name_zh: 顾晓薇
+  tier: T2
+  channel: 教授
+  affiliation: Northeastern University
+  country: CN
+  basis: 东北大学资源与土木工程学院教授；露天矿生态修复与矿山固废资源化利用
+- key: wang-qing-neu
+  name: Qing Wang
+  name_zh: 王青
+  tier: T2
+  channel: 教授
+  affiliation: Northeastern University
+  country: CN
+  basis: 东北大学资源与土木工程学院教授；采矿工程与矿山生态修复
