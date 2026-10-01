@@ -14,3 +14,14 @@ if ($rows -gt 0) {
 } else {
     Write-Host "警告: 备份文件为空，请检查容器是否运行！" -ForegroundColor Red
 }
+
+# ---- 异地副本：检测到 OneDrive 目录则自动同步 ----
+$cloud = $env:OneDrive
+if ($cloud -and (Test-Path $cloud)) {
+    $cloudDir = Join-Path $cloud "mining-backups"
+    New-Item -ItemType Directory -Force $cloudDir | Out-Null
+    Copy-Item $out $cloudDir -Force
+    Write-Host "异地副本: $cloudDir" -ForegroundColor Green
+} else {
+    Write-Host "提示: 未检测到 OneDrive，请手动将 backups 目录复制到网盘/移动硬盘" -ForegroundColor Yellow
+}

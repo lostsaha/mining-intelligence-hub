@@ -46,6 +46,11 @@ export default async function RadarPage({ searchParams }) {
         <div className="sub">
           热度 = 0.45 × 论文增速（近12月 vs 前12月） + 0.30 × 近12月产量 + 0.25 × 专家聚集度 ·
           交叉信号用于识别正在形成或升温的技术方向
+          <br />
+          <span style={{ color: "#b45309" }}>
+            ⚠ 读数须知：学术数据库收录滞后约 3~6 个月；矿业强周期性会传导到论文产量，
+            增速宜作趋势提示而非结论；样本不足的方向已单独标注。
+          </span>
         </div>
       </div>
 
@@ -81,6 +86,15 @@ export default async function RadarPage({ searchParams }) {
                   {t.new_experts > 0 && (
                     <span className="badge" style={{ background: "#f5f5f4", color: "#7c3aed" }}>
                       +{t.new_experts} 新专家
+                    </span>
+                  )}
+                  {t.low_sample && (
+                    <span
+                      className="badge"
+                      style={{ background: "#fef3c7", color: "#b45309" }}
+                      title="近12月论文不足 30 篇，增速读数波动大，仅供参考"
+                    >
+                      样本不足
                     </span>
                   )}
                 </div>

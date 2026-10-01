@@ -145,6 +145,23 @@ topics:
     match_keywords_zh:
     - 支护
     - 锚杆
+  - slug: underground-mining.backfill
+    name_zh: 充填采矿
+    name_en: Backfill Mining
+    query_keywords:
+    - backfill mining
+    - cemented paste backfill
+    match_keywords:
+    - backfill
+    - paste backfill
+    - cemented backfill
+    - fill mass
+    - stoping backfill
+    match_keywords_zh:
+    - 充填采矿
+    - 膏体充填
+    - 胶结充填
+    - 尾砂充填
   query_keywords_zh:
   - 地下金属矿山
   - 煤矿井下开采
@@ -699,6 +716,22 @@ topics:
   query_keywords:
   - mineral processing
   children:
+  - slug: mineral-processing.geometallurgy
+    name_zh: 矿石性质学
+    name_en: Geometallurgy
+    query_keywords:
+    - geometallurgy
+    - ore characterization
+    match_keywords:
+    - geometallurgy
+    - ore characterization
+    - mineral liberation
+    - mla
+    - ore variability
+    match_keywords_zh:
+    - 矿石性质
+    - 工艺矿物学
+    - 矿石可选性
   - slug: mineral-processing.comminution
     name_zh: 破碎磨矿
     name_en: Comminution
@@ -749,6 +782,23 @@ topics:
     match_keywords_zh:
     - 磁选
     - 重选
+  - slug: mineral-processing.dewatering
+    name_zh: 浓缩与脱水
+    name_en: Thickening & Dewatering
+    query_keywords:
+    - tailings thickening dewatering
+    - paste thickener
+    match_keywords:
+    - thickening
+    - thickener
+    - dewatering
+    - filtration
+    - paste thickener
+    match_keywords_zh:
+    - 浓缩
+    - 脱水
+    - 深锥浓密
+    - 压滤
   query_keywords_zh:
   - 矿物加工
   - 浮选工艺
@@ -1184,3 +1234,150 @@ topics:
   - 扩产
   - 产量
   - 市场
+- slug: mine-ventilation
+  name_zh: 矿井通风
+  name_en: Mine Ventilation
+  sort_order: 16
+  keywords:
+  - mine ventilation
+  - ventilation network
+  - main fan
+  - airflow
+  - auxiliary ventilation
+  - 矿井通风
+  - 通风网络
+  - 主扇
+  - 局部通风
+  - 风量
+  query_keywords:
+  - mine ventilation
+  query_keywords_zh:
+  - 矿井通风
+  - 通风网络解算
+  - 采场通风
+  children:
+  - slug: mine-ventilation.network
+    name_zh: 通风网络解算与模拟
+    name_en: Ventilation Network Modeling
+    query_keywords:
+    - mine ventilation network
+    - ventilation network simulation
+    match_keywords:
+    - ventilation network
+    - ventilation simulation
+    - ventsim
+    - airway resistance
+    match_keywords_zh:
+    - 通风网络
+    - 网络解算
+    - 风阻
+  - slug: mine-ventilation.fans
+    name_zh: 主扇与通风系统
+    name_en: Fans & Ventilation Systems
+    query_keywords:
+    - mine main fan
+    - auxiliary ventilation underground
+    match_keywords:
+    - main fan
+    - primary fan
+    - booster fan
+    - auxiliary ventilation
+    - fan selection
+    match_keywords_zh:
+    - 主扇
+    - 通风机
+    - 局部通风机
+    - 通风系统
+  - slug: mine-ventilation.air
+    name_zh: 风量计算与按需通风
+    name_en: Air Quantity & On-Demand Ventilation
+    query_keywords:
+    - ventilation on demand mine
+    - air quantity requirement
+    match_keywords:
+    - air quantity
+    - vod
+    - ventilation on demand
+    - airflow regulation
+    match_keywords_zh:
+    - 风量计算
+    - 需风量
+    - 按需通风
+    - 风量调节
+  - slug: mine-ventilation.fires
+    name_zh: 矿井火灾与防灾通风
+    name_en: Mine Fires & Emergency Ventilation
+    query_keywords:
+    - mine fire ventilation
+    - spontaneous combustion coal
+    match_keywords:
+    - mine fire
+    - spontaneous combustion
+    - sealed area
+    - pressure balance ventilation
+    match_keywords_zh:
+    - 矿井火灾
+    - 自燃
+    - 均压通风
+    - 封闭区
+- slug: deep-mining
+  name_zh: 深部开采
+  name_en: Deep Mining
+  sort_order: 17
+  keywords:
+  - deep mining
+  - deep coal mining
+  - high geostress
+  - deep metal mine
+  - 深部开采
+  - 深部矿井
+  - 高地应力
+  - 深部岩体
+  query_keywords:
+  - deep mining rock mechanics
+  query_keywords_zh:
+  - 深部开采
+  - 深部岩体力学
+  - 深部煤矿
+  children:
+  - slug: deep-mining.rock-mechanics
+    name_zh: 深部岩体力学
+    name_en: Deep Rock Mechanics
+    query_keywords:
+    - deep rock mechanics
+    - high geostress excavation
+    match_keywords:
+    - deep rock mechanics
+    - high stress rock
+    - geostress
+    - rockburst proneness
+    match_keywords_zh:
+    - 深部岩体力学
+    - 高地应力
+    - 岩爆倾向
+  - slug: deep-mining.coal
+    name_zh: 深部煤炭开采
+    name_en: Deep Coal Mining
+    query_keywords:
+    - deep coal mining
+    match_keywords:
+    - deep coal mine
+    - deep coalbed
+    - 1000m coal
+    match_keywords_zh:
+    - 深部煤矿
+    - 深部煤炭
+    - 深井煤矿
+  - slug: deep-mining.metal
+    name_zh: 深部金属矿开采
+    name_en: Deep Metal Mining
+    query_keywords:
+    - deep metal mining
+    - high stress stoping
+    match_keywords:
+    - deep metal mine
+    - deep high-stress
+    - below 1000 m
+    match_keywords_zh:
+    - 深部金属矿
+    - 深井开采

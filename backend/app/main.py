@@ -164,7 +164,26 @@ def weekly_detail(digest_id: int):
             "items": [],
         })
         groups[key]["items"].append(r)
-    return {**digest, "groups": list(groups.values())}
+
+    # 技术报告与披露提示：周内命中披露关键词的条目（JORC/NI 43-101/可研/储量声明等），
+    # 提示读者去 A-/S0 一手渠道核实原文（证据链原则：新闻→公告→技术报告）
+    disclosures = db.query(
+        """
+        SELECT i.item_id, i.title, i.url, i.summary_zh, i.published_at, s.name AS source_name
+        FROM mining.items i
+        JOIN mining.sources s USING (source_id)
+        WHERE i.status = 'approved'
+          AND COALESCE(i.published_at, i.collected_at) >= ((SELECT week_start FROM mining.weekly_digests WHERE digest_id = %s))::timestamptz
+          AND COALESCE(i.published_at, i.collected_at) < (((SELECT week_start FROM mining.weekly_digests WHERE digest_id = %s)) + 7)::timestamptz
+          AND (i.title ~* %s OR COALESCE(i.summary_zh, '') ~ %s)
+        ORDER BY i.final_score DESC
+        LIMIT 10
+        """,
+        (digest_id, digest_id,
+         r'JORC|NI 43-101|43-101|SAMREC|S-K 1300|definitive feasibility|pre-?feasibility|bankable feasibility|maiden (mineral )?resource|resource (update|statement|estimate)|reserve (estimate|statement)|mineral resource and ore reserve|scoping study',
+         r'JORC|43-101|储量|资源量(更新|声明)|可行性研究|可研|初步可研|技术报告'),
+    )
+    return {**digest, "groups": list(groups.values()), "disclosures": disclosures}
 
 
 # ---------------------------------------------------------------- 信源

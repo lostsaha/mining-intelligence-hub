@@ -1,6 +1,8 @@
 """处理管线：pending 条目 → 过滤/分类/摘要/评分 → approved/rejected。"""
 from __future__ import annotations
 
+import re
+
 from datetime import datetime, timezone
 
 from .. import config, db
@@ -23,7 +25,12 @@ def _depth(title: str, summary_raw: str | None, item_type: str) -> float:
     return round(score, 3)
 
 
+def normalize_title(t: str) -> str:
+    return re.sub(r"[^a-z0-9一-鿿]", "", (t or "").lower())
+
+
 def process_item(item: dict, source: dict, topic_map: dict[str, int]) -> dict:
+    title_norm = normalize_title(item["title"])
     site_url = source.get("site_url") or ""
     source_type = source.get("source_type") or "news"
     title = item["title"] or ""
@@ -54,19 +61,36 @@ def process_item(item: dict, source: dict, topic_map: dict[str, int]) -> dict:
     # 避免"relevant=true 但分数略低"时被静默拒绝且无原因
     status = "approved" if result.get("relevant") else "rejected"
 
+    # 标题级去重：同一事件常被多个信源各报一次（精确重复 + 0.6 相似度改写）
+    if status == "approved":
+        dup = db.query_one(
+            """
+            SELECT item_id FROM mining.items
+            WHERE item_id <> %s
+              AND status IN ('approved', 'pending')
+              AND (title_norm = %s
+                   OR similarity(title_norm, %s) >= 0.6)
+            LIMIT 1
+            """,
+            (item["item_id"], title_norm, title_norm),
+        )
+        if dup:
+            status = "rejected"
+            result["reject_reason"] = "重复新闻（其他信源已收录同一事件）"
+
     db.execute(
         """
         UPDATE mining.items
         SET summary_zh = %s, item_type = %s,
             mining_relevance = %s, authority = %s, freshness = %s, depth = %s,
             final_score = %s, status = %s, status_source = %s,
-            reject_reason = %s, processed_at = now()
+            reject_reason = %s, title_norm = %s, processed_at = now()
         WHERE item_id = %s
         """,
         (
             result.get("summary_zh"), item_type, relevance, authority, freshness,
             depth, final_score, status, status_source, result.get("reject_reason"),
-            item["item_id"],
+            title_norm, item["item_id"],
         ),
     )
 

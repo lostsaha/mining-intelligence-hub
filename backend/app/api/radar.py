@@ -116,6 +116,8 @@ def _heat(rows: list[dict]) -> list[dict]:
             "heat": round(heat, 1),
             "momentum": momentum,
             "momentum_zh": momentum_zh,
+            # 近12月样本 <30 篇时增速不可靠，前端降置信展示
+            "low_sample": w12 < 30,
         })
     out.sort(key=lambda x: -x["heat"])
     return out
