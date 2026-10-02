@@ -305,11 +305,13 @@ def select_top(candidates: list[dict], top_n: int) -> list[dict]:
     while remaining and len(selected) < top_n:
         best, best_score = None, -1.0
         for c in remaining:
-            dyn = 0.7 * c["expert_score"] + 0.3 * coverage(c)
+            scale = min(1.0, c["corpus_works"] / 30)  # 语料规模因子：微型语料不入头部
+            dyn = 0.7 * c["expert_score"] * scale + 0.3 * coverage(c)
             if dyn > best_score:
                 best, best_score = c, dyn
         best["coverage_score"] = round(coverage(best), 2)
-        best["final_score"] = round(0.7 * best["expert_score"] + 0.3 * best["coverage_score"], 2)
+        scale = min(1.0, best["corpus_works"] / 30)
+        best["final_score"] = round(0.7 * best["expert_score"] * scale + 0.3 * best["coverage_score"], 2)
         selected.append(best)
         remaining.remove(best)
         cat_count[best.get("category_id")] += 1
@@ -479,22 +481,26 @@ def persist_candidates(candidates: list[dict]) -> None:
         db.execute(
             """
             UPDATE mining.persons SET
+                country_code = COALESCE(%s, country_code),
                 corpus_works = %s, corpus_citations = %s,
                 first_year = %s, last_year = %s, coauthor_count = %s,
                 mining_relevance_score = %s, research_impact_score = %s,
                 recent_activity_score = %s, topic_depth_score = %s,
                 industry_score = %s, collaboration_score = %s,
-                expert_score = %s, coverage_score = %s, final_score = %s,
+                expert_score = %s, coverage_score = %s,
+                final_score = %s,
                 is_selected = FALSE, expert_rank = NULL, updated_at = now()
             WHERE person_id = %s
             """,
             (
+                cand.get("country_code"),
                 cand["corpus_works"], cand["corpus_citations"],
                 cand["first_year"], cand["last_year"], cand["coauthor_count"],
                 s["relevance"], s["impact"], s["activity"], s["depth"],
                 s["industry"], s["collab"],
                 cand["expert_score"], cand.get("coverage_score"),
-                cand["expert_score"], cand["person_id"],
+                round(cand["expert_score"] * min(1.0, cand["corpus_works"] / 30), 2),
+                cand["person_id"],
             ),
         )
 
