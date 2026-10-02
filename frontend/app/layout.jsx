@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
               <a href="/radar">雷达</a>
               <a href="/graph">图谱</a>
               <a href="/works">文献</a>
+              <a href="/journals">期刊</a>
               <a href="/sources">信源</a>
               <a href="/about">关于</a>
             </nav>

@@ -9,6 +9,7 @@ from .. import db
 def search_works(
     q: str | None = None,
     topic: str | None = None,
+    journal: str | None = None,
     year_from: int | None = None,
     sort: str = "citations",
     limit: int = Query(30, le=100),
@@ -29,6 +30,9 @@ def search_works(
             "(SELECT topic_id FROM mining.topics WHERE slug = %s)))"
         )
         params += [topic, topic]
+    if journal:
+        where.append("w.source_name = %s")
+        params.append(journal)
     if year_from:
         where.append("w.publication_year >= %s")
         params.append(year_from)

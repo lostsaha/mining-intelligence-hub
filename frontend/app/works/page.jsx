@@ -7,13 +7,15 @@ export default async function WorksPage({ searchParams }) {
   const params = await searchParams;
   const q = params.q || null;
   const topic = params.topic || null;
+  const journal = params.journal || null;
   const sort = params.sort || "citations";
 
   const [data, topicsData] = await Promise.all([
     api(
       `/api/works?limit=40&sort=${sort}` +
         `${q ? `&q=${encodeURIComponent(q)}` : ""}` +
-        `${topic ? `&topic=${encodeURIComponent(topic)}` : ""}`,
+        `${topic ? `&topic=${encodeURIComponent(topic)}` : ""}` +
+        `${journal ? `&journal=${encodeURIComponent(journal)}` : ""}`,
     ),
     api("/api/radar?level=1"),
   ]);
@@ -21,7 +23,7 @@ export default async function WorksPage({ searchParams }) {
   return (
     <>
       <div className="page-head">
-        <h1>文献检索</h1>
+        <h1>文献检索{journal && <span style={{ color: "var(--accent)" }}> · {journal}</span>}</h1>
         <div className="sub">
           语料内 {data.total} 篇论文（标题/摘要检索）· 可按被引量或年份排序 ·
           作者可跳转专家卡片
@@ -35,6 +37,11 @@ export default async function WorksPage({ searchParams }) {
       </div>
 
       <div className="chips">
+        {journal && (
+          <Link href={`/works${q ? `?q=${encodeURIComponent(q)}` : ""}`} className="chip active">
+            ✕ {journal}
+          </Link>
+        )}
         <Link href={`/works${q ? `?q=${encodeURIComponent(q)}` : ""}`} className={`chip ${!topic ? "active" : ""}`}>
           全部主题
         </Link>

@@ -223,6 +223,15 @@ button.run[disabled] { opacity: 0.5; cursor: wait; }
   padding: 5px 12px; font-size: 13px; cursor: pointer;
 }
 
+/* ---------- 期刊排名 ---------- */
+.journal-list { margin-top: 8px; }
+.journal-row {
+  display: flex; align-items: center; gap: 14px;
+  background: #fff; border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 16px; margin-top: 10px;
+}
+.journal-row .radar-name { font-weight: 600; font-size: 14.5px; }
+
 /* ---------- 文献检索 ---------- */
 .work-results { margin-top: 6px; }
 

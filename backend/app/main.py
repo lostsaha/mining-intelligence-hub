@@ -7,6 +7,7 @@ from fastapi import FastAPI, HTTPException, Query
 
 from . import db
 from .api import graph as graph_api
+from .api import journals_api
 from .api import radar as radar_api
 from .api import works_api
 from .collect.run import run_collect
@@ -440,6 +441,7 @@ def api_graph(topic: str = "geotech-slope", expert_limit: int = Query(24, le=50)
 def api_works(
     q: str | None = None,
     topic: str | None = None,
+    journal: str | None = None,
     year_from: int | None = None,
     sort: str = "citations",
     limit: int = Query(30, le=100),
@@ -447,8 +449,20 @@ def api_works(
 ):
     """文献检索（标题/摘要）。sort=citations|year"""
     return works_api.search_works(
-        q=q, topic=topic, year_from=year_from, sort=sort, limit=limit, offset=offset
+        q=q, topic=topic, journal=journal, year_from=year_from, sort=sort,
+        limit=limit, offset=offset
     )
+
+
+@app.get("/api/journals")
+def api_journals(
+    q: str | None = None,
+    sort: str = "citations",
+    min_papers: int = Query(5, le=50),
+    limit: int = Query(60, le=200),
+):
+    """期刊排名：sort=citations|papers|avg|name；默认仅收有矿业存在(≥5篇)的期刊。"""
+    return journals_api.journals(q=q, sort=sort, min_papers=min_papers, limit=limit)
 
 
 # ---------------------------------------------------------------- 统计 / 管理
