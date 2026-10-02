@@ -14,7 +14,17 @@ export async function api(path, options = {}) {
 export function formatDate(iso) {
   if (!iso) return "时间未知";
   const d = new Date(iso);
-  return d.toLocaleDateString("zh-CN", { month: "long", day: "numeric" });
+  return `${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+// 确定性日期时间格式化：禁止 toLocaleString ——
+// 服务器(Node)与浏览器对 locale 的格式化结果不同，会导致 React hydration 不匹配
+export function formatDateTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${d.getMonth() + 1}/${d.getDate()} ${hh}:${mm}`;
 }
 
 export function dayKey(iso) {

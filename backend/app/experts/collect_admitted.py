@@ -14,6 +14,9 @@ import yaml
 from .. import config, db
 from ..openalex.client import BudgetExhausted, OpenAlexClient, reconstruct_abstract
 from .collect_works import (
+    _contains_word,
+    _is_generic_kw,
+    mining_context,
     build_authorships_cache,
     flush_authorships,
     load_ontology,
@@ -30,26 +33,34 @@ def _flat_classifier(ontology: list[dict]) -> list[dict]:
     for cat in ontology:
         for ch in cat["children"]:
             flat.append({
-                "topic_id": ch["topic_id"],
+                "topic_id": ch["topic_id"], "level": 2,
                 "en": [k.lower() for k in ch["match_keywords"]],
                 "zh": [k for k in ch.get("match_keywords_zh", [])] + [ch["name_zh"]],
             })
         flat.append({
-            "topic_id": cat["topic_id"],
+            "topic_id": cat["topic_id"], "level": 1,
             "en": [k.lower() for k in cat["match_keywords"]],
             "zh": [k for k in cat.get("match_keywords_zh", [])] + [cat["name_zh"]],
         })
     return flat
 
 
-def global_classify(text: str, flat: list[dict]) -> list[tuple[int, float]]:
+def global_classify(title: str, text: str, flat: list[dict]) -> list[tuple[int, float]]:
+    strong = mining_context(title)
     scored = []
     for t in flat:
-        hits = sum(1 for k in t["en"] if k in text)
-        hits += sum(1 for k in t.get("zh", []) if k and k in text)
+        en_hits = [k for k in t["en"] if _contains_word(text, k)]
+        zh_hits = [k for k in t.get("zh", []) if k and _contains_word(text, k)]
+        hits = len(en_hits) + len(zh_hits)
+        specific = any(not _is_generic_kw(k) for k in en_hits) or bool(zh_hits)
         if hits:
-            scored.append((t["topic_id"], min(0.9, 0.5 + 0.1 * hits)))
+            scored.append((t["topic_id"], min(0.9, 0.5 + 0.1 * hits), t.get("level", 1), specific))
     scored.sort(key=lambda x: -x[1])
+    # 门：矿业语境标题，或子主题命中矿业特有关键词；大类泛词一律需语境
+    scored = [
+        (tid, rel) for tid, rel, lvl, spec in scored
+        if strong or (lvl == 2 and spec)
+    ]
     return scored[:2]
 
 

@@ -1,4 +1,4 @@
-import { dayKey, scoreColor } from "@/lib/api";
+import { dayKey, formatDateTime, scoreColor } from "@/lib/api";
 
 function Summary({ item }) {
   const text = item.summary_zh || item.summary_raw || "";
@@ -25,7 +25,7 @@ export function ItemRow({ item }) {
           <span>{item.source_name}</span>
           <span className="sep" />
           <span>
-            {item.published_at ? new Date(item.published_at).toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "时间未知"}
+            {item.published_at ? formatDateTime(item.published_at) : "时间未知"}
           </span>
           {topics.map((t) => (
             <span key={t.slug} className="tag">{t.name_zh}</span>

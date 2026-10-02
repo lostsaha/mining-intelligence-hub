@@ -290,15 +290,16 @@ def select_top(candidates: list[dict], top_n: int) -> list[dict]:
     remaining = list(candidates)
 
     def coverage(c: dict) -> float:
+        # 多样性约束按 PDF 记录 §13 规格：每大类/机构软上限 15
         f = 1.0
         cc = cat_count[c.get("category_id")]
-        f *= 0.25 if cc >= 12 else 0.7 if cc >= 6 else 1.0
+        f *= 0.5 if cc >= 15 else 0.85 if cc >= 12 else 1.0
         if c.get("current_institution_id"):
             ic = inst_count[c["current_institution_id"]]
-            f *= 0.6 if ic >= 5 else 0.85 if ic >= 3 else 1.0
+            f *= 0.6 if ic >= 15 else 0.85 if ic >= 8 else 1.0
         if c.get("country_code"):
             k = country_count[c["country_code"]]
-            f *= 0.5 if k >= 25 else 0.8 if k >= 12 else 1.0
+            f *= 0.7 if k >= 40 else 0.9 if k >= 25 else 1.0
         return 100 * f
 
     while remaining and len(selected) < top_n:

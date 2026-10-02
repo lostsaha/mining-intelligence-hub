@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { api } from "@/lib/api";
+import { api, formatDateTime } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,7 @@ export default async function WeeklyList() {
             <h2>{d.title}</h2>
             <div className="sub">
               {d.summary} · 生成于{" "}
-              {new Date(d.generated_at).toLocaleString("zh-CN")}
+              {formatDateTime(d.generated_at)}
             </div>
           </Link>
         ))

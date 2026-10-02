@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { api } from "@/lib/api";
+import { api, formatDateTime } from "@/lib/api";
 import ItemList from "./components/item-list";
 import PipelineButton from "./components/pipeline-button";
 
@@ -23,7 +23,7 @@ export default async function Home({ searchParams }) {
           过去 30 天 · {itemsData.total} 条精选 · 信源 {stats.sources.active} 个 ·
           累计采集 {stats.items.total} 条
           {stats.last_run?.finished_at &&
-            ` · 上次采集 ${new Date(stats.last_run.finished_at).toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}`}
+            ` · 上次采集 ${formatDateTime(stats.last_run.finished_at)}`}
         </div>
         <PipelineButton />
       </div>

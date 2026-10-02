@@ -142,6 +142,8 @@ topics:
     - rockbolt
     - cable bolt
     - shotcrete
+    - gangue
+    - structural reliability
     match_keywords_zh:
     - 支护
     - 锚杆
@@ -209,6 +211,10 @@ topics:
     - rock mass
     - uniaxial compressive
     - crack initiation
+    - rock dynamic
+    - energy evolution
+    - dynamic response
+    - rock failure
     match_keywords_zh:
     - 岩石力学
     - 岩体
@@ -920,6 +926,9 @@ topics:
     - rockburst
     - seismicity
     - microseismic
+    - mine seismic
+    - seismic event
+    - microseismic monitoring
     match_keywords_zh:
     - 冲击地压
     - 微震

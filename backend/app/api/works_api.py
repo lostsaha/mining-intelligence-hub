@@ -14,7 +14,10 @@ def search_works(
     limit: int = Query(30, le=100),
     offset: int = 0,
 ) -> dict:
-    where: list[str] = []
+    where: list[str] = [
+        # 仅返回经关键词证实与矿业相关的论文（有主题关联），排除 OpenAlex 模糊搜索噪音
+        "EXISTS (SELECT 1 FROM mining.work_topic wt WHERE wt.work_id = w.work_id)"
+    ]
     params: list = []
     if q:
         where.append("(w.title ILIKE %s OR w.abstract ILIKE %s)")
@@ -30,8 +33,19 @@ def search_works(
         where.append("w.publication_year >= %s")
         params.append(year_from)
     where_sql = " AND ".join(where) if where else "TRUE"
-    order = "w.cited_by_count DESC" if sort == "citations" else "w.publication_year DESC, w.cited_by_count DESC"
-
+    # 矿业语境标题优先（检索词模糊命中导致的非矿业论文沉底）。
+    # CASE 的正则参数必须插在 where 参数之后、limit/offset 之前
+    order = (
+        "CASE WHEN w.title ~* %s THEN 0 ELSE 1 END, "
+        + ("w.cited_by_count DESC" if sort == "citations"
+           else "w.publication_year DESC, w.cited_by_count DESC")
+    )
+    context_re = (
+        r'min(?:e|es|ing|eral|erals)|ores?|tailings|open.?pit|blast|rockburst|coal|rock mechanics|'
+        r'geotechn|slope|backfill|ventilation|stoping|caving|orebody|mineral processing|flotation|leach'
+        r'|矿|煤矿|露天|尾矿|爆破|边坡|充填|岩爆|冲击地压|采场|通风|选矿|排土|疏干|瓦斯'
+    )
+    limit_offset = params[len(params):]  # 占位，仅保持结构清晰
     rows = db.query(
         f"""
         SELECT w.work_id, w.title, w.abstract, w.publication_year, w.publication_date,
@@ -55,7 +69,7 @@ def search_works(
         ORDER BY {order}
         LIMIT %s OFFSET %s
         """,
-        (*params, limit, offset),
+        (*params, context_re, limit, offset),
     )
     total = db.query_one(
         f"SELECT COUNT(*) AS n FROM mining.works w WHERE {where_sql}", tuple(params)

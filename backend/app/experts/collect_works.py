@@ -16,6 +16,28 @@ from ..openalex.client import BudgetExhausted, OpenAlexClient, reconstruct_abstr
 
 BATCH = 800
 
+# 矿业语境门：标题命中强特征词，或关键词多命中（rel>=0.65）才关联主题。
+# OpenAlex search 是模糊匹配，生物医学/加密货币等论文可能带单个泛词命中（如 machine learning）。
+import re as _re
+CRYPTO_RE = _re.compile(
+    r'bitcoin|blockchain|cryptocurr|ethereum|nft|web3|hash ?rate|mining pool'
+    r'|data mining|text mining|process mining|opinion mining|gene mining|gpu mining',
+    _re.IGNORECASE)
+
+def mining_context(title: str) -> bool:
+    """标题级矿业语境：强特征词命中且非加密货币/数据挖掘假阳性。"""
+    t = title or ""
+    return bool(MINING_CONTEXT_RE.search(t)) and not bool(CRYPTO_RE.search(t))
+
+MINING_CONTEXT_RE = _re.compile(
+    r'min(?:e|es|ing|eral|erals)|ores?|tailings|open.?pit|opencast|blast|rockburst'
+    r'|coal ?(seam|mine|mining)|rock mechanics|rock mass|geotechn|slope stability|pit slope'
+    r'|underground (?:mine|mining)|backfill|mine ventilation|stoping|caving|ore body|orebody'
+    r'|mineral processing|flotation|leach(?:ing)?|comminution|grade control|drill(?:ing)? and blast'
+    r'|fragmentation|haulage|haul truck|longwall|room.and.pillar|sublevel|ore dilution|mineral resource|ore reserve'
+    r'|矿|煤矿|露天|尾矿|爆破|边坡|充填|岩爆|冲击地压|采场|通风|选矿|排土|疏干|瓦斯|采矿|采煤|矿井|矿石|金属矿',
+    _re.IGNORECASE)
+
 
 def load_ontology() -> list[dict]:
     """从 topics.yaml 读取大类+子主题，返回带 topic_id 的分类器结构。"""
@@ -55,26 +77,45 @@ def load_ontology() -> list[dict]:
     return result
 
 
+
+# 泛化关键词：单独命中不足以证明矿业相关（任何学科都有 ML/模拟类论文）
+GENERIC_KEYWORDS = {
+    "machine learning", "deep learning", "neural network", "artificial intelligence",
+    "cnn", "lstm", "transformer", "random forest", "xgboost", "svm",
+    "optimization", "prediction", "classification", "clustering",
+    "big data", "data analytics", "numerical modeling", "numerical simulation",
+    "finite element", "discrete element", "genetic algorithm", "simulation",
+    "review", "assessment", "prediction model",
+    "机器学习", "深度学习", "神经网络", "人工智能", "数值模拟", "大数据",
+}
+
+def _is_generic_kw(k: str) -> bool:
+    return k.strip().lower() in GENERIC_KEYWORDS
+
 def _contains_word(text: str, needle: str) -> bool:
     if re.search(r"[\u4e00-\u9fff]", needle):
         return needle in text
     return re.search(r"(?<![a-z0-9])" + re.escape(needle) + r"(?![a-z0-9])", text) is not None
 
 
-def classify_work(text: str, category: dict) -> list[tuple[int, float]]:
-    """返回 [(topic_id, relevance)]，最多 2 个：子主题优先，无命中归大类。"""
+def classify_work(title: str, text: str, category: dict) -> list[tuple[int, float]]:
+    """返回 [(topic_id, relevance)]。矿业语境门：标题无强特征词时要求多命中(>=0.65)。"""
+    strong = mining_context(title)
     scored = []
     for ch in category["children"]:
-        hits = sum(1 for k in ch["match_keywords"] if _contains_word(text, k))
-        if hits:
-            scored.append((ch["topic_id"], min(0.95, 0.55 + 0.1 * hits)))
+        kw_hits = [k for k in ch["match_keywords"] if _contains_word(text, k)]
+        specific = any(not _is_generic_kw(k) for k in kw_hits)
+        if kw_hits:
+            scored.append((ch["topic_id"], min(0.95, 0.55 + 0.1 * len(kw_hits)), specific))
     scored.sort(key=lambda x: -x[1])
     if scored:
-        return scored[:2]
+        # 门：矿业语境标题，或命中矿业特有关键词（泛化词双命中不算）
+        scored = [s for s in scored if strong or s[2]]
+        return [(tid, rel) for tid, rel, _ in scored[:2]]
     cat_hits = sum(1 for k in category["match_keywords"] if _contains_word(text, k))
-    if cat_hits:
+    if cat_hits and strong:  # 大类泛关键词关联必须要求矿业语境（防 ML 类泛词绕门）
         return [(category["topic_id"], min(0.7, 0.35 + 0.08 * cat_hits))]
-    return [(category["topic_id"], 0.3)]  # 来自该类查询词族，保底归属
+    return []  # 零命中：OpenAlex search 模糊匹配的噪音（数据挖掘/比特币挖矿等），不关联主题
 
 
 _seen_dois: set[str] | None = None
@@ -322,7 +363,7 @@ def collect(
                 if work_db_id is None:
                     continue
                 text = f"{work.get('title') or ''} {reconstruct_abstract(work.get('abstract_inverted_index'))}".lower()
-                for topic_id, rel in classify_work(text, cat):
+                for topic_id, rel in classify_work((work.get("title") or ""), text, cat):
                     db.execute(
                         "INSERT INTO mining.work_topic (work_id, topic_id, relevance) "
                         "VALUES (%s, %s, %s) ON CONFLICT (work_id, topic_id) DO NOTHING",
