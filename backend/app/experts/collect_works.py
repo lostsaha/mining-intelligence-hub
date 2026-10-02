@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import re
 import time
+from datetime import timedelta
 
 import yaml
 
@@ -139,6 +140,20 @@ def _doi_available(doi: str | None) -> str | None:
 def upsert_work(cur_work: dict) -> int | None:
     title = (cur_work.get("title") or cur_work.get("display_name") or "").strip()
     if not title:
+        return None
+    # 未来日期门：机构库/数据集常把日期错标到未来（OpenAlex 元数据质量问题）。
+    # 允许在线优先出版提前 180 天；更远的未来日期视为错误元数据，拒收。
+    _pd = cur_work.get("publication_date")
+    _py = cur_work.get("publication_year") or 0
+    if _pd:
+        try:
+            from datetime import date as _date
+            _y, _m, _d = (int(x) for x in _pd.split("-"))
+            if _date(_y, _m, _d) > _date.today() + timedelta(days=180):
+                return None
+        except (ValueError, TypeError):
+            pass
+    if _py > _date.today().year:  # 年份超过当年一律拒收（实测来年条目均为元数据错误）
         return None
     abstract = reconstruct_abstract(cur_work.get("abstract_inverted_index"))
     loc = cur_work.get("primary_location") or {}
