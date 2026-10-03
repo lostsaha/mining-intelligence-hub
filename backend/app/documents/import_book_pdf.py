@@ -22,6 +22,13 @@ _WS_RE = re.compile(r"[ \t]+")
 _NUL_RE = re.compile(r"\x00+")  # PDF 内嵌字体常吐 NUL，PostgreSQL 拒收
 
 
+def _detect_lang(text: str) -> str:
+    if not text:
+        return "en"
+    cjk = sum(1 for ch in text[:4000] if "CJK" in __import__("unicodedata").name(ch, ""))
+    return "zh" if cjk / min(len(text), 4000) > 0.15 else "en"
+
+
 def _clean_page(text: str) -> str:
     text = _NUL_RE.sub("", text)
     text = _HYPHEN_RE.sub(r"\1\2", text)
@@ -83,9 +90,7 @@ def _toc_for_pages(doc) -> dict[int, str]:
 def import_book_pdf(limit: int | None = None) -> dict:
     stats = {"books": 0, "pages": 0, "chunks": 0, "skipped": 0}
     root = Path(r"H:\00\mining_library\books")
-    for d in sorted(root.iterdir()):
-        if not d.is_dir():
-            continue
+    for d in sorted(p for p in root.rglob("*") if p.is_dir()):
         if _classify_dir(d) is None:
             continue
         if limit and stats["books"] >= limit:

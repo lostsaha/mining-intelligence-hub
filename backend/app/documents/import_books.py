@@ -157,11 +157,15 @@ def parse_markdown(md_path: Path, skeleton):
     return out
 
 
+_STD_RE = re.compile(r"^(GB|GBT|GB/T|DZ|AQ|TCSEB|JTG|MT|SL|DB)[\sA-Z]*\d", re.I)
+
+
 def _classify_dir(d: Path):
     if d.name in SKIP_DIRS or d.name.startswith((".", "_")):
         return None
     files = [f for f in d.iterdir() if f.is_file()]
-    if d.name == "标准" or any("GB" in f.name and f.suffix == ".pdf" for f in files):
+    if (d.name == "标准" or "标准" in d.name or _STD_RE.match(d.name)
+            or any(_STD_RE.match(f.stem) for f in files)):
         return "standard"
     if any(f.suffix.lower() in (".pdf", ".md") for f in files):
         return "book"

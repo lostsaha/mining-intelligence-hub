@@ -142,9 +142,16 @@ curl.exe "http://127.0.0.1:8100/api/ask?q=露天矿边坡监测有哪些方法"
 
 ### 2.7 文献库位置与 embedding 回填
 
-**文献文件库已迁至 `H:\00\mining_library`**（书籍 `books\`、待解析 PDF `papers_pending_mineru\`，
-详见该目录 README.md）。再移动书籍目录后，必须同步 `mining.documents.source_dir` 与
+**文献文件库已迁至 `H:\00\mining_library`**（书籍 `books\`、中文露天矿山标准
+`books\标准-露天矿山\`、待解析 PDF `papers_pending_mineru\`，详见该目录 README.md）。
+再移动书籍目录后，必须同步 `mining.documents.source_dir` 与
 `mining.document_versions.file_path`。
+
+**中文证据入库**（2026-10-03 起）：书籍的中文译本 EPUB 已按其自身目录分段入
+document_chunks（`python -m app.documents.import_epub_chunks`）；`H:\00\标准整理`
+的 30 个露天矿山标准已 doc→md 转换入库（复用工具 `scripts/standards_ingest.py`，
+新批次标准改脚本内 SRC 后重跑）。4 个扫描件 PDF 标准无文字层，待 MinerU OCR 后
+重跑 `import_book_pdf` 补段。
 
 **语义检索（pgvector）**：数据库镜像已换 `pgvector/pgvector:pg16`，`sql/010_embeddings.sql`
 建好了三张表的 `embedding vector(1024)` 列。向量化需要 embeddings API（DeepSeek 不提供，
