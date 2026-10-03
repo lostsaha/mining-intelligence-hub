@@ -25,7 +25,6 @@ sys.path.insert(0, r"E:\syn\矿业聚合平台\backend")
 from standards_ingest import DST_ROOT, PANDOC, TMP_DIR, _display, plan  # noqa: E402
 
 API = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
-KEY = os.getenv("ZHIPU_API_KEY", "").strip()
 MODEL = "glm-4v-flash"
 MEDIA_RE = re.compile(r"!\[[^\]]*\]\(([^)]+)\)(?:\{[^}]*\})?")
 GOOD_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"}
@@ -39,7 +38,7 @@ PROMPT = """这张图片来自中国工程建设标准（doc 文档内嵌图）�
 无法辨认时也输出空字符串。"""
 
 
-def vision_convert(img_path: Path) -> str:
+def vision_convert(img_path: Path, key: str) -> str:
     b64 = base64.b64encode(img_path.read_bytes()).decode()
     payload = {
         "model": MODEL,
@@ -54,7 +53,7 @@ def vision_convert(img_path: Path) -> str:
         try:
             r = httpx.post(
                 API, json=payload, timeout=90.0,
-                headers={"Authorization": f"Bearer {KEY}"},
+                headers={"Authorization": f"Bearer {key}"},
             )
             r.raise_for_status()
             return (r.json()["choices"][0]["message"]["content"] or "").strip()
@@ -67,6 +66,8 @@ def vision_convert(img_path: Path) -> str:
 
 def main() -> int:
     global MODEL
+    from app import config  # noqa: F401  先加载 backend/.env 再读 key
+    key = os.getenv("ZHIPU_API_KEY", "").strip()
     if "--model" in sys.argv:
         MODEL = sys.argv[sys.argv.index("--model") + 1]
     limit = int(sys.argv[sys.argv.index("--limit") + 1]) if "--limit" in sys.argv else None
@@ -75,7 +76,7 @@ def main() -> int:
     if limit:
         items = items[:limit]
 
-    if not dry and not KEY:
+    if not dry and not key:
         print("未配置 ZHIPU_API_KEY（backend/.env），无法调视觉模型")
         return 1
 
@@ -129,7 +130,7 @@ def main() -> int:
                 block = ""
                 skip += 1
             else:
-                block = vision_convert(p)
+                block = vision_convert(p, key)
                 ok += 1
                 time.sleep(0.3)
             text = MEDIA_RE.sub(lambda m: block if m.group(1) == ref else m.group(0), text, count=1)

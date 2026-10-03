@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import httpx
 
-from .. import config
+from . import config
 
 EMBEDDINGS_BASE_URL = config.EMBEDDINGS_BASE_URL
 EMBEDDINGS_API_KEY = config.EMBEDDINGS_API_KEY
