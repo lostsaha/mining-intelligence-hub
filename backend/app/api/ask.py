@@ -255,6 +255,10 @@ def _collect_evidence(q: str, topk: int) -> list[dict]:
             else:
                 merged[key] = h
     ranked = sorted(merged.values(), key=lambda h: h["score"], reverse=True)
+    _terms = re.findall(r"[a-z0-9\-]+", tsq)  # 向量命中无 snippet，统一在此补齐
+    for h in ranked:
+        if "snippet" not in h:
+            h["snippet"] = _snippet(h["content"], _terms + zh)
 
     picked, per_title = [], {}
     for h in ranked:
