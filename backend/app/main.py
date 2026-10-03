@@ -4,6 +4,7 @@ from __future__ import annotations
 import threading
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 
 from . import db
 from .api import ask as ask_api
@@ -16,6 +17,17 @@ from .process import digest as digest_mod
 from .process import pipeline
 
 app = FastAPI(title="矿业前沿情报聚合平台 API", version="0.1.0")
+
+# 浏览器直连 API（前端 3100 → 后端 8100 跨源）：问答页/流水线按钮都需要
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3100",
+        "http://127.0.0.1:3100",
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 简单互斥：避免采集任务并发重入
 _job_lock = threading.Lock()
