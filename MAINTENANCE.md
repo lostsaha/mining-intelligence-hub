@@ -150,8 +150,15 @@ curl.exe "http://127.0.0.1:8100/api/ask?q=露天矿边坡监测有哪些方法"
 **中文证据入库**（2026-10-03 起）：书籍的中文译本 EPUB 已按其自身目录分段入
 document_chunks（`python -m app.documents.import_epub_chunks`）；`H:\00\标准整理`
 的 30 个露天矿山标准已 doc→md 转换入库（复用工具 `scripts/standards_ingest.py`，
-新批次标准改脚本内 SRC 后重跑）。4 个扫描件 PDF 标准无文字层，待 MinerU OCR 后
-重跑 `import_book_pdf` 补段。
+新批次标准改脚本内 SRC 后重跑）。
+
+**图片型表格/公式视觉转换**（智谱 GLM-4V，2026-10-03 全量跑过）：标准内嵌图 580 张
+已原位转为 GFM 表格/LaTeX 入语料。后续新标准先跑 `scripts/standards_ingest.py`，
+再跑 `python scripts/vision_ocr_standards.py`（读 `.env` 的 `ZHIPU_API_KEY`，
+默认 glm-4v-flash；`--dry` 只盘点不调用）。CN 中文专著入库用
+`python scripts/ingest_cn_books.py --wipe`（EPUB 骨架校正 md 标题层级）。
+注意：智谱免费档并发低，多任务同时调 API 会互相 429；embedding-3 未开通
+（429），开通后在 `.env` 配 EMBEDDINGS_* 再跑 `embed_backfill`。
 
 **语义检索（pgvector）**：数据库镜像已换 `pgvector/pgvector:pg16`，`sql/010_embeddings.sql`
 建好了三张表的 `embedding vector(1024)` 列。向量化需要 embeddings API（DeepSeek 不提供，
