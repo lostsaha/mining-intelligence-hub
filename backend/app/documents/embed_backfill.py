@@ -18,8 +18,8 @@ import time
 
 from .. import db, emb
 
-BATCH = 64
-_SLEEP = 0.2  # 批间限速
+BATCH = 32
+_SLEEP = 2.5  # 批间限速（配合 emb.py 的 429 退避自适配服务商限额）
 
 _TARGETS = {
     # 表名: (主键, 文本表达式, 已有文本非空的过滤)

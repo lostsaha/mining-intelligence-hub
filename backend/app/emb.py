@@ -8,6 +8,8 @@
 """
 from __future__ import annotations
 
+import time
+
 import httpx
 
 from . import config
@@ -24,7 +26,7 @@ def embed(texts: list[str]) -> list[list[float]]:
     if not EMBEDDINGS_ENABLED:
         raise RuntimeError("Embeddings 未配置（EMBEDDINGS_BASE_URL / API_KEY / MODEL）")
     last_error: Exception | None = None
-    for _ in range(3):
+    for attempt in range(6):
         try:
             resp = httpx.post(
                 f"{EMBEDDINGS_BASE_URL}/embeddings",
@@ -34,8 +36,13 @@ def embed(texts: list[str]) -> list[list[float]]:
                     "input": [t[:8000] for t in texts],
                     **({"dimensions": EMBEDDINGS_DIM} if config.EMBEDDINGS_SEND_DIM else {}),
                 },
-                timeout=60.0,
+                timeout=90.0,
             )
+            if resp.status_code == 429:  # 限速：按 Retry-After 或 30s 退避
+                wait = float(resp.headers.get("retry-after") or 30)
+                time.sleep(min(wait, 90))
+                last_error = RuntimeError("429 rate limited")
+                continue
             resp.raise_for_status()
             data = sorted(resp.json()["data"], key=lambda d: d["index"])
             vecs = [d["embedding"] for d in data]
@@ -47,6 +54,9 @@ def embed(texts: list[str]) -> list[list[float]]:
                     "——请换模型或改 .env 与 sql/010_embeddings.sql 的维度"
                 )
             return vecs
+        except httpx.HTTPStatusError:
+            raise
         except Exception as exc:
             last_error = exc
+            time.sleep(2 * (attempt + 1))
     raise RuntimeError(f"embeddings 调用失败: {last_error}")
