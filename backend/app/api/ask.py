@@ -17,6 +17,11 @@ import httpx
 from .. import config, db
 from ..process.llm import _extract_json
 
+try:  # embeddings 可选：未配置时向量检索分支整体跳过
+    from .. import emb as _emb
+except Exception:
+    _emb = None
+
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]{2,}")
 _EN_RE = re.compile(r"[A-Za-z][A-Za-z\-]{2,}")
 _PAGE_RE = re.compile(r"\[p(\d+)(?:-(\d+))?\]\s*$")
@@ -186,6 +191,48 @@ def _search_chunks(
     return hits
 
 
+def _vector_hits(query: str, table: str, topk: int) -> dict[int, dict]:
+    """pgvector 余弦近邻（仅当有向量且语料已回填时生效）。"""
+    if _emb is None or not _emb.EMBEDDINGS_ENABLED:
+        return {}
+    n = db.query_one(f"SELECT COUNT(*) AS n FROM mining.{table} WHERE embedding IS NOT NULL")["n"]
+    if n == 0:
+        return {}
+    try:
+        vec = _emb.embed([query])[0]
+    except Exception:
+        return {}
+    vec_lit = "[" + ",".join(f"{x:.6f}" for x in vec) + "]"
+    if table == "document_chunks":
+        sql = """
+            SELECT c.chunk_id AS id, c.section_path, c.content, c.lang,
+                   COALESCE(d.title_zh, d.title_en) AS title,
+                   1 - (c.embedding <=> %s::vector) AS score
+            FROM mining.document_chunks c
+            JOIN mining.documents d USING (document_id)
+            WHERE c.embedding IS NOT NULL
+            ORDER BY c.embedding <=> %s::vector LIMIT %s"""
+    else:
+        sql = """
+            SELECT c.chunk_id AS id, c.section_path, c.content, c.lang,
+                   w.title, w.publication_year,
+                   1 - (c.embedding <=> %s::vector) AS score
+            FROM mining.work_chunks c
+            JOIN mining.works w USING (work_id)
+            WHERE c.embedding IS NOT NULL
+            ORDER BY c.embedding <=> %s::vector LIMIT %s"""
+    source = "book" if table == "document_chunks" else "paper"
+    out = {}
+    for r in db.query(sql, (vec_lit, vec_lit, topk)):
+        out[r["id"]] = {
+            "id": r["id"], "source": source, "title": r["title"],
+            "section_path": r["section_path"], "lang": r["lang"],
+            "year": r.get("publication_year") if source == "paper" else None,
+            "content": r["content"], "score": 1.2 * float(r["score"] or 0),
+        }
+    return out
+
+
 def _collect_evidence(q: str, topk: int) -> list[dict]:
     zh, en = _extract_terms(q)
     if config.LLM_ENABLED:  # LLM 改写检索词（含中→英翻译），失败回退正则切分
@@ -201,6 +248,12 @@ def _collect_evidence(q: str, topk: int) -> list[dict]:
     for table in ("document_chunks", "work_chunks"):
         for cid, h in _search_chunks(table, zh, tsq, per_term_limit=topk * 2).items():
             merged[(h["source"], cid)] = h
+        for cid, h in _vector_hits(q, table, topk).items():  # 语义召回（有向量时叠加）
+            key = (h["source"], cid)
+            if key in merged:
+                merged[key]["score"] += h["score"] * 0.5
+            else:
+                merged[key] = h
     ranked = sorted(merged.values(), key=lambda h: h["score"], reverse=True)
 
     picked, per_title = [], {}
