@@ -32,7 +32,7 @@ def embed(texts: list[str]) -> list[list[float]]:
                 json={
                     "model": EMBEDDINGS_MODEL,
                     "input": [t[:8000] for t in texts],
-                    "dimensions": EMBEDDINGS_DIM,
+                    **({"dimensions": EMBEDDINGS_DIM} if config.EMBEDDINGS_SEND_DIM else {}),
                 },
                 timeout=60.0,
             )

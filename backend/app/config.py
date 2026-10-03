@@ -36,6 +36,8 @@ EMBEDDINGS_BASE_URL = os.getenv("EMBEDDINGS_BASE_URL", "").rstrip("/")
 EMBEDDINGS_API_KEY = os.getenv("EMBEDDINGS_API_KEY", "").strip()
 EMBEDDINGS_MODEL = os.getenv("EMBEDDINGS_MODEL", "").strip()
 EMBEDDINGS_DIM = int(os.getenv("EMBEDDINGS_DIM", "1024"))
+# 仅部分服务商支持 dimensions 入参（如智谱 embedding-3）；硅基流动 bge-m3 传了会 400
+EMBEDDINGS_SEND_DIM = os.getenv("EMBEDDINGS_SEND_DIM", "").strip() == "1"
 
 # 采集设置
 COLLECT_MAX_PER_SOURCE = int(os.getenv("COLLECT_MAX_PER_SOURCE", "40"))

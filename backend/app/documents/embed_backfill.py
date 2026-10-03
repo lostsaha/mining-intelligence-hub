@@ -57,9 +57,10 @@ def backfill(target: str, limit: int | None = None) -> None:
         vecs = emb.embed([r["text"] for r in rows])
         with db.get_conn() as conn, conn.cursor() as cur:
             for r, v in zip(rows, vecs):
+                vec_lit = "[" + ",".join(f"{x:.6f}" for x in v) + "]"
                 cur.execute(
-                    f"UPDATE mining.{table} SET embedding = %s WHERE {pk} = %s",
-                    (v, r["id"]),
+                    f"UPDATE mining.{table} SET embedding = %s::vector WHERE {pk} = %s",
+                    (vec_lit, r["id"]),
                 )
         done += len(rows)
         remain = _pending(table)
