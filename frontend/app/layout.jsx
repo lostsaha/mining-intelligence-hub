@@ -18,6 +18,7 @@ export default function RootLayout({ children }) {
             <nav className="main">
               <a href="/">信息流</a>
               <a href="/weekly">周报</a>
+              <a href="/ask">问答</a>
               <a href="/experts">专家</a>
               <a href="/admissions">名册</a>
               <a href="/radar">雷达</a>

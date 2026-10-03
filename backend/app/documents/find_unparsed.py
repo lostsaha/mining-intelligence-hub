@@ -1,8 +1,8 @@
 """对账：Zotero PDF 全文 vs 已解析 MD（mineru_results + all_md）。
 
 输出：
-- 未解析 PDF 复制到 E:\\syn\\待解析_mineru\\（复制不移动，Zotero storage 原样保留）
-- E:\\syn\\待解析_mineru\\_清单.md —— 标题清单（可照此在 Zotero 建集合跑 magic 插件）
+- 未解析 PDF 复制到 H:\\00\\mining_library\\papers_pending_mineru\\（复制不移动，Zotero storage 原样保留）
+- _清单.md —— 标题清单（可照此在 Zotero 建集合跑 magic 插件）
 用法：python -m app.documents.find_unparsed [--copy]
 """
 from __future__ import annotations
@@ -17,7 +17,7 @@ ZOTERO_DB = Path(r"E:\Zotero\zotero.sqlite")
 ZOTERO_STORAGE = Path(r"E:\Zotero\storage")
 MINERU_DIR = Path(r"H:\00\zotero\mineru_results")
 ALLMD_DIR = Path(r"H:\00\zotero\all_md")
-OUT_DIR = Path(r"E:\syn\待解析_mineru")
+OUT_DIR = Path(r"H:\00\mining_library\papers_pending_mineru")
 
 
 def _norm(t: str) -> str:

@@ -1,4 +1,4 @@
-"""自有藏书（E:\syn）导入 documents/versions/chunks。
+"""自有藏书（H:\00\mining_library\books）导入 documents/versions/chunks。
 
 - 章节骨架以「修复过的中文 EPUB 目录」为权威参照（用户对译本做过大量结构修复），
   英文 MD 分段结果在章节数量量级匹配时按顺序对齐到骨架标题。
@@ -15,11 +15,11 @@ from pathlib import Path
 
 from .. import db
 
-DEFAULT_ROOT = Path(r"E:\syn")
+DEFAULT_ROOT = Path(r"H:\00\mining_library\books")
 SKIP_DIRS = {
     "soft", "__pycache__", "papers", "Calibre 书库", "Translatebook",
     "TranslateBook_Data", "mining_epub_work", "zlib", "个人交易研究助手",
-    "小学", "矿业聚合平台",
+    "小学", "矿业聚合平台", "epub_repair_work", "_work", "_work2", "work",
 }
 CHUNK_TARGET = 1400
 CHUNK_MAX = 2200

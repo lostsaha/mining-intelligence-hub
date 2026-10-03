@@ -124,11 +124,47 @@ powershell -ExecutionPolicy Bypass -File scripts\quality-check.ps1
 |---|---|---|
 | 信息流 | `/` | 条目带中文摘要、按天分组、主题 chips 有计数 |
 | 周报 | `/weekly` | 本周报告在、点开有主题分组 |
+| 问答 | `/ask` | 中文提问返回带 [n] 引用的作答、证据卡片带页码/章节 |
 | 专家 | `/experts` | Top 100、院士徽章、认证筛选生效 |
 | 名册 | `/admissions` | 四格统计、双重入选/盲区卡片 |
 | 雷达 | `/radar` | 热度排序、年度趋势条 |
 | 图谱 | `/graph` | 节点渲染、点专家出弹窗 |
 | 文献 | `/works?q=blast` | 有结果、作者可点 |
+
+### 2.6 证据问答（/ask）测试
+
+```powershell
+curl.exe "http://127.0.0.1:8100/api/ask?q=露天矿边坡监测有哪些方法"
+```
+
+**期望**：`evidence_status: "answered"`、`citations` 数组带书名/章节/页码、`answer` 含 `[n]` 引用。
+**逻辑**：检索（英文走 tsvector，中文走 ILIKE+pg_trgm）→ LLM 只基于证据作答；语料无命中返回 `no_evidence` 而不是瞎编。
+
+### 2.7 文献库位置与 embedding 回填
+
+**文献文件库已迁至 `H:\00\mining_library`**（书籍 `books\`、待解析 PDF `papers_pending_mineru\`，
+详见该目录 README.md）。再移动书籍目录后，必须同步 `mining.documents.source_dir` 与
+`mining.document_versions.file_path`。
+
+**语义检索（pgvector）**：数据库镜像已换 `pgvector/pgvector:pg16`，`sql/010_embeddings.sql`
+建好了三张表的 `embedding vector(1024)` 列。向量化需要 embeddings API（DeepSeek 不提供，
+可用硅基流动等 OpenAI 兼容服务），在 `.env` 配置：
+
+```
+EMBEDDINGS_BASE_URL=https://api.siliconflow.cn/v1
+EMBEDDINGS_API_KEY=sk-xxx
+EMBEDDINGS_MODEL=BAAI/bge-m3
+```
+
+然后回填（幂等，可中断重跑；全部完成后再建 HNSW 索引）：
+
+```powershell
+cd E:\syn\矿业聚合平台\backend
+.\.venv\Scripts\python -m app.documents.embed_backfill --target works
+.\.venv\Scripts\python -m app.documents.embed_backfill --target chunks
+.\.venv\Scripts\python -m app.documents.embed_backfill --target work_chunks
+.\.venv\Scripts\python -m app.documents.embed_backfill --index
+```
 
 ---
 

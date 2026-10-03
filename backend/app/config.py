@@ -31,6 +31,12 @@ LLM_API_KEY = os.getenv("LLM_API_KEY", "").strip()
 LLM_MODEL = os.getenv("LLM_MODEL", "").strip()
 LLM_ENABLED = bool(LLM_BASE_URL and LLM_API_KEY and LLM_MODEL)
 
+# Embeddings（OpenAI 兼容 /embeddings，Phase 4D 语义检索；未配置则关闭）
+EMBEDDINGS_BASE_URL = os.getenv("EMBEDDINGS_BASE_URL", "").rstrip("/")
+EMBEDDINGS_API_KEY = os.getenv("EMBEDDINGS_API_KEY", "").strip()
+EMBEDDINGS_MODEL = os.getenv("EMBEDDINGS_MODEL", "").strip()
+EMBEDDINGS_DIM = int(os.getenv("EMBEDDINGS_DIM", "1024"))
+
 # 采集设置
 COLLECT_MAX_PER_SOURCE = int(os.getenv("COLLECT_MAX_PER_SOURCE", "40"))
 PROCESS_BATCH_SIZE = int(os.getenv("PROCESS_BATCH_SIZE", "200"))

@@ -2,7 +2,7 @@ name: mining-hub
 
 services:
   db:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16  # postgres16 + pgvector（语义检索，见 sql/010）
     container_name: mining-db
     environment:
       POSTGRES_USER: mining

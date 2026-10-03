@@ -6,6 +6,7 @@ import threading
 from fastapi import FastAPI, HTTPException, Query
 
 from . import db
+from .api import ask as ask_api
 from .api import graph as graph_api
 from .api import journals_api
 from .api import radar as radar_api
@@ -452,6 +453,20 @@ def api_works(
         q=q, topic=topic, journal=journal, year_from=year_from, sort=sort,
         limit=limit, offset=offset
     )
+
+
+@app.get("/api/ask")
+def api_ask(
+    q: str = Query(..., min_length=1, max_length=500),
+    topk: int = Query(6, ge=3, le=10),
+):
+    """证据问答：分段检索 → LLM 基于证据作答（四段式响应）。"""
+    try:
+        return ask_api.ask(q, topk=topk)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc))
 
 
 @app.get("/api/journals")
