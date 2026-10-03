@@ -1,7 +1,8 @@
 ﻿# 数据库备份（建议每周一次；备份目录自动创建）
 $env:PYTHONUTF8 = "1"
 $date = Get-Date -Format "yyyy-MM-dd"
-$dir = Join-Path $PSScriptRoot "..\backups"
+# 备份含全部文献文本与向量，绝不能放仓库目录（防止误提交 GitHub）
+$dir = "E:\syn\mining_backups"
 $out = Join-Path $dir "backup_mining_$date.sql"
 New-Item -ItemType Directory -Force $dir | Out-Null
 

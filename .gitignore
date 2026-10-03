@@ -24,3 +24,15 @@ out/
 .DS_Store
 Thumbs.db
 寻找活跃矿业专家.pdf
+
+# 文献与数据（绝不上传：入库的论文/书籍/标准/向量库/数据库备份，2026-10-03 用户指令）
+backups/
+*.dump
+*.pdf
+*.epub
+*.doc
+*.docx
+*.mobi
+scripts/_std_tmp/
+scripts/_probe_media/
+*_tmp.json
