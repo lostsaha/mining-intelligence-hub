@@ -136,10 +136,11 @@ def main() -> int:
             text = MEDIA_RE.sub(lambda m: block if m.group(1) == ref else m.group(0), text, count=1)
 
         md_path.write_text(text, encoding="utf-8")
-        shutil.rmtree(media_dir, ignore_errors=True)
-        with_media.unlink(missing_ok=True)
-        if ext == ".doc":
-            conv.unlink(missing_ok=True)
+        # 过程文件保留在 _std_tmp（用户规则 2026-10-04：便于修补回溯）
+        # shutil.rmtree(media_dir, ignore_errors=True)
+        # with_media.unlink(missing_ok=True)
+        # if ext == ".doc":
+        #     conv.unlink(missing_ok=True)
         total_ok += ok
         total_skip += skip
         print(f"[ocr] {d.name[:44]:44s} 转换 {ok:3d} / 跳过 {skip:3d}")

@@ -134,8 +134,9 @@ def main() -> int:
         else:
             fail += 1
             print(f"[pandoc-fail] {src.name[:56]}: {(r.stderr or '')[:80]}")
-    for t in TMP_DIR.glob("*.docx"):
-        t.unlink()  # 清临时件
+    # 过程文件保留（用户规则 2026-10-04：E:\syn 留过程件以便修补，成果进 H 盘）
+    # for t in TMP_DIR.glob("*.docx"):
+    #     t.unlink()
     print(f"\n转换完成 ok={ok} fail={fail}")
 
     # 3) 入库（md 分段）

@@ -160,6 +160,10 @@ document_chunks（`python -m app.documents.import_epub_chunks`）；`H:\00\标�
 注意：智谱免费档并发低，多任务同时调 API 会互相 429；embedding-3 未开通
 （429），开通后在 `.env` 配 EMBEDDINGS_* 再跑 `embed_backfill`。
 
+**工作区/成果区规则**（2026-10-04）：`E:\syn` 保留过程文件（MinerU 中间产物、
+EPUB 修复工作区、临时 docx、OCR 缓存等，便于修补）；`H:\00\mining_library` 只放
+成果/阶段成果（三件套、标准转换成品）。管线脚本已停用过程件清理；详见 H 盘 README。
+
 **语义检索（pgvector）**：数据库镜像已换 `pgvector/pgvector:pg16`，`sql/010_embeddings.sql`
 建好了三张表的 `embedding vector(1024)` 列。向量化需要 embeddings API（DeepSeek 不提供，
 可用硅基流动等 OpenAI 兼容服务），在 `.env` 配置：
