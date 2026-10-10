@@ -80,7 +80,8 @@ def main() -> int:
     pdfs = all_pdfs()
     staged = set()
     for d in (Path(r"E:\syn\papers_pending_mineru"),
-              Path(r"H:\00\mining_library\papers_pending_mineru")):
+              Path(r"H:\00\mining_library\papers_pending_mineru"),
+              OUT):
         if d.is_dir():
             staged |= {p.name for p in d.glob("*.pdf")}
     print(f"全量 PDF 附件（含链接式）: {len(pdfs)} | 旧批次已暂存 {len(staged)}")
@@ -99,9 +100,7 @@ def main() -> int:
     print(f"未解析 {len(unparsed) + overlapped}，其中旧批次已暂存 {overlapped}，真正新增 {len(unparsed)}")
 
     if copy and unparsed:
-        if OUT.exists():
-            for f in OUT.glob("*.pdf"):
-                f.unlink()
+        OUT.mkdir(parents=True, exist_ok=True)  # 不清空输出文件夹（增量并入）
         OUT.mkdir(parents=True, exist_ok=True)
         seen: set[str] = set()
         lines = []
