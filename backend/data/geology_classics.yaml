@@ -1,0 +1,49 @@
+# 矿山地质—资源建模经典书单（采集规划）
+# 来源：推荐经典书籍论文.pdf（顾问对话记录，2026-10）
+# 知识链：矿山地质→矿床地质→勘探数据→地质解释→3D建模→地质统计学→品位估算→资源量→不确定性→模型验证
+# 状态：规划中（等书籍翻译批次完成后与 import_all_books 一并执行）
+
+meta:
+  knowledge_layers:
+    - {layer: L1, direction: 矿山地质, core: Marjoribanks}
+    - {layer: L2, direction: 矿床/经济地质, core: "Guilbert & Park"}
+    - {layer: L3, direction: 3D地质建模, core: Houlding}
+    - {layer: L4, direction: 地质统计学, core: "Isaaks & Srivastava"}
+    - {layer: L5, direction: 资源量估算, core: "Rossi & Deutsch"}
+    - {layer: L6, direction: 高级模拟/不确定性, core: "Deutsch, Journel, Goovaerts"}
+
+books:
+  - {rank: 1, authors: "Rossi & Deutsch", title: "Mineral Resource Estimation", stars: 5,
+     status: "已在库（正在翻译中文版）"}
+  - {rank: 2, authors: "Isaaks & Srivastava", title: "An Introduction to Applied Geostatistics", year: 1989, stars: 5, status: 待采集}
+  - {rank: 3, authors: "Sinclair & Blackwell", title: "Applied Mineral Inventory Estimation", year: 2002, stars: 5, status: 待采集}
+  - {rank: 4, authors: "Journel & Huijbregts", title: "Mining Geostatistics", year: 1978, stars: 5, status: 待采集}
+  - {rank: 5, authors: "Deutsch & Journel", title: "GSLIB: Geostatistical Software Library and User's Guide", year: 1998, stars: 5, status: 待采集}
+  - {rank: 6, authors: "Marjoribanks", title: "Geological Methods in Mineral Exploration and Mining", stars: 5,
+     status: "待采集（已有 2016 中文译本，可采译本）"}
+  - {rank: 7, authors: "Houlding", title: "3D Geoscience Modeling", year: 1994, stars: 5, status: 待采集}
+  - {rank: 8, authors: "David", title: "Geostatistical Ore Reserve Estimation", year: 1977, stars: 5, status: 待采集（历史经典）}
+  - {rank: 9, authors: "Goovaerts", title: "Geostatistics for Natural Resources Evaluation", stars: 4.5, status: 待采集}
+  - {rank: 10, authors: "Cressie", title: "Statistics for Spatial Data", stars: 4.5, status: 待采集（非矿业专属）}
+  - {authors: "Guilbert & Park", title: "The Geology of Ore Deposits", status: 待采集（L2 矿床地质代表）}
+
+papers:
+  - {authors: "Krige", year: 1951, title: "A Statistical Approach to Some Basic Mine Valuation Problems on the Witwatersrand",
+     status: "已在语料"}
+  - {authors: "Matheron", year: 1963, title: "Principles of Geostatistics",
+     doi: "10.2113/gsecongeo.58.8.1246", status: "PDF 已收编 Zotero；语料待查"}
+
+# 采集关键词簇（扩充 地质勘查与资源估算 大类的 query_keywords / match_keywords）
+keywords:
+  地质统计学: [kriging, variogram, semivariogram, nugget effect, spatial continuity, anisotropy]
+  资源估算: [mineral resource estimation, grade estimation, block model, resource classification, reconciliation, grade-tonnage]
+  三维建模: [geological modeling, implicit modeling, wireframe, structural modeling, lithological modeling]
+  模拟与不确定性: [conditional simulation, sequential gaussian simulation, multiple point statistics, resource uncertainty, probabilistic resource estimation]
+
+# 知识图谱蓝图（Phase 4B /ask 演进方向）
+graph_blueprint:
+  矿床: [地质体[岩性/构造/蚀变/矿化], 勘探数据[钻孔/品位/密度/地质编录], 地质模型[Wireframe/Surface/Solid]]
+  高阶问句示例:
+    - 关于斑岩铜矿的资源建模，哪些经典方法最常用？
+    - Rossi & Deutsch 的资源估算方法与传统 Kriging 有什么区别？
+    - 某一资源建模方法是谁提出的？后来有哪些论文改进？
