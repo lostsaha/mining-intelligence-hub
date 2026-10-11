@@ -405,3 +405,26 @@ mining.collect_runs   -- 采集运行记录：started/finished, per-source 结�
 - **4D 融入 4A**：pgvector + bge-m3 混合检索（跨语言召回是验收项，不是可选项）
 - **4B**：矿山/矿种/阶段建模照旧，LLM 抽取 + 人工种子
 - 新增治理件：collections（专题资料集，US-05）、topic_aliases、评测集维护
+
+### 10.7 入库逻辑 v2：编号体系与版本更新（2026-10-04 规划，翻译批次完成后执行）
+
+**四条铁律**：①源文件只读不删不改；②md 优先（EPUB 骨架校正）；③无 md 用 epub 终版
+（判定=修改时间最新，忽略文件名）；④中英双语同时入库，检索全量、证据配额。
+
+**编号体系**（唯一性锚点在数据库，不在文件名）：
+- 格式 `<专业>-<类型>-<序号>`，如 `GEO-BOOK-0003`、`SURF-STD-0002`
+- 专业：SURF 露天 / UNDER 地下 / GEO 地质 / BLAST 爆破 / SAFE 安全 / MINE 通用
+- 类型：BOOK 书籍 / TRANS 译本 / STD 标准 / PAPER 论文 / THESIS 学位论文 / CONF 会议
+- documents 加 `book_code` 唯一列；文件名仅供人读
+
+**更新替换机制**（书籍修正/遗漏补齐后）：
+- document_versions 追加新版本行（旧记录保留 = 修复史）
+- documents.current_version_id 切换当前版本
+- 分段替换：删旧版 chunks+embedding → 新版分段 → 增量回填
+- /ask 只引用 current 版本；旧源文件保留在盘
+- 中英配对：documents.source_doc_id（英文母本 ← 中文译本），/ask 证据按对去重
+  （每书最多 2 槽：一中一英）
+
+**触发**：用户翻译批次完成 → 盘点（scan_unreg_epubs）→ 圈定终版 → import_all_books
+一次执行 + embedding 增量回填。地质批次主题按实际内容配（L1~L6 骨架见
+backend/data/geology_classics.yaml），预设空主题被禁止。
