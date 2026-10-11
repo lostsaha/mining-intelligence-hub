@@ -36,3 +36,4 @@ backups/
 scripts/_std_tmp/
 scripts/_probe_media/
 *_tmp.json
+backend/data/jcr.db

@@ -74,6 +74,23 @@ export default async function JournalsPage({ searchParams }) {
                   总被引 {j.total_citations} · 篇均 {j.avg_citations} ·
                   {j.since_year}–{j.to_year}
                 </div>
+                {j.impact_factor != null && (
+                  <div className="meta" style={{ marginTop: 4 }}>
+                    <span
+                      className="chip"
+                      title={`JCR ${j.jcr_quartile || "-"} · 中科院 ${j.cas_category || "-"}${j.cas_quartile || ""}${j.cas_top === "是" ? " · Top 期刊" : ""}`}
+                    >
+                      IF <b>{j.impact_factor}</b>
+                    </span>
+                    {j.jcr_quartile && <span className="chip">JCR {j.jcr_quartile}</span>}
+                    {j.cas_quartile && (
+                      <span className="chip">
+                        中科院 {j.cas_category} {j.cas_quartile}
+                        {j.cas_top === "是" ? " · Top" : ""}
+                      </span>
+                    )}
+                  </div>
+                )}
                 <div className="sb-track" style={{ marginTop: 6, maxWidth: 420 }}>
                   <div
                     className="sb-fill"

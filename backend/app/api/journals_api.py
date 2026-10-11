@@ -36,10 +36,22 @@ def journals(
                COALESCE(SUM(w.cited_by_count), 0) AS total_citations,
                COALESCE(ROUND(AVG(w.cited_by_count)::numeric, 1), 0) AS avg_citations,
                MIN(w.publication_year) AS since_year,
-               MAX(w.publication_year) AS to_year
+               MAX(w.publication_year) AS to_year,
+               jm.if_2025 AS impact_factor,
+               jm.jcr_quartile,
+               jm.cas_category,
+               jm.cas_quartile,
+               jm.cas_top
         FROM mining.works w
+        LEFT JOIN (
+            SELECT DISTINCT ON (norm_name) norm_name, journal, if_2025,
+                   jcr_quartile, cas_category, cas_quartile, cas_top
+            FROM mining.journal_metrics
+            ORDER BY norm_name, if_2025 DESC NULLS LAST
+        ) jm ON jm.norm_name = regexp_replace(lower(w.source_name), '[^a-zA-Z0-9一-鿿]', '', 'g')
         WHERE {" AND ".join(where)}
-        GROUP BY w.source_name
+        GROUP BY w.source_name, jm.if_2025, jm.jcr_quartile, jm.cas_category,
+                 jm.cas_quartile, jm.cas_top
         HAVING COUNT(*) >= %s
            AND COUNT(*) FILTER (
                WHERE EXISTS (SELECT 1 FROM mining.work_topic wt WHERE wt.work_id = w.work_id)
