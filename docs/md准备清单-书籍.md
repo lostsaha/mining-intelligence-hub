@@ -36,7 +36,7 @@
 
 | 书 | 经典书单 | en md | zh 现状 | 行动项 |
 |---|---|---|---|---|
-| Isaaks & Srivastava《Applied Geostatistics》 | L4 ✓ | mineu_results 有 | **整本 zh md 已成**（isaaks_1990..._zh.md） | zh：整本 md 直接采用（信任翻译产出）；en：四关质检 |
+| Isaaks & Srivastava《Applied Geostatistics》 | L4 ✓ | mineu_results 分块（工程目录） | **双成果**：终版 epub《地质统计学导论》在书目录（已验完好）+ 整本译稿 md 在工程目录（zh_build） | zh：**epub→md**（终版 epub 为准）；en：分块合并+四关质检。注：用户已拆双目录——`An Introduction...`（成果：原版 PDF/DJVU+中文 epub+audit/epub_work）与 `isaaks_1990...`（工程：for_mineru/mineu_results/zh_build md） |
 | Sinclair & Blackwell《Applied Mineral Inventory Estimation》 | L5 ✓ | 待查 | 章节翻译 md（work/translated_full/ 01~03 章） | zh：**章节 md 合并成整本 _zh.md**（新需求）；翻完续并 |
 | Journel & Huijbregts《Mining Geostatistics》 | L4 ✓ | 待查 | 待翻译 | en 质检备用；zh 等翻译 |
 | Marjoribanks《矿产勘查及开发中的地质方法》 | L1 ✓ | — | **现成中文译本 epub+pdf**（万方译） | zh：epub→md 直接生成 |
