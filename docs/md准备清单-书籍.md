@@ -12,7 +12,25 @@
 | C 存量书更新 | ~16 本 | epub 修复版已就位（Blasting/MRE/HaulRoad 等有新增代） |
 | D E:\syn\mineru_results（论文） | 1,713 md | **新批次论文解析成果已回传**，走论文管线另行入库，不在本清单 |
 
-## 二、分批明细与行动项
+## 二·补、子目录成果分布（2026-10-14 补充盘点，用户指出成果在子目录）
+
+各书成果不在顶层，分布形态归纳为六类（合并/转换工具需按此适配）：
+
+| 成果形态 | 典型书 | 子目录 | 处理 |
+|---|---|---|---|
+| **中文译稿目录** | SME Surface（译稿:159）、SME Underground（translation:253）、Surface Mining Technology（work:212）、Sustainable Management（work:206）、Surface Mining Machines（work:36） | `译稿/` `work/` `translation/` | 章节译稿按序合并 → `_zh.md` |
+| **MinerU 分章块** | Optimisation（zh:95+chunk_NN:1×多）、Paste Tailings、haul roads、big data（units:45） | `zh/` `chunk_51_60/`… | 分章块合并（序号识别）→ 质检 |
+| **MinerU 解析专区** | SME mining reference（mineru_reparse:139+mineru_results:103）、SME Underground（mineru_results:184）、SME Surface（mineru_results:138） | `mineru_results/` `mineru_reparse/` | 英文分章解析稿合并 → en 四关质检 |
+| **构建工作区** | SME mining reference（zh_build:130+epub_build:43）、SME Underground（epub_build:2）、Data Analytics（epub_build:2）、Hard Rock（handbook_build:2） | `*_build/` | epub 构建源——若 epub 已成品则 epub→md 更稳 |
+| **翻译准备/混杂** | SME Mine Safety（translation_prep:66）、Water in Pit（zh:3）、Blasting（work:145+成果:49）、MRE（顶层:15+chunks:4） | 各异 | 逐本甄别：译稿 vs 原文解析 |
+| **书内嵌套书目录** | 地质\An Introduction...（内含 mineu_results/）、SME_missing_chapter_openings | 嵌套 | 上卷已列，动工时展平处理 |
+
+**规则补充（入指南 v1.1）**：md 准备扫描必须 rglob 全目录树；成果甄别顺序：
+①整本 `_zh.md`/整本翻译 md → ②`译稿|work|translation` 章节稿合并 → ③`*_build` 的 epub 优先转 md
+→ ④MinerU 分章合并（en 侧）→ ⑤顶层散 md 质检。命名归一时**原位保留全部源文件**，
+生成的 `_zh.md`/`_en.md` 放书目录顶层。
+
+## 三、分批明细与行动项
 
 ### A. 地质批次（对应 geology_classics.yaml 六层书单——书单已实现大半）
 
