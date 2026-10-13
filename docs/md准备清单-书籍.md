@@ -66,7 +66,7 @@
 
 Blasting（新增导读/恢复代）、MRE、HaulRoad、Hard Rock、OPMD、各 Guidelines 系列、SME Surface（35 分章 zh epub + 36 en epub）、Principles and Practice（25 en epub 代）等——epub 修复版齐备，**统一按指南跑 epub→md（zh）+ 既有 en md 质检**。
 
-## 三、准备工具清单（动工前实现，均只读源文件）
+## 四、准备工具清单（动工前实现，均只读源文件）
 
 | # | 工具 | 用途 | 新增需求来源 |
 |---|---|---|---|
@@ -77,7 +77,7 @@ Blasting（新增导读/恢复代）、MRE、HaulRoad、Hard Rock、OPMD、各 G
 | 5 | 目录甄别器 | `地质` vs `鍦拌川` 文件级去重；epub_check_work 归属判定 | 本轮盘点 |
 | 6 | `assign_book_codes.py` | 按主类自动编号（GEO-BOOK-0001 起），存量 67 本回溯编号 | §10.7 |
 
-## 四、执行顺序（发令后）
+## 五、执行顺序（发令后）
 
 1. **清障**：地质双目录并轨去重 → 乱码目录名归一
 2. **中文 md**（指南铁律）：整本翻译 md 直接采 → 章节翻译 md 合并 → epub→md（其余）
@@ -86,7 +86,7 @@ Blasting（新增导读/恢复代）、MRE、HaulRoad、Hard Rock、OPMD、各 G
 5. **验收**：每书 zh 章节数 vs epub 目录抽查、乱码扫描、路径体检
 6. 转入 import_all_books 入库队列（编号/配对/分段/向量，另行发令）
 
-## 五、两个待确认
+## 六、两个待确认
 
 1. 地质批次以哪个目录为准（建议 `地质\`，乱码目录并入）？
 2. SME Statistics 的 4 个 zh epub 是否终版（mtime 10-07）？若是，直接 epub→md。
