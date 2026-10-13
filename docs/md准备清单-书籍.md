@@ -86,7 +86,17 @@ Blasting（新增导读/恢复代）、MRE、HaulRoad、Hard Rock、OPMD、各 G
 5. **验收**：每书 zh 章节数 vs epub 目录抽查、乱码扫描、路径体检
 6. 转入 import_all_books 入库队列（编号/配对/分段/向量，另行发令）
 
-## 六、两个待确认
+## 六、两个待确认（已解决）与翻译进度定稿（2026-10-14 用户修正）
 
-1. 地质批次以哪个目录为准（建议 `地质\`，乱码目录并入）？
-2. SME Statistics 的 4 个 zh epub 是否终版（mtime 10-07）？若是，直接 epub→md。
+1. ~~地质双目录~~ ✅ 已并轨（`地质\` 为准，12,495 文件归一，乱码目录已删）
+2. ~~SME Statistics 终版~~ ✅ 已按 mtime 最新保留（10-06 修复版），旧版已清
+
+**判定规则（用户口授，入指南 v1.1）**：书籍目录内 **mtime 最新的 epub 一般即中文版**
+（不看文件名——`chinese` 小写、无中文命名的译本都靠这条兜住）。
+
+| 状态 | 书 |
+|---|---|
+| ❌ 唯一未翻译 | SME Mineral Processing and Extractive Metallurgy Handbook |
+| 🔄 在译（3 本） | Application of Optimisation Techniques（57 章）、Guidelines for Probabilistic Performance-Based Seismic Design、OPSD 补全（见下） |
+| ⚠️ 特殊 | Guidelines for Open Pit Slope Design：chinese.epub 经 mtime 确认是中文版，但**未找到完整电子版——该文件忽略不计**，待完整版后补 |
+| ✅ 中文成果 36 本 | 终版 epub 33（SME 全家桶/新技术书/地质批次）+ md 成稿 3（haul roads 16 / Paste Tailings 20 / Open pit mining 2） |
