@@ -3,10 +3,10 @@ from __future__ import annotations
 
 import threading
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import db
+from . import config, db
 from .api import ask as ask_api
 from .api import graph as graph_api
 from .api import journals_api
@@ -15,18 +15,16 @@ from .api import works_api
 from .collect.run import run_collect
 from .process import digest as digest_mod
 from .process import pipeline
+from .security import client_hash, require_admin, require_ask_quota
 
-app = FastAPI(title="矿业前沿情报聚合平台 API", version="0.1.0")
+app = FastAPI(title="矿业前沿情报聚合平台 API", version=config.APP_VERSION)
 
-# 浏览器直连 API（前端 3100 → 后端 8100 跨源）：问答页/流水线按钮都需要
+# 前端直连 API（默认 3000/3100 → 后端 8100）：来源由 CORS_ORIGINS 配置。
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3100",
-        "http://127.0.0.1:3100",
-    ],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=config.CORS_ORIGINS,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "X-Admin-Token", "X-Requested-With"],
 )
 
 # 简单互斥：避免采集任务并发重入
@@ -35,10 +33,10 @@ _job_state = {"running": False, "last_result": None}
 
 TOPIC_STATS_SQL = """
 SELECT t.slug, t.name_zh, t.name_en, t.sort_order,
-       COUNT(it.item_id) FILTER (
+       COUNT(i.item_id) FILTER (
            WHERE COALESCE(i.published_at, i.collected_at) >= now() - interval '30 days'
        ) AS item_count,
-       COUNT(it.item_id) AS item_count_all
+       COUNT(i.item_id) AS item_count_all
 FROM mining.topics t
 LEFT JOIN mining.item_topic it ON it.topic_id = t.topic_id
 LEFT JOIN mining.items i ON i.item_id = it.item_id AND i.status = 'approved'
@@ -53,7 +51,14 @@ s.name AS source_name, s.slug AS source_slug, s.lang AS source_lang
 """
 
 
-def _items_with_topics(where: str, params: tuple) -> list[dict]:
+def _items_with_topics(
+    where: str, params: tuple, limit: int | None = None, offset: int = 0
+) -> list[dict]:
+    page_sql = ""
+    query_params: tuple = params
+    if limit is not None:
+        page_sql = "LIMIT %s OFFSET %s"
+        query_params = (*params, limit, offset)
     rows = db.query(
         f"""
         SELECT {ITEM_FIELDS},
@@ -68,8 +73,9 @@ def _items_with_topics(where: str, params: tuple) -> list[dict]:
         JOIN mining.sources s USING (source_id)
         {where}
         ORDER BY COALESCE(i.published_at, i.collected_at) DESC
+        {page_sql}
         """,
-        params,
+        query_params,
     )
     return rows
 
@@ -78,9 +84,9 @@ def _items_with_topics(where: str, params: tuple) -> list[dict]:
 @app.get("/api/items")
 def list_items(
     topic: str | None = None,
-    days: int = 30,
-    limit: int = Query(50, le=200),
-    offset: int = 0,
+    days: int = Query(30, ge=0, le=3650),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
     q: str | None = None,
 ):
     where = ["i.status = 'approved'",
@@ -96,7 +102,7 @@ def list_items(
         where.append("(i.title ILIKE %s OR i.summary_zh ILIKE %s)")
         params += [f"%{q}%", f"%{q}%"]
     where_sql = " AND ".join(where)
-    rows = _items_with_topics(f"WHERE {where_sql}", tuple(params))
+    rows = _items_with_topics(f"WHERE {where_sql}", tuple(params), limit=limit, offset=offset)
     total = db.query_one(
         f"""
         SELECT COUNT(*) AS n
@@ -105,7 +111,7 @@ def list_items(
         """,
         tuple(params),
     )["n"]
-    return {"total": total, "items": rows[offset: offset + limit]}
+    return {"total": total, "items": rows}
 
 
 # ---------------------------------------------------------------- 主题
@@ -115,7 +121,7 @@ def list_topics():
 
 
 @app.get("/api/topics/{slug}")
-def topic_detail(slug: str, limit: int = Query(100, le=300)):
+def topic_detail(slug: str, limit: int = Query(100, ge=1, le=300)):
     topic = db.query_one(
         "SELECT slug, name_zh, name_en FROM mining.topics WHERE slug = %s", (slug,)
     )
@@ -219,7 +225,8 @@ def list_sources():
     rows = db.query(
         """
         SELECT s.source_id, s.slug, s.name, s.tier, s.source_type, s.site_url,
-               s.lang, s.authority_weight, s.active, s.notes, s.last_fetched_at,
+               s.feed_url, s.lang, s.authority_weight, s.active, s.notes,
+               s.last_fetched_at,
                COUNT(i.item_id) FILTER (WHERE i.status = 'approved') AS approved_count
         FROM mining.sources s
         LEFT JOIN mining.items i ON i.source_id = s.source_id
@@ -234,11 +241,14 @@ def list_sources():
         "tiers": [
             {
                 "tier": t,
-                "name": SOURCE_TIER_META[t][0],
-                "description": SOURCE_TIER_META[t][1],
+                "name": SOURCE_TIER_META.get(t, (f"{t} · 未分类", ""))[0],
+                "description": SOURCE_TIER_META.get(t, (f"{t} · 未分类", ""))[1],
                 "sources": grouped.get(t, []),
             }
-            for t in SOURCE_TIER_ORDER if t in grouped
+            for t in SOURCE_TIER_ORDER + [
+                x for x in grouped.keys() if x not in SOURCE_TIER_ORDER
+            ]
+            if t in grouped
         ]
     }
 
@@ -251,7 +261,7 @@ def list_experts(
     topic: str | None = None,
     q: str | None = None,
     tier: str | None = None,
-    limit: int = Query(100, le=200),
+    limit: int = Query(100, ge=1, le=200),
 ):
     where = []  # 名册人员（is_selected=false）也要能出现在认证筛选里
     params: list = []
@@ -272,6 +282,7 @@ def list_experts(
     if q:
         where.append("(p.display_name ILIKE %s OR i.name ILIKE %s OR ea.name_zh ILIKE %s)")
         params += [f"%{q}%", f"%{q}%", f"%{q}%"]
+    where_sql = " AND ".join(where)
     rows = db.query(
         f"""
         SELECT p.person_id, p.display_name, p.expert_rank, p.final_score, p.expert_score,
@@ -292,14 +303,24 @@ def list_experts(
         FROM mining.persons p
         LEFT JOIN mining.institutions i ON i.institution_id = p.current_institution_id
         LEFT JOIN mining.expert_admissions ea ON ea.person_id = p.person_id
-        WHERE {" AND ".join(where)}
+        WHERE {where_sql}
         ORDER BY (ea.tier IS NOT NULL) DESC NULLS LAST,
                  p.final_score DESC NULLS LAST
         LIMIT %s
         """,
         (*params, limit),
     )
-    return {"total": len(rows), "experts": rows}
+    total = db.query_one(
+        f"""
+        SELECT COUNT(DISTINCT p.person_id) AS n
+        FROM mining.persons p
+        LEFT JOIN mining.institutions i ON i.institution_id = p.current_institution_id
+        LEFT JOIN mining.expert_admissions ea ON ea.person_id = p.person_id
+        WHERE {where_sql}
+        """,
+        tuple(params),
+    )["n"]
+    return {"total": total, "experts": rows}
 
 
 @app.get("/api/experts/meta")
@@ -341,8 +362,11 @@ def admissions_compare():
     for r in rows:
         by_tier[r["tier"]] = by_tier.get(r["tier"], 0) + 1
     dual = [r for r in rows if r["is_selected"]]
-    blind_spot = [r for r in rows if r["tier"] and not r["is_selected"]]
     independent = [r for r in rows if r["match_status"] == "created"]
+    blind_spot = [
+        r for r in rows
+        if r["tier"] and not r["is_selected"] and r["match_status"] != "created"
+    ]
     algo_only = db.query_one(
         "SELECT COUNT(*) AS n FROM mining.persons p "
         "WHERE p.is_selected AND NOT EXISTS ("
@@ -445,7 +469,7 @@ def api_radar(level: int = Query(2, ge=1, le=2), parent: str | None = None):
 
 
 @app.get("/api/graph")
-def api_graph(topic: str = "geotech-slope", expert_limit: int = Query(24, le=50)):
+def api_graph(topic: str = "geotech-slope", expert_limit: int = Query(24, ge=1, le=50)):
     """以主题为中心的知识图谱子图。"""
     return graph_api.subgraph(topic, expert_limit=expert_limit)
 
@@ -457,8 +481,8 @@ def api_works(
     journal: str | None = None,
     year_from: int | None = None,
     sort: str = "citations",
-    limit: int = Query(30, le=100),
-    offset: int = 0,
+    limit: int = Query(30, ge=1, le=100),
+    offset: int = Query(0, ge=0),
 ):
     """文献检索（标题/摘要）。sort=citations|year"""
     return works_api.search_works(
@@ -469,12 +493,14 @@ def api_works(
 
 @app.get("/api/ask")
 def api_ask(
+    request: Request,
     q: str = Query(..., min_length=1, max_length=500),
     topk: int = Query(6, ge=3, le=10),
+    _: None = Depends(require_ask_quota),
 ):
     """证据问答：分段检索 → LLM 基于证据作答（四段式响应）。"""
     try:
-        return ask_api.ask(q, topk=topk)
+        return ask_api.ask(q, topk=topk, client_hash=client_hash(request))
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     except RuntimeError as exc:
@@ -485,14 +511,24 @@ def api_ask(
 def api_journals(
     q: str | None = None,
     sort: str = "citations",
-    min_papers: int = Query(5, le=50),
-    limit: int = Query(60, le=200),
+    min_papers: int = Query(5, ge=1, le=50),
+    limit: int = Query(60, ge=1, le=200),
 ):
     """期刊排名：sort=citations|papers|avg|name；默认仅收有矿业存在(≥5篇)的期刊。"""
     return journals_api.journals(q=q, sort=sort, min_papers=min_papers, limit=limit)
 
 
 # ---------------------------------------------------------------- 统计 / 管理
+@app.get("/api/health")
+def health():
+    """存活 + 数据库连通性检查。"""
+    try:
+        db.ping()
+    except Exception as exc:
+        raise HTTPException(503, f"database unavailable: {exc}") from exc
+    return {"status": "ok", "version": config.APP_VERSION, "database": "ok"}
+
+
 @app.get("/api/stats")
 def stats():
     items = db.query_one(
@@ -518,13 +554,17 @@ def stats():
 
 
 @app.post("/api/admin/run-pipeline")
-def run_pipeline():
+def run_pipeline(
+    request: Request,
+    _: None = Depends(require_admin),
+):
     """后台执行一轮完整管线：采集 → 处理 → 周报。立即返回，用 /api/stats 轮询。"""
-    if _job_state["running"]:
-        return {"started": False, "message": "已有任务在运行中"}
+    with _job_lock:
+        if _job_state["running"]:
+            return {"started": False, "message": "已有任务在运行中"}
+        _job_state["running"] = True
 
     def _job():
-        _job_state["running"] = True
         result = {}
         try:
             result["collect"] = run_collect()
@@ -533,8 +573,9 @@ def run_pipeline():
         except Exception as exc:
             result["error"] = str(exc)
         finally:
-            _job_state["running"] = False
-            _job_state["last_result"] = result
+            with _job_lock:
+                _job_state["running"] = False
+                _job_state["last_result"] = result
 
     threading.Thread(target=_job, daemon=True).start()
     return {"started": True, "message": "管线已启动：采集 → 过滤评分 → 周报生成"}

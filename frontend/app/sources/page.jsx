@@ -14,8 +14,8 @@ export default async function SourcesPage() {
       <div className="page-head">
         <h1>全球矿业信源金字塔</h1>
         <div className="sub">
-          八级信源体系：S0–S2 确认事实 · B+/B-/B 扩展知识 · C/D 发现线索 ·
-          原则：<b>社媒适合「发现」，数据库适合「定位」，一手文件适合「验证」</b>
+          八级信源体系：S0 政府/监管 · A 国际标准 · A- 公司披露 · B+ 商业数据库 ·
+          B 专业媒体 · B- 学术文献 · C 专家渠道 · D 普通媒体/论坛
         </div>
       </div>
       {data.tiers.map((layer) => (

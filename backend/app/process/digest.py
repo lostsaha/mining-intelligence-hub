@@ -40,27 +40,25 @@ def _candidate_items(week_start: date) -> list[dict]:
 
 
 def select_items(items: list[dict]) -> list[dict]:
-    """先保证每主题入选（每主题最多 5 条），再按全局分补足。"""
+    """按全局分扫描，每主题最多 PER_TOPIC_TOP 条，总数最多 GLOBAL_TOP。
+
+    主题数不足时宁可少选，也不突破单主题上限（避免周报被单一主题刷屏）。
+    """
     chosen: list[int] = []
     result: list[dict] = []
-
-    def take(item: dict) -> None:
-        if item["item_id"] not in chosen:
-            chosen.append(item["item_id"])
-            result.append(item)
-
     per_topic_counts: dict[str, int] = {}
+
     for item in items:  # 已按 final_score 降序
-        t = item["primary_topic"]
-        if per_topic_counts.get(t, 0) < PER_TOPIC_TOP:
-            take(item)
-            per_topic_counts[t] = per_topic_counts.get(t, 0) + 1
-        if len(result) >= GLOBAL_TOP:
-            return result
-    for item in items:
         if len(result) >= GLOBAL_TOP:
             break
-        take(item)
+        t = item["primary_topic"]
+        if per_topic_counts.get(t, 0) >= PER_TOPIC_TOP:
+            continue
+        if item["item_id"] in chosen:
+            continue
+        chosen.append(item["item_id"])
+        result.append(item)
+        per_topic_counts[t] = per_topic_counts.get(t, 0) + 1
     return result
 
 
@@ -76,28 +74,29 @@ def generate(week_start: date | None = None) -> dict:
     n_topics = len({i["primary_topic"] for i in selected})
     summary = f"本周精选 {len(selected)} 条动态，覆盖 {n_topics} 个主题方向。"
 
-    digest = db.query_one(
-        """
-        INSERT INTO mining.weekly_digests (week_start, title, summary, item_count)
-        VALUES (%s, %s, %s, %s)
-        ON CONFLICT (week_start) DO UPDATE
-        SET title = EXCLUDED.title, summary = EXCLUDED.summary,
-            item_count = EXCLUDED.item_count, generated_at = now()
-        RETURNING digest_id
-        """,
-        (week_start, title, summary, len(selected)),
-    )
-    db.execute("DELETE FROM mining.digest_item WHERE digest_id = %s", (digest["digest_id"],))
-    for rank, item in enumerate(selected, start=1):
-        db.execute(
+    with db.transaction():
+        digest = db.query_one(
             """
-            INSERT INTO mining.digest_item (digest_id, item_id, topic_id, rank)
-            VALUES (%s, %s,
-                    (SELECT topic_id FROM mining.topics WHERE slug = %s), %s)
-            ON CONFLICT DO NOTHING
+            INSERT INTO mining.weekly_digests (week_start, title, summary, item_count)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (week_start) DO UPDATE
+            SET title = EXCLUDED.title, summary = EXCLUDED.summary,
+                item_count = EXCLUDED.item_count, generated_at = now()
+            RETURNING digest_id
             """,
-            (digest["digest_id"], item["item_id"], item["primary_topic"], rank),
+            (week_start, title, summary, len(selected)),
         )
+        db.execute("DELETE FROM mining.digest_item WHERE digest_id = %s", (digest["digest_id"],))
+        for rank, item in enumerate(selected, start=1):
+            db.execute(
+                """
+                INSERT INTO mining.digest_item (digest_id, item_id, topic_id, rank)
+                VALUES (%s, %s,
+                        (SELECT topic_id FROM mining.topics WHERE slug = %s), %s)
+                ON CONFLICT DO NOTHING
+                """,
+                (digest["digest_id"], item["item_id"], item["primary_topic"], rank),
+            )
 
     print(f"digest {week_start}: {len(selected)} items / {n_topics} topics")
     return {"digest_id": digest["digest_id"], "week_start": str(week_start),

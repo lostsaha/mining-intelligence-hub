@@ -22,6 +22,7 @@ from html import unescape
 USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
 FETCH_TIMEOUT = 25.0
+FETCH_RETRIES = 3
 
 # URL 归一化时剔除的跟踪参数
 STRIP_PARAMS = {
@@ -65,17 +66,29 @@ def entry_published(entry) -> datetime | None:
 
 
 def fetch_feed(feed_url: str) -> list[dict]:
-    resp = httpx.get(
-        feed_url,
-        headers={"User-Agent": USER_AGENT, "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"},
-        timeout=FETCH_TIMEOUT,
-        follow_redirects=True,
-    )
-    resp.raise_for_status()
-    parsed = feedparser.parse(resp.content)
-    if parsed.bozo and not parsed.entries:
-        raise ValueError(f"feed parse error: {parsed.bozo_exception}")
-    return parsed.entries
+    last_error: Exception | None = None
+    for attempt in range(FETCH_RETRIES):
+        try:
+            resp = httpx.get(
+                feed_url,
+                headers={"User-Agent": USER_AGENT, "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"},
+                timeout=FETCH_TIMEOUT,
+                follow_redirects=True,
+            )
+            resp.raise_for_status()
+            parsed = feedparser.parse(resp.content)
+            if parsed.bozo and not parsed.entries:
+                raise ValueError(f"feed parse error: {parsed.bozo_exception}")
+            return parsed.entries
+        except Exception as exc:
+            last_error = exc
+            retryable = not isinstance(exc, httpx.HTTPStatusError) or exc.response.status_code in {
+                429, 500, 502, 503, 504,
+            }
+            if not retryable or attempt == FETCH_RETRIES - 1:
+                break
+            time.sleep(1.5 * (attempt + 1))
+    raise last_error if last_error else RuntimeError("feed fetch failed")
 
 
 def entry_to_item(source: dict, entry: dict) -> dict | None:
@@ -95,6 +108,12 @@ def entry_to_item(source: dict, entry: dict) -> dict | None:
         "summary_raw": summary or None,
         "published_at": entry_published(entry),
         "lang": source["lang"],
+        "raw_data": json.dumps({
+            "feed_id": entry.get("id"),
+            "feed_link": entry.get("link"),
+            "published": entry.get("published"),
+            "updated": entry.get("updated"),
+        }, ensure_ascii=False),
     }
 
 
@@ -103,32 +122,30 @@ def collect_source(source: dict, max_items: int) -> int:
         return 0
     entries = fetch_feed(source["feed_url"])
     inserted = 0
-    for entry in entries[:max_items]:
-        item = entry_to_item(source, entry)
-        if item is None:
-            continue
-        exists = db.query_one(
-            "SELECT 1 FROM mining.items WHERE url = %s", (item["url"],)
-        )
-        if exists:
-            continue
+    with db.transaction():
+        for entry in entries[:max_items]:
+            item = entry_to_item(source, entry)
+            if item is None:
+                continue
+            affected = db.execute(
+                """
+                INSERT INTO mining.items
+                    (source_id, url, title, author, summary_raw, published_at,
+                     lang, raw_data, status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'pending')
+                ON CONFLICT (url) DO NOTHING
+                """,
+                (
+                    item["source_id"], item["url"], item["title"], item["author"],
+                    item["summary_raw"], item["published_at"], item["lang"],
+                    item["raw_data"],
+                ),
+            )
+            inserted += max(0, affected)
         db.execute(
-            """
-            INSERT INTO mining.items
-                (source_id, url, title, author, summary_raw, published_at, lang, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, 'pending')
-            ON CONFLICT (url) DO NOTHING
-            """,
-            (
-                item["source_id"], item["url"], item["title"], item["author"],
-                item["summary_raw"], item["published_at"], item["lang"],
-            ),
+            "UPDATE mining.sources SET last_fetched_at = now() WHERE source_id = %s",
+            (source["source_id"],),
         )
-        inserted += 1
-    db.execute(
-        "UPDATE mining.sources SET last_fetched_at = now() WHERE source_id = %s",
-        (source["source_id"],),
-    )
     return inserted
 
 

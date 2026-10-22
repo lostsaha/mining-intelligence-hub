@@ -8,7 +8,7 @@
 ## 架构
 
 ```
-frontend/  Next.js 15 (http://localhost:3100)   信息流 / 每周精选 / 主题 / 信源
+frontend/  Next.js 15 (http://localhost:3000)   信息流 / 每周精选 / 主题 / 信源
 backend/   FastAPI    (http://localhost:8100)   API + 采集/过滤/周报管线
 db         PostgreSQL 16 (Docker, :5432)        mining schema
 ```
@@ -18,7 +18,7 @@ db         PostgreSQL 16 (Docker, :5432)        mining schema
 ```bash
 # 0. 启动 Docker Desktop（Windows）
 
-# 1. 数据库（首次启动自动执行 backend/sql/001_init.sql）
+# 1. 数据库（首次启动自动执行 backend/sql/001~011；已有库见下方迁移）
 docker compose up -d
 
 # 2. 后端
@@ -26,6 +26,7 @@ cd backend
 python -m venv .venv
 .venv/Scripts/pip install -r requirements.txt       # Linux/Mac: .venv/bin/pip
 copy .env.example .env                              # 按需修改
+.venv/Scripts/python -m app.migrate                 # 已有库升级/补齐迁移记录（可重复执行）
 .venv/Scripts/python -m app.seed                    # 导入主题+信源
 .venv/Scripts/python -m uvicorn app.main:app --port 8100
 
@@ -41,10 +42,37 @@ cd backend
 # 4. 前端
 cd frontend
 npm install
-npm run dev            # 开发模式；如 3000 端口被占用: npx next dev -p 3100
+copy .env.example .env.local      # 按需修改（ADMIN_TOKEN 要与 backend/.env 一致）
+npm run dev            # 默认 3000；浏览器通过 Next 的 /api 代理访问后端
 ```
 
-打开 <http://localhost:3100>。
+打开 <http://localhost:3000>。如 3000 被占用：`npx next dev -p 3100`，
+`backend/.env` 的 `CORS_ORIGINS` 已默认同时允许 3000/3100。
+
+## 管理端点与安全
+
+`POST /api/admin/run-pipeline` 会触发采集和 LLM 调用（有费用/副作用），默认只允许
+本机回环地址并带 `X-Requested-With: mining-admin` 请求头。生产环境请在
+`backend/.env` 设置随机 `ADMIN_TOKEN`，调用方改用 `X-Admin-Token`；`/api/ask` 默认
+按 IP 每分钟 20 次限流（`ASK_RATE_LIMIT_PER_MIN`）；经 Next 代理后后端看到的都是
+Next 服务端地址，多用户生产环境需在网关层按真实用户限流。
+
+前端按钮走 Next 服务端路由 `/admin-api/run-pipeline`，不会把 `ADMIN_TOKEN` 暴露给
+浏览器；生产环境默认关闭该入口（`ALLOW_ADMIN_UI=0`），需要时在 `frontend/.env.local`
+显式开启，并自行在网关层加登录/访问控制。`/api/admin/*` 已被 middleware 禁止通过
+Next 的 `/api` 代理访问。生产环境不要直接把后端 `8100` 暴露到公网，只让 Next
+服务端访问。
+
+## 测试
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+pytest
+```
+
+测试覆盖启发式过滤、中文检索词、周报主题上限、引用编号校验与迁移契约，
+不依赖数据库/网络/LLM。端到端检查仍见 `MAINTENANCE.md`。
 
 ## 接入 LLM（可选但推荐）
 
@@ -88,18 +116,22 @@ cd frontend && npm run dev
 PROJECT_PLAN.md          项目规划（定位/设计原则/路线图/风险）
 docker-compose.yml       PostgreSQL
 backend/
-  sql/001_init.sql       建表（schema 兼容 PDF 记录中的 MELTG 图谱设计）
-  data/topics.yaml       矿业主题体系（13 大类 + 行业市场）
-  data/sources.yaml      信源白名单（30+ 源，含失效标记）
+  sql/001~011.sql        建表/迁移（schema 兼容 PDF 记录中的 MELTG 图谱设计）
+  data/topics.yaml       矿业主题体系（17 个大类 + 71 个子主题）
+  data/sources.yaml      信源白名单（50+ 源，含失效标记）
   app/
+    migrate.py           迁移执行器（python -m app.migrate）
+    security.py          管理端点保护/限流
     collect/run.py       RSS 采集器（python -m app.collect.run）
     process/pipeline.py  LLM/启发式过滤 + 多因子评分
     process/digest.py    周报生成（主题多样性优先）
+    api/ask.py           证据问答（检索 + 引用校验 + 日志持久化）
     main.py              FastAPI 接口
+  tests/                 纯函数/迁移契约测试（pytest）
 frontend/app/            Next.js 页面（信息流/周报/专家/雷达/图谱/文献/信源）
 ```
 
-## Phase 2/3 速览
+## Phase 2/3/4 速览
 
 - **专家发现**：`python -m app.experts.run --build` 重建 Top 100；全量采集 `python -m app.experts.run`
 - **前沿雷达** `/radar`：主题热度 = 论文增速 45% + 近期产量 30% + 专家聚集 25%

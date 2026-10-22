@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-const API_URL = process.env.API_URL || "http://127.0.0.1:8100";
-
 const EXAMPLES = [
   "露天矿边坡监测有哪些常用方法？",
   "矿井突水预警有哪些技术手段？",
@@ -31,7 +29,7 @@ export default function AskPage() {
     setData(null);
     try {
       const res = await fetch(
-        `${API_URL}/api/ask?q=${encodeURIComponent(question.trim())}`,
+        `/api/ask?q=${encodeURIComponent(question.trim())}`,
         { cache: "no-store" },
       );
       if (!res.ok) {
@@ -134,7 +132,13 @@ export default function AskPage() {
                 <span className="chip">{c.source_type === "book" ? "书籍" : "论文"}</span>
                 {c.section_path && <span className="chip">{c.section_path}</span>}
                 {c.page && <span className="chip">第 {c.page.replace("p", "")} 页</span>}
+                {c.authors && <span className="chip">{String(c.authors).slice(0, 80)}</span>}
                 {c.year && <span className="chip">{c.year}</span>}
+                {c.url && (
+                  <a className="chip" href={c.url} target="_blank" rel="noopener noreferrer">
+                    DOI ↗
+                  </a>
+                )}
               </div>
               <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
                 {c.snippet}

@@ -4,11 +4,13 @@ r"""导入 ShowJCR jcr.db（JCR2025 + 中科院分区 FQBJCR2025）→ mining.jo
 import re
 import sqlite3
 import sys
+from pathlib import Path
 
-sys.path.insert(0, r"E:\syn\矿业聚合平台\backend")
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "backend"))
 from app import db  # noqa: E402
 
-JCR_DB = Path_jcr = r"backend\data\jcr.db"
+JCR_DB = ROOT / "backend" / "data" / "jcr.db"
 
 
 def norm(name: str) -> str:
@@ -70,7 +72,6 @@ def main() -> int:
         )
         """
     )
-    db.execute("DELETE FROM mining.journal_metrics")
     merged = {}
     for k, m in jcr.items():
         merged.setdefault(k, {}).update(m)
@@ -83,14 +84,16 @@ def main() -> int:
         rows.append((m.get("journal"), k, m.get("issn"), m.get("eissn"),
                      parse_if(m.get("if_2025")), m.get("jcr_quartile"), m.get("jcr_category"),
                      m.get("cas_category"), m.get("cas_quartile"), m.get("cas_rank"), m.get("cas_top")))
-    with db.get_conn() as conn, conn.cursor() as cur:
-        cur.executemany(
-            """INSERT INTO mining.journal_metrics
-               (journal, norm_name, issn, eissn, if_2025, jcr_quartile, jcr_category,
-                cas_category, cas_quartile, cas_rank, cas_top)
-               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-            rows,
-        )
+    with db.transaction():
+        db.execute("DELETE FROM mining.journal_metrics")
+        with db.get_conn() as conn, conn.cursor() as cur:
+            cur.executemany(
+                """INSERT INTO mining.journal_metrics
+                   (journal, norm_name, issn, eissn, if_2025, jcr_quartile, jcr_category,
+                    cas_category, cas_quartile, cas_rank, cas_top)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                rows,
+            )
     print(f"journal_metrics 导入 {len(rows)} 条")
 
     # 匹配率对账

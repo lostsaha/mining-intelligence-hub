@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import re
 import time
-from datetime import timedelta
+from datetime import date as _date, timedelta
 
 import yaml
 
@@ -47,13 +47,11 @@ def load_ontology() -> list[dict]:
     slug_to_id = {r["slug"]: r["topic_id"] for r in db.query("SELECT topic_id, slug FROM mining.topics")}
     result = []
     for cat in data["topics"]:
-        if "children" not in cat:
-            continue
         cat_id = slug_to_id.get(cat["slug"])
         if not cat_id:
             continue
         children = []
-        for ch in cat["children"]:
+        for ch in cat.get("children", []) or []:
             tid = slug_to_id.get(ch["slug"])
             if tid:
                 children.append({
@@ -147,7 +145,6 @@ def upsert_work(cur_work: dict) -> int | None:
     _py = cur_work.get("publication_year") or 0
     if _pd:
         try:
-            from datetime import date as _date
             _y, _m, _d = (int(x) for x in _pd.split("-"))
             if _date(_y, _m, _d) > _date.today() + timedelta(days=180):
                 return None
@@ -210,10 +207,11 @@ def build_authorships_cache(authorships: list[dict], work_db_id: int, caches: di
 def _executemany(sql: str, rows: list[tuple]) -> None:
     if not rows:
         return
-    with db.get_conn() as conn, conn.cursor() as cur:
+    with db.transaction(), db.get_conn() as conn, conn.cursor() as cur:
         cur.executemany(sql, rows)
 
 
+@db.atomic
 def flush_authorships(caches: dict) -> None:
     """批量写入机构 → 作者 → 关系表。"""
     if caches["inst_rows"]:
@@ -281,6 +279,7 @@ def flush_authorships(caches: dict) -> None:
     caches["pi"].clear()
 
 
+@db.atomic
 def build_citation_edges() -> int:
     """引用边：仅保留两端都在语料内的 cited 关系（PDF 记录 work_citation）。"""
     corpus = {r["openalex_id"]: r["work_id"] for r in db.query("SELECT work_id, openalex_id FROM mining.works")}

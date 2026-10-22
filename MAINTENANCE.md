@@ -27,8 +27,8 @@ powershell -ExecutionPolicy Bypass -File scripts\smoke.ps1
   OK  mining-db Up 2 hours (healthy)
 == 2. 后端 API (8100) ==
   OK  条目 816（通过 711 / 待处理 0）· 活跃信源 23
-== 3. 前端 (3100) ==
-  OK  HTTP 200
+== 3. 前端 (3000/3100) ==
+  OK  :3000 HTTP 200
 全部正常 ✓
 ```
 
@@ -57,11 +57,31 @@ npx next dev -p 3100
 
 **停止**：各窗口 Ctrl+C；数据库 `docker compose down`（加 `-v` 会删数据，**永远别加**）。
 
-> 提示：本机 3000/8000 端口被其他程序占用，所以本项目固定用 **3100（前端）/ 8100（后端）**。
+> 提示：本机 3000/8000 端口如被其他程序占用，可用 **3100（前端）/ 8100（后端）**；
+> `backend/.env` 的 `CORS_ORIGINS` 默认同时允许 3000/3100。前端通过 Next 的 `/api` 代理访问后端。
 
 ---
 
 ## 2. 测试
+
+### 2.0 数据库迁移与自动化测试
+
+升级或拉取新代码后，先执行迁移（可重复；每个文件独立事务）：
+
+```powershell
+cd E:\syn\矿业聚合平台\backend
+.\.venv\Scripts\python -m app.migrate
+```
+
+纯函数测试（不依赖数据库/网络/LLM）：
+
+```powershell
+.\.venv\Scripts\pip install -r requirements-dev.txt
+.\.venv\Scripts\python -m pytest
+```
+
+迁移记录在 `mining.schema_migrations`。`011_upgrade.sql` 会修复 embedding 类型、
+补 `journal_metrics`/`ask_logs`/`ask_citations`、加索引与约束；执行前先备份。
 
 ### 2.1 API 测试（最常用）
 
@@ -137,7 +157,7 @@ powershell -ExecutionPolicy Bypass -File scripts\quality-check.ps1
 curl.exe "http://127.0.0.1:8100/api/ask?q=露天矿边坡监测有哪些方法"
 ```
 
-**期望**：`evidence_status: "answered"`、`citations` 数组带书名/章节/页码、`answer` 含 `[n]` 引用。
+**期望**：`evidence_status: "answered"`、`citations` 数组带书名/章节/页码（论文另带 DOI/URL/年份）、`answer` 含 `[n]` 引用；越界引用会把状态降为 `partial` 并给出局限说明。
 **逻辑**：检索（英文走 tsvector，中文走 ILIKE+pg_trgm）→ LLM 只基于证据作答；语料无命中返回 `no_evidence` 而不是瞎编。
 
 ### 2.7 文献库位置与 embedding 回填
@@ -251,7 +271,7 @@ $env:PYTHONUTF8 = "1"
 
 | 症状 | 原因 | 解法 |
 |---|---|---|
-| 后端起不来 `EADDRINUSE` | 端口被占 | 先跑 `scripts\smoke.ps1`：若全部 OK，说明服务已在别的窗口运行，**直接用即可**；要换到自己窗口，先关旧窗口或 `taskkill`。本机 8000/3000 被其他程序占用，固定用 8100/3100 |
+| 后端起不来 `EADDRINUSE` | 端口被占 | 先跑 `scripts\smoke.ps1`：若全部 OK，说明服务已在别的窗口运行，**直接用即可**；要换到自己窗口，先关旧窗口或 `taskkill`。默认 3000/8100，也可用 3100/8100 |
 | 停了服务端口仍被占 | `npx next dev` 会残留 node 子进程 | `netstat -ano | findstr :3100` 找 PID → `taskkill /PID <pid> /F` |
 | `docker compose up` 报 project name | 中文目录名 | 已在 compose 固定 `name: mining-hub`，勿删该行 |
 | 采集大量 `403 Forbidden` | 站点反爬 | 属正常；源标记失败并跳过，批量失效再处理 |

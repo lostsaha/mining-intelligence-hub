@@ -357,6 +357,7 @@ def key_works_for(cand: dict, corpus: dict) -> dict:
     return {"classic": scored[:5], "recent": recent[:3]}
 
 
+@db.atomic
 def save(selected: list[dict], corpus: dict) -> None:
     today = date.today()
     for rank, cand in enumerate(selected, start=1):
@@ -427,7 +428,12 @@ def save(selected: list[dict], corpus: dict) -> None:
                 ),
             )
 
-        # 评分历史（每月重算后对比趋势）
+        # 评分历史（每月重算后对比趋势；同日重算先删后插，兼容未执行 011 的旧库）
+        db.execute(
+            "DELETE FROM mining.expert_score_history "
+            "WHERE person_id = %s AND score_date = %s",
+            (cand["person_id"], today),
+        )
         db.execute(
             """
             INSERT INTO mining.expert_score_history
@@ -474,6 +480,7 @@ def save(selected: list[dict], corpus: dict) -> None:
         )
 
 
+@db.atomic
 def persist_candidates(candidates: list[dict]) -> None:
     """未入选 Top N 的候选也持久化语料统计（认证专家页需要显示真实数据）。"""
     for cand in candidates:

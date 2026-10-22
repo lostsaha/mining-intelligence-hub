@@ -112,7 +112,7 @@ def collect_admitted(tiers: tuple[str, ...] = ("T1",), per_author_cap: int = 400
                     if work_db_id is None:
                         continue
                     text = f"{work.get('title') or ''} {reconstruct_abstract(work.get('abstract_inverted_index'))}".lower()
-                    for topic_id, rel in global_classify(text, flat):
+                    for topic_id, rel in global_classify(work.get("title") or "", text, flat):
                         db.execute(
                             "INSERT INTO mining.work_topic (work_id, topic_id, relevance) "
                             "VALUES (%s, %s, %s) ON CONFLICT (work_id, topic_id) DO NOTHING",

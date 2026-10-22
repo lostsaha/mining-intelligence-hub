@@ -1,6 +1,8 @@
 """前沿技术雷达 API：主题论文增速 × 专家聚集度 → 热度排名（PDF 记录 §24 思路）。"""
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from fastapi import HTTPException
 
 from .. import db
@@ -51,6 +53,7 @@ def _topic_rows(level: int) -> list[dict]:
         series.setdefault(r["topic_id"], {})[r["yr"]] = r["n"]
 
     experts: dict[int, dict] = {}
+    new_expert_since = datetime.now(timezone.utc).year - 5
     for r in db.query(
         """
         SELECT ptp.topic_id,
@@ -60,7 +63,7 @@ def _topic_rows(level: int) -> list[dict]:
         JOIN mining.persons p ON p.person_id = ptp.person_id
         GROUP BY ptp.topic_id
         """,
-        (2024,),
+        (new_expert_since,),
     ):
         experts[r["topic_id"]] = r
 

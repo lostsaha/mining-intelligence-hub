@@ -1,12 +1,20 @@
-export const API_URL = process.env.API_URL || "http://127.0.0.1:8100";
+export const API_URL =
+  process.env.API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://127.0.0.1:8100";
 
+/**
+ * 服务端组件直接请求 FastAPI；浏览器端组件应请求同源 /api/*，
+ * 由 next.config.mjs 的 rewrite 代理，避免 CORS 与端口漂移。
+ */
 export async function api(path, options = {}) {
   const res = await fetch(`${API_URL}${path}`, {
     cache: "no-store",
     ...options,
   });
   if (!res.ok) {
-    throw new Error(`API ${path} failed: ${res.status}`);
+    const detail = await res.text().catch(() => "");
+    throw new Error(`API ${path} failed: ${res.status}${detail ? ` ${detail.slice(0, 200)}` : ""}`);
   }
   return res.json();
 }

@@ -57,6 +57,17 @@ def _extract_json(text: str) -> dict:
         raise
 
 
+def _as_bool(value, default: bool = False) -> bool:
+    """严格解析 JSON 布尔值；避免 bool("false") == True。"""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "1", "yes", "y", "是"}
+    return default
+
+
 def classify(title: str, summary: str, site_url: str = "", source_type: str = "news") -> dict:
     label_map = _topic_label_map()
     valid_slugs = list(label_map.keys())
@@ -68,6 +79,7 @@ def classify(title: str, summary: str, site_url: str = "", source_type: str = "n
     payload = {
         "model": config.LLM_MODEL,
         "temperature": 0,
+        "max_tokens": config.LLM_MAX_TOKENS,
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
@@ -80,7 +92,7 @@ def classify(title: str, summary: str, site_url: str = "", source_type: str = "n
                 f"{config.LLM_BASE_URL}/chat/completions",
                 headers={"Authorization": f"Bearer {config.LLM_API_KEY}"},
                 json=payload,
-                timeout=45.0,
+                timeout=config.LLM_TIMEOUT,
             )
             resp.raise_for_status()
             content = resp.json()["choices"][0]["message"]["content"]
@@ -88,13 +100,19 @@ def classify(title: str, summary: str, site_url: str = "", source_type: str = "n
 
             relevance = max(0.0, min(1.0, float(data.get("relevance", 0))))
             topics = [t for t in (data.get("topics") or []) if t in valid_slugs][:3]
-            relevant = bool(data.get("relevant", relevance >= config.RELEVANCE_APPROVE_THRESHOLD))
+            relevant = _as_bool(
+                data.get("relevant"),
+                default=relevance >= config.RELEVANCE_APPROVE_THRESHOLD,
+            )
+            item_type = str(data.get("item_type") or "news").strip().lower()
+            if item_type not in {"news", "paper", "report", "conference", "company", "expert"}:
+                item_type = "news"
             return {
                 "relevant": relevant,
                 "relevance": round(relevance, 2),
                 "topics": topics,
                 "summary_zh": (data.get("summary_zh") or "").strip()[:160] or None,
-                "item_type": data.get("item_type") or "news",
+                "item_type": item_type,
                 "reject_reason": None if relevant else "LLM 判定与矿业无关",
             }
         except Exception as exc:

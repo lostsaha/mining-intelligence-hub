@@ -42,7 +42,10 @@ keywords:
 
 # 知识图谱蓝图（Phase 4B /ask 演进方向）
 graph_blueprint:
-  矿床: [地质体[岩性/构造/蚀变/矿化], 勘探数据[钻孔/品位/密度/地质编录], 地质模型[Wireframe/Surface/Solid]]
+  矿床:
+    - 地质体[岩性/构造/蚀变/矿化]
+    - 勘探数据[钻孔/品位/密度/地质编录]
+    - 地质模型[Wireframe/Surface/Solid]
   高阶问句示例:
     - 关于斑岩铜矿的资源建模，哪些经典方法最常用？
     - Rossi & Deutsch 的资源估算方法与传统 Kriging 有什么区别？

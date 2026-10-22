@@ -9,10 +9,10 @@ export default function PipelineButton() {
 
   async function checkStatus() {
     try {
-      const res = await fetch("http://127.0.0.1:8100/api/stats", { cache: "no-store" });
+      const res = await fetch("/api/stats", { cache: "no-store" });
+      if (!res.ok) return false;
       const data = await res.json();
-      if (data.job_running) return true;
-      return false;
+      return Boolean(data.job_running);
     } catch {
       return false;
     }
@@ -36,8 +36,14 @@ export default function PipelineButton() {
     setRunning(true);
     setMsg("管线运行中：采集 → AI 过滤打分 → 周报生成，约需 1~3 分钟");
     try {
-      const res = await fetch("http://127.0.0.1:8100/api/admin/run-pipeline", { method: "POST" });
-      const data = await res.json();
+      const res = await fetch("/admin-api/run-pipeline", {
+        method: "POST",
+        headers: { "X-Requested-With": "mining-admin" },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.detail || `HTTP ${res.status}`);
+      }
       if (!data.started) {
         setRunning(true);
         setPolling(true);
@@ -45,9 +51,9 @@ export default function PipelineButton() {
       } else {
         setPolling(true);
       }
-    } catch {
+    } catch (e) {
       setRunning(false);
-      setMsg("启动失败：请确认后端服务（127.0.0.1:8100）已运行");
+      setMsg(`启动失败：${e.message || "请确认后端服务已运行"}`);
     }
   }
 

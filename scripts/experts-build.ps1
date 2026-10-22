@@ -2,4 +2,4 @@
 $env:PYTHONUTF8 = "1"
 Set-Location (Join-Path $PSScriptRoot "..\backend")
 & .\.venv\Scripts\python.exe -m app.experts.run --build
-Write-Host "`n完成。打开 http://127.0.0.1:3100/experts 查看新榜单" -ForegroundColor Green
+Write-Host "`n完成。打开 http://127.0.0.1:3000/experts（或 3100）查看新榜单" -ForegroundColor Green

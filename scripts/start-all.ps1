@@ -27,10 +27,13 @@ Write-Host "  OK mining-db" -ForegroundColor Green
 Write-Host "== 2/4 启动后端（8100，新窗口）==" -ForegroundColor Cyan
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\backend'; .\.venv\Scripts\python -m uvicorn app.main:app --port 8100"
 
-Write-Host "== 3/4 启动前端（3100，新窗口）==" -ForegroundColor Cyan
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\frontend'; npx next dev -p 3100"
+Write-Host "== 3/4 启动前端（新窗口）==" -ForegroundColor Cyan
+$port = 3000
+if (Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue) { $port = 3100 }
+Write-Host "  使用端口 $port" -ForegroundColor Gray
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\frontend'; npx next dev -p $port"
 
 Write-Host "== 4/4 等待服务就绪并打开浏览器 ==" -ForegroundColor Cyan
 Start-Sleep -Seconds 25
-Start-Process "http://127.0.0.1:3100"
+Start-Process "http://127.0.0.1:$port"
 Write-Host "`n完成。两个服务窗口请保持开启；关闭=停止服务。" -ForegroundColor Green

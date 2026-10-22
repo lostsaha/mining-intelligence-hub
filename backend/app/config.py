@@ -24,12 +24,37 @@ _load_dotenv()
 DATABASE_URL = os.getenv(
     "DATABASE_URL", "postgresql://mining:mining_dev_2026@localhost:5432/mining"
 )
+DB_CONNECT_TIMEOUT = int(os.getenv("DB_CONNECT_TIMEOUT", "5"))
 
 # LLM（OpenAI 兼容）
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "").rstrip("/")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "").strip()
 LLM_MODEL = os.getenv("LLM_MODEL", "").strip()
 LLM_ENABLED = bool(LLM_BASE_URL and LLM_API_KEY and LLM_MODEL)
+LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "800"))
+LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "90"))
+
+# 前端来源：默认同时允许 3000/3100，避免文档端口不一致导致 CORS 失败
+CORS_ORIGINS = [
+    o.strip() for o in os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:3000,http://127.0.0.1:3000,"
+        "http://localhost:3100,http://127.0.0.1:3100",
+    ).split(",") if o.strip()
+]
+
+# 管理端点保护：
+# - ADMIN_TOKEN 非空时，必须带 X-Admin-Token；
+# - ADMIN_TOKEN 为空时，仅允许本机回环地址 + X-Requested-With: mining-admin
+#   （阻止任意网页通过表单/简单请求触发付费管线）。
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "").strip()
+ADMIN_ALLOW_LOOPBACK = os.getenv("ADMIN_ALLOW_LOOPBACK", "1").strip() == "1"
+
+# 简单的进程内限流（单机 MVP；多 worker/多机需换 Redis）
+ASK_RATE_LIMIT_PER_MIN = int(os.getenv("ASK_RATE_LIMIT_PER_MIN", "20"))
+ADMIN_RATE_LIMIT_PER_MIN = int(os.getenv("ADMIN_RATE_LIMIT_PER_MIN", "3"))
+
+APP_VERSION = "0.2.0"
 
 # Embeddings（OpenAI 兼容 /embeddings，Phase 4D 语义检索；未配置则关闭）
 EMBEDDINGS_BASE_URL = os.getenv("EMBEDDINGS_BASE_URL", "").rstrip("/")
