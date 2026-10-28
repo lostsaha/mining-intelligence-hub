@@ -1,4 +1,5 @@
 import "./globals.css";
+import NavLinks from "./components/nav-links";
 
 export const metadata = {
   title: "矿业前沿情报站 · Mining Intelligence Hub",
@@ -15,25 +16,27 @@ export default function RootLayout({ children }) {
               ⛏ 矿业前沿
               <small>Mining Intelligence Hub</small>
             </a>
-            <nav className="main">
-              <a href="/">信息流</a>
-              <a href="/weekly">周报</a>
-              <a href="/ask">问答</a>
-              <a href="/experts">专家</a>
-              <a href="/admissions">名册</a>
-              <a href="/radar">雷达</a>
-              <a href="/graph">图谱</a>
-              <a href="/works">文献</a>
-              <a href="/journals">期刊</a>
-              <a href="/sources">信源</a>
-              <a href="/about">关于</a>
-            </nav>
+            <NavLinks />
           </div>
         </header>
         <main className="container">{children}</main>
         <footer className="site">
-          矿业前沿情报站 · 每日采集精选信源，AI 过滤打分，按矿业主题组织 ·
-          设计原则见 <a href="/about">项目规划</a>
+          <div className="container foot-grid">
+            <div>
+              <div className="foot-brand">⛏ 矿业前沿情报站</div>
+              <div>每日采集精选信源 · AI 过滤打分 · 按矿业主题组织</div>
+            </div>
+            <div>
+              <div className="foot-h">数据</div>
+              <a href="/works">文献检索</a> · <a href="/journals">期刊排名</a> ·{" "}
+              <a href="/graph">知识图谱</a>
+            </div>
+            <div>
+              <div className="foot-h">项目</div>
+              设计原则见 <a href="/about">项目规划</a> · 语义检索由
+              pgvector + bge-m3 驱动
+            </div>
+          </div>
         </footer>
       </body>
     </html>
