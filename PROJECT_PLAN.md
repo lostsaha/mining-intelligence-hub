@@ -428,3 +428,14 @@ mining.collect_runs   -- 采集运行记录：started/finished, per-source 结�
 **触发**：用户翻译批次完成 → 盘点（scan_unreg_epubs）→ 圈定终版 → import_all_books
 一次执行 + embedding 增量回填。地质批次主题按实际内容配（L1~L6 骨架见
 backend/data/geology_classics.yaml），预设空主题被禁止。
+
+### 10.8 书籍入库延期（2026-10-25 更新）
+
+- 英文论文语料已全量入库（work_chunks 86,619），embedding 增量回填进行中。
+- **书籍批次暂缓入库**：用户正以 `E:\syn\epub-toolkit\` 统一管线（book.yaml →
+  mdprep → pandoc epub3 → epubcheck 门禁，规范化合并稿 `build/book.md`，
+  源 md 永不改写）对约 30 本书中英文质量全力清理；**清理完成后再走
+  import_all_books 入库**（届时直接取 epub-toolkit 的 build/book.md 作
+  高质量 md 源，替代 MinerU 原始 md——质量更高且已过门禁）。
+- 入库指南 v1.1 依旧有效：中文 md 首选修复版 epub 生成；epub-toolkit 成品
+  （dist/*.epub 与 build/book.md）视为"终版 epub/md"，按 mtime 规则自然胜出。
