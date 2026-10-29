@@ -1,0 +1,482 @@
+{
+ "summary": {
+  "total": 30,
+  "source_hit_rate": 0.733,
+  "keyword_rate": 1.0,
+  "ref_valid_rate": 1.0,
+  "answered_rate": 1.0
+ },
+ "results": [
+  {
+   "q": "露天矿边坡变形监测常用哪些仪器与方法？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "监测",
+    "GNSS",
+    "雷达"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7755,
+   "hit_titles": [
+    "边坡稳定",
+    "51016",
+    "监测"
+   ]
+  },
+  {
+   "q": "台阶爆破的孔网参数如何设计？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "孔距",
+    "抵抗线"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 9091,
+   "hit_titles": [
+    "台阶爆破",
+    "采矿手册"
+   ]
+  },
+  {
+   "q": "排土场稳定性有哪些规范要求？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "排土场"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8931,
+   "hit_titles": [
+    "排土场",
+    "51119"
+   ]
+  },
+  {
+   "q": "什么是克里金法？与反距离加权有何区别？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "克里金",
+    "估计"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 9839,
+   "hit_titles": [
+    "采矿学"
+   ]
+  },
+  {
+   "q": "经济合理剥采比怎么确定？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "剥采比"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8552,
+   "hit_titles": []
+  },
+  {
+   "q": "矿山突水预警技术有哪些？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "突水",
+    "预警"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8786,
+   "hit_titles": []
+  },
+  {
+   "q": "尾矿库溃坝的主要原因有哪些？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "尾矿库",
+    "溃坝"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7402,
+   "hit_titles": [
+    "尾矿"
+   ]
+  },
+  {
+   "q": "岩爆的孕育机制与预警方法有哪些？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "岩爆",
+    "预警"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8048,
+   "hit_titles": [
+    "岩爆"
+   ]
+  },
+  {
+   "q": "预裂爆破与光面爆破的区别是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "预裂",
+    "光面"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8190,
+   "hit_titles": [
+    "爆破"
+   ]
+  },
+  {
+   "q": "边坡平面滑动与圆弧滑动的稳定性分析方法有哪些？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "圆弧",
+    "稳定"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8592,
+   "hit_titles": [
+    "岩石边坡",
+    "边坡稳定"
+   ]
+  },
+  {
+   "q": "钻孔岩芯编录应记录哪些内容？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "编录",
+    "岩芯"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 6141,
+   "hit_titles": []
+  },
+  {
+   "q": "矿产资源量与储量如何分类？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "资源量",
+    "储量"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7670,
+   "hit_titles": [
+    "资源"
+   ]
+  },
+  {
+   "q": "变差函数的块金效应、基台和变程分别是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "块金",
+    "变程"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 6505,
+   "hit_titles": [
+    "采矿学"
+   ]
+  },
+  {
+   "q": "露天矿境界优化的 LG 算法原理是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "境界"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8816,
+   "hit_titles": []
+  },
+  {
+   "q": "矿用自卸卡车的选型与匹配原则是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "卡车",
+    "选型"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7325,
+   "hit_titles": []
+  },
+  {
+   "q": "矿山闭坑与生态修复的流程是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "闭坑",
+    "复垦"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7698,
+   "hit_titles": []
+  },
+  {
+   "q": "充填采矿的适用条件是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "充填"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7525,
+   "hit_titles": [
+    "充填",
+    "采矿手册"
+   ]
+  },
+  {
+   "q": "露天矿疏干排水的设计要点是什么？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "疏干",
+    "排水"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 10601,
+   "hit_titles": [
+    "疏干",
+    "排水"
+   ]
+  },
+  {
+   "q": "边坡加固中锚索设计的要点是什么？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "锚索",
+    "锚杆"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7846,
+   "hit_titles": [
+    "边坡"
+   ]
+  },
+  {
+   "q": "采矿学中露天开采工艺主要包括哪些内容？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "开采",
+    "工艺"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7278,
+   "hit_titles": [
+    "采矿学"
+   ]
+  },
+  {
+   "q": "炸药的爆轰原理与起爆方式有哪些？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "炸药",
+    "起爆"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8999,
+   "hit_titles": [
+    "爆破",
+    "台阶爆破"
+   ]
+  },
+  {
+   "q": "高陡边坡安全监测技术规范有什么要求？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "监测"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7112,
+   "hit_titles": [
+    "2063",
+    "监测"
+   ]
+  },
+  {
+   "q": "爆破振动安全允许标准是多少？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "振动",
+    "安全"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 6547,
+   "hit_titles": [
+    "6722",
+    "爆破",
+    "振动"
+   ]
+  },
+  {
+   "q": "三维地质建模的基本流程是什么？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "建模"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 6575,
+   "hit_titles": []
+  },
+  {
+   "q": "矿石品位控制与配矿方法有哪些？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "品位",
+    "配矿"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7906,
+   "hit_titles": [
+    "采矿学"
+   ]
+  },
+  {
+   "q": "露天矿开拓运输系统有哪些方式？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "开拓",
+    "运输"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7132,
+   "hit_titles": [
+    "现代采矿手册",
+    "露天矿"
+   ]
+  },
+  {
+   "q": "膏体尾矿堆存与管理的技术要点是什么？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "膏体"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 7977,
+   "hit_titles": [
+    "尾矿"
+   ]
+  },
+  {
+   "q": "矿山安全规程对爆破作业有哪些要求？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "安全",
+    "爆破"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8933,
+   "hit_titles": [
+    "爆破安全",
+    "6722",
+    "爆破"
+   ]
+  },
+  {
+   "q": "开采引起的地表沉陷如何预计？",
+   "status": "partial",
+   "n_evidence": 16,
+   "src_hit": false,
+   "kw_hit": [
+    "沉陷"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 8287,
+   "hit_titles": []
+  },
+  {
+   "q": "资源储量估算中的品位-吨位曲线是什么？",
+   "status": "answered",
+   "n_evidence": 16,
+   "src_hit": true,
+   "kw_hit": [
+    "品位",
+    "吨位"
+   ],
+   "kw_ok": true,
+   "ref_ok": true,
+   "took_ms": 5896,
+   "hit_titles": [
+    "矿产资源"
+   ]
+  }
+ ]
+}

@@ -341,7 +341,7 @@ def _llm_answer(q: str, evidence: list[dict]) -> dict:
     payload = {
         "model": config.LLM_MODEL,
         "temperature": 0.2,
-        "max_tokens": config.LLM_MAX_TOKENS,
+        "max_tokens": max(config.LLM_MAX_TOKENS, 3000),
         "messages": [
             {"role": "system", "content": ASK_SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
@@ -357,7 +357,13 @@ def _llm_answer(q: str, evidence: list[dict]) -> dict:
                 timeout=config.LLM_TIMEOUT,
             )
             resp.raise_for_status()
-            data = _extract_json(resp.json()["choices"][0]["message"]["content"])
+            content = resp.json()["choices"][0]["message"]["content"]
+            try:
+                data = _extract_json(content)
+            except Exception:
+                # 截断/坏 JSON 兜底：剥壳后整段当回答（总好于整题失败）
+                body = re.sub(r"^\s*```(?:json)?|```\s*$", "", content.strip(), flags=re.M)
+                data = {"answer": body, "sufficient": True, "limitations": None}
             answer = (data.get("answer") or "").strip()
             return {
                 "answer": answer,

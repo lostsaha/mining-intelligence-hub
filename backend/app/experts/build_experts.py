@@ -27,6 +27,10 @@ MINING_COMPANY_RE = (
 CURRENT_YEAR = datetime.now(timezone.utc).year
 
 
+def _venue_norm(name: str | None) -> str:
+    return re.sub(r"[^a-z0-9\u4e00-\u9fff]", "", (name or "").lower())
+
+
 def _log_scale(value: int, ceiling: int) -> float:
     return min(1.0, math.log1p(max(0, value)) / math.log1p(ceiling))
 
@@ -35,7 +39,7 @@ def load_corpus() -> dict:
     works = {
         r["work_id"]: r
         for r in db.query(
-            "SELECT work_id, title, publication_year, cited_by_count, work_type FROM mining.works"
+            "SELECT work_id, title, publication_year, cited_by_count, work_type, source_name FROM mining.works"
         )
     }
     work_topics = defaultdict(list)
@@ -61,10 +65,18 @@ def load_corpus() -> dict:
             "SELECT institution_id, name, country_code, institution_type FROM mining.institutions"
         )
     }
+    # 期刊质量（IF/中科院分区，ShowJCR 数据集）：归一化名 → 指标
+    journal_metrics = {
+        r["norm_name"]: r
+        for r in db.query(
+            "SELECT norm_name, if_2025, jcr_quartile, cas_quartile, cas_top FROM mining.journal_metrics"
+        )
+    }
     return {
         "works": works, "work_topics": work_topics, "topics": topics,
         "person_work": person_work, "persons": persons,
         "person_inst": person_inst, "institutions": institutions,
+        "journal_metrics": journal_metrics,
     }
 
 
@@ -72,6 +84,7 @@ def score_candidates(corpus: dict) -> list[dict]:
     """给每个满足最小作品数的作者打六维分数（纯内存计算）。"""
     works, work_topics, topics = corpus["works"], corpus["work_topics"], corpus["topics"]
     person_work, persons = corpus["person_work"], corpus["persons"]
+    journal_metrics = corpus["journal_metrics"]
 
     # 作品 → 作者（用于合作者网络）
     work_authors = defaultdict(list)
@@ -119,16 +132,36 @@ def score_candidates(corpus: dict) -> list[dict]:
         coverage = min(1.0, len(child_topic_ids) / 5)
         relevance = 100 * (0.45 * ratio_child + 0.30 * avg_rel + 0.25 * coverage)
 
-        # 2) 学术影响力
+        # 2) 学术影响力（含期刊质量因子：IF/中科院分区，占 25%）
         recent_citations = sum(
             works[w]["cited_by_count"] or 0
             for w in wids if (works[w]["publication_year"] or 0) >= CURRENT_YEAR - 5
         )
-        impact = 100 * (
+        base_impact = 100 * (
             0.45 * _log_scale(citations, 3000)
             + 0.35 * _log_scale(recent_citations, 1200)
             + 0.20 * _log_scale(key_citations, 800)
         )
+        q_map = {"Q1": 1.0, "Q2": 0.7, "Q3": 0.4, "Q4": 0.2}
+        cas_map = {"1区": 1.0, "2区": 0.7, "3区": 0.4, "4区": 0.2}
+        q_scores, ifs, has_metric = [], [], 0
+        for w in wids:
+            m = journal_metrics.get(_venue_norm(works[w].get("source_name")))
+            if not m:
+                continue
+            has_metric += 1
+            if m.get("if_2025"):
+                ifs.append(float(m["if_2025"]))
+            qs = max(q_map.get(m.get("jcr_quartile") or "", 0),
+                     cas_map.get(m.get("cas_quartile") or "", 0))
+            if m.get("cas_top") == "是":
+                qs = min(1.0, qs + 0.15)
+            q_scores.append(qs)
+        if_comp = _log_scale(sum(sorted(ifs, reverse=True)[:3]) / max(1, min(3, len(ifs))), 45) if ifs else 0.0
+        q_comp = sum(q_scores) / len(q_scores) if q_scores else 0.0
+        coverage = has_metric / len(wids)
+        venue = 100 * (0.40 * if_comp + 0.40 * q_comp + 0.20 * coverage)
+        impact = 100 * (0.75 * (base_impact / 100) + 0.25 * (venue / 100))
 
         # 3) 近期活跃度
         last_year = max(years) if years else 0
@@ -188,6 +221,7 @@ def score_candidates(corpus: dict) -> list[dict]:
             "top_topic_id": top_tid, "category_id": cat_id,
             "scores": {
                 "relevance": round(relevance, 2), "impact": round(impact, 2),
+                "venue": round(venue, 2),
                 "activity": round(activity, 2), "depth": round(depth, 2),
                 "industry": round(industry, 2), "collab": round(collab, 2),
             },
